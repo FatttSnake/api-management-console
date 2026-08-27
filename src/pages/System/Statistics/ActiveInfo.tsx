@@ -10,13 +10,43 @@ import StatisticsCard from '@/components/system/StatisticsCard'
 const ActiveInfo = () => {
     const { styles } = useStyles()
     const activeInfoDivRef = useRef<HTMLDivElement>(null)
-    const activeInfoEChartsRef = useRef<echarts.EChartsType | null>(null)
+    const activeInfoEChartsRef = useRef<{
+        instance: echarts.EChartsType
+        dom: HTMLDivElement
+    } | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [scope, setScope] = useState('WEEK')
+    const [activeInfoEChartsOption, setActiveInfoEChartsOption] =
+        useState<echarts.EChartsCoreOption | null>(null)
+
+    useEffect(() => {
+        const div = activeInfoDivRef.current
+        if (!div) {
+            return
+        }
+
+        if (!activeInfoEChartsRef.current || activeInfoEChartsRef.current.dom !== div) {
+            activeInfoEChartsRef.current?.instance.dispose()
+            activeInfoEChartsRef.current = {
+                instance: echarts.init(div, null, { renderer: 'svg' }),
+                dom: div
+            }
+        }
+        if (activeInfoEChartsOption) {
+            activeInfoEChartsRef.current.instance.setOption(activeInfoEChartsOption)
+        }
+    }, [activeInfoEChartsOption, isLoading])
+
+    useEffect(() => {
+        return () => {
+            activeInfoEChartsRef.current?.instance.dispose()
+            activeInfoEChartsRef.current = null
+        }
+    }, [])
 
     useEffect(() => {
         const chartResizeObserver = new ResizeObserver(() => {
-            activeInfoEChartsRef.current?.resize()
+            activeInfoEChartsRef.current?.instance.resize()
         })
 
         activeInfoDivRef.current && chartResizeObserver.observe(activeInfoDivRef.current)
@@ -46,106 +76,100 @@ const ActiveInfo = () => {
 
         setIsLoading(true)
 
-        r_sys_statistics_active({ scope: _scope }).then((res) => {
-            const response = res.data
-            if (response.success) {
-                const data = response.data
-                if (data) {
-                    setIsLoading(false)
-
-                    setTimeout(() => {
-                        const registerList = data.registerHistory.length
-                            ? getTimesBetweenTwoTimes(
-                                  data.registerHistory[0].time,
-                                  data.registerHistory[data.registerHistory.length - 1].time,
-                                  'day'
-                              ).map((time) => [
-                                  time,
-                                  data.registerHistory.find(
-                                      (value) =>
-                                          value.time.substring(0, 10) === time.substring(0, 10)
-                                  )?.count ?? 0
-                              ])
-                            : []
-                        const loginList = data.loginHistory.length
-                            ? getTimesBetweenTwoTimes(
-                                  data.loginHistory[0].time,
-                                  data.loginHistory[data.loginHistory.length - 1].time,
-                                  'day'
-                              ).map((time) => [
-                                  time,
-                                  data.loginHistory.find(
-                                      (value) =>
-                                          value.time.substring(0, 10) === time.substring(0, 10)
-                                  )?.count ?? 0
-                              ])
-                            : []
-                        const verifyList = data.verifyHistory.length
-                            ? getTimesBetweenTwoTimes(
-                                  data.verifyHistory[0].time,
-                                  data.verifyHistory[data.verifyHistory.length - 1].time,
-                                  'day'
-                              ).map((time) => [
-                                  time,
-                                  data.verifyHistory.find(
-                                      (value) =>
-                                          value.time.substring(0, 10) === time.substring(0, 10)
-                                  )?.count ?? 0
-                              ])
-                            : []
-
-                        activeInfoEChartsRef.current = echarts.init(
-                            activeInfoDivRef.current,
-                            null,
-                            { renderer: 'svg' }
-                        )
-
-                        activeInfoEChartsRef.current?.setOption({
-                            ...lineEChartsBaseOption,
-                            useUTC: true,
-                            tooltip: {
-                                ...lineEChartsBaseOption.tooltip,
-                                formatter: getTooltipTimeFormatter('YYYY-MM-DD')
-                            },
-                            dataZoom: [
-                                {
-                                    type: 'inside',
-                                    start: 0,
-                                    end: 100,
-                                    minValueSpan: 2 * 24 * 60 * 60 * 1000
-                                }
-                            ],
-                            series: [
-                                {
-                                    name: '注册人数',
-                                    type: 'line',
-                                    smooth: true,
-                                    symbol: 'none',
-                                    areaStyle: {},
-                                    data: registerList
-                                },
-                                {
-                                    name: '登录人数',
-                                    type: 'line',
-                                    smooth: true,
-                                    symbol: 'none',
-                                    areaStyle: {},
-                                    data: loginList
-                                },
-                                {
-                                    name: '验证账号人数',
-                                    type: 'line',
-                                    smooth: true,
-                                    symbol: 'none',
-                                    areaStyle: {},
-                                    data: verifyList
-                                }
-                            ]
-                        })
-                    })
+        r_sys_statistics_active({ scope: _scope })
+            .then((res) => {
+                const response = res.data
+                if (!response.success) {
+                    return
                 }
-            }
-        })
+                const data = response.data
+                if (!data) {
+                    return
+                }
+
+                const registerList = data.registerHistory.length
+                    ? getTimesBetweenTwoTimes(
+                          data.registerHistory[0].time,
+                          data.registerHistory[data.registerHistory.length - 1].time,
+                          'day'
+                      ).map((time) => [
+                          time,
+                          data.registerHistory.find(
+                              (value) => value.time.substring(0, 10) === time.substring(0, 10)
+                          )?.count ?? 0
+                      ])
+                    : []
+                const loginList = data.loginHistory.length
+                    ? getTimesBetweenTwoTimes(
+                          data.loginHistory[0].time,
+                          data.loginHistory[data.loginHistory.length - 1].time,
+                          'day'
+                      ).map((time) => [
+                          time,
+                          data.loginHistory.find(
+                              (value) => value.time.substring(0, 10) === time.substring(0, 10)
+                          )?.count ?? 0
+                      ])
+                    : []
+                const verifyList = data.verifyHistory.length
+                    ? getTimesBetweenTwoTimes(
+                          data.verifyHistory[0].time,
+                          data.verifyHistory[data.verifyHistory.length - 1].time,
+                          'day'
+                      ).map((time) => [
+                          time,
+                          data.verifyHistory.find(
+                              (value) => value.time.substring(0, 10) === time.substring(0, 10)
+                          )?.count ?? 0
+                      ])
+                    : []
+
+                setActiveInfoEChartsOption({
+                    ...lineEChartsBaseOption,
+                    useUTC: true,
+                    tooltip: {
+                        ...lineEChartsBaseOption.tooltip,
+                        formatter: getTooltipTimeFormatter('YYYY-MM-DD')
+                    },
+                    dataZoom: [
+                        {
+                            type: 'inside',
+                            start: 0,
+                            end: 100,
+                            minValueSpan: 2 * 24 * 60 * 60 * 1000
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '注册人数',
+                            type: 'line',
+                            smooth: true,
+                            symbol: 'none',
+                            areaStyle: {},
+                            data: registerList
+                        },
+                        {
+                            name: '登录人数',
+                            type: 'line',
+                            smooth: true,
+                            symbol: 'none',
+                            areaStyle: {},
+                            data: loginList
+                        },
+                        {
+                            name: '验证账号人数',
+                            type: 'line',
+                            smooth: true,
+                            symbol: 'none',
+                            areaStyle: {},
+                            data: verifyList
+                        }
+                    ]
+                })
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }
 
     return (

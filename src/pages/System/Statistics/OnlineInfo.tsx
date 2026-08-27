@@ -10,14 +10,44 @@ import StatisticsCard from '@/components/system/StatisticsCard'
 const OnlineInfo = () => {
     const { styles } = useStyles()
     const onlineInfoDivRef = useRef<HTMLDivElement>(null)
-    const onlineInfoEChartsRef = useRef<echarts.EChartsType | null>(null)
+    const onlineInfoEChartsRef = useRef<{
+        instance: echarts.EChartsType
+        dom: HTMLDivElement
+    } | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [currentOnlineCount, setCurrentOnlineCount] = useState(-1)
     const [scope, setScope] = useState('WEEK')
+    const [onlineInfoEChartsOption, setOnlineInfoEChartsOption] =
+        useState<echarts.EChartsCoreOption | null>(null)
+
+    useEffect(() => {
+        const div = onlineInfoDivRef.current
+        if (!div) {
+            return
+        }
+
+        if (!onlineInfoEChartsRef.current || onlineInfoEChartsRef.current.dom !== div) {
+            onlineInfoEChartsRef.current?.instance.dispose()
+            onlineInfoEChartsRef.current = {
+                instance: echarts.init(div, null, { renderer: 'svg' }),
+                dom: div
+            }
+        }
+        if (onlineInfoEChartsOption) {
+            onlineInfoEChartsRef.current.instance.setOption(onlineInfoEChartsOption)
+        }
+    }, [onlineInfoEChartsOption, isLoading])
+
+    useEffect(() => {
+        return () => {
+            onlineInfoEChartsRef.current?.instance.dispose()
+            onlineInfoEChartsRef.current = null
+        }
+    }, [])
 
     useEffect(() => {
         const chartResizeObserver = new ResizeObserver(() => {
-            onlineInfoEChartsRef.current?.resize()
+            onlineInfoEChartsRef.current?.instance.resize()
         })
 
         onlineInfoDivRef.current && chartResizeObserver.observe(onlineInfoDivRef.current)
@@ -48,77 +78,68 @@ const OnlineInfo = () => {
         setIsLoading(true)
         setCurrentOnlineCount(-1)
 
-        r_sys_statistics_online({ scope: _scope }).then((res) => {
-            const response = res.data
-            if (!response.success) {
-                return
-            }
-            const data = response.data
-            if (!data) {
-                return
-            }
-            const processDataAsync = async () => {
+        r_sys_statistics_online({ scope: _scope })
+            .then((res) => {
+                const response = res.data
+                if (!response.success) {
+                    return
+                }
+                const data = response.data
+                if (!data) {
+                    return
+                }
+
                 const chunkSize = 20
                 const timeList = getTimesBetweenTwoTimes(
-                    data!.history[0].time,
-                    data!.history[data!.history.length - 1].time,
+                    data.history[0].time,
+                    data.history[data.history.length - 1].time,
                     _scope === 'DAY' || _scope === 'WEEK'
                         ? 'minute'
                         : _scope === 'MONTH'
                           ? 'hour'
                           : 'day'
                 )
-                const result: (string | number)[][] = []
+                const processChunk = (
+                    chunk: string[],
+                    history: { time: string; record: string }[]
+                ) => {
+                    const lengthMap: Record<string, number> = {
+                        DAY: 16,
+                        WEEK: 16,
+                        MONTH: 13,
+                        default: 10
+                    }
+                    const substrLength = lengthMap[_scope] || lengthMap.default
 
-                for (let i = 0; i < timeList.length; i += chunkSize) {
-                    const chunk = timeList.slice(i, i + chunkSize)
-                    const chunkResult = processChunk(chunk, data!.history, _scope)
-                    result.push(...chunkResult)
+                    return chunk.map((time) => {
+                        const timePrefix = time.substring(0, substrLength)
+                        const records: number[] = []
 
-                    // Refresh UI
-                    await new Promise((resolve) => setTimeout(resolve))
+                        history.forEach(({ time, record }) => {
+                            if (time.substring(0, substrLength) === timePrefix) {
+                                records.push(Number(record))
+                            }
+                        })
+
+                        return [timePrefix, records.length ? Math.max(...records) : 0]
+                    })
+                }
+                const processDataAsync = async () => {
+                    const result: (string | number)[][] = []
+
+                    for (let i = 0; i < timeList.length; i += chunkSize) {
+                        const chunk = timeList.slice(i, i + chunkSize)
+                        result.push(...processChunk(chunk, data.history))
+
+                        await new Promise((resolve) => setTimeout(resolve))
+                    }
+
+                    return result
                 }
 
-                return result
-            }
-
-            const processChunk = (
-                chunk: string[],
-                history: { time: string; record: string }[],
-                scope: string
-            ) => {
-                const lengthMap: Record<string, number> = {
-                    DAY: 16,
-                    WEEK: 16,
-                    MONTH: 13,
-                    default: 10
-                }
-                const substrLength = lengthMap[scope] || lengthMap.default
-
-                return chunk.map((time) => {
-                    const timePrefix = time.substring(0, substrLength)
-                    const records: number[] = []
-
-                    history.forEach(({ time, record }) => {
-                        if (time.substring(0, substrLength) === timePrefix) {
-                            records.push(Number(record))
-                        }
-                    })
-
-                    return [timePrefix, records.length ? Math.max(...records) : 0]
-                })
-            }
-
-            processDataAsync().then((dataList) => {
-                setIsLoading(false)
-                setCurrentOnlineCount(data.current)
-
-                setTimeout(() => {
-                    onlineInfoEChartsRef.current = echarts.init(onlineInfoDivRef.current, null, {
-                        renderer: 'svg'
-                    })
-
-                    onlineInfoEChartsRef.current?.setOption({
+                return processDataAsync().then((dataList) => {
+                    setCurrentOnlineCount(data.current)
+                    setOnlineInfoEChartsOption({
                         ...lineEChartsBaseOption,
                         tooltip: {
                             ...lineEChartsBaseOption.tooltip,
@@ -148,7 +169,9 @@ const OnlineInfo = () => {
                     })
                 })
             })
-        })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }
 
     return (

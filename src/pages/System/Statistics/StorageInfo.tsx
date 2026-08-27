@@ -4,162 +4,165 @@ import useStyles from '@/assets/css/pages/system/statistics/common.style'
 import { formatByteSize } from '@/utils/common'
 import { r_sys_statistics_storage } from '@/services/system'
 import FlexBox from '@/components/common/FlexBox'
-import {
-    barDefaultSeriesOption,
-    barEChartsBaseOption,
-    EChartsOption
-} from '@/pages/System/Statistics/shared'
+import { barDefaultSeriesOption, barEChartsBaseOption } from '@/pages/System/Statistics/shared'
 import StatisticsCard from '@/components/system/StatisticsCard'
+
+interface StorageChartData {
+    label: string
+    used: number
+    free: number
+}
+
+const storageDefaultSeriesOption: BarSeriesOption = {
+    ...barDefaultSeriesOption,
+    tooltip: { valueFormatter: (value) => formatByteSize(value as number) }
+}
 
 const StorageInfo = () => {
     const { styles } = useStyles()
-    const keyDivRef = useRef<HTMLDivElement>(null)
-    const percentDivRef = useRef<HTMLDivElement>(null)
-    const storageInfoDivRef = useRef<HTMLDivElement>(null)
+    const chartValueDivRef = useRef<HTMLDivElement>(null)
     const storageInfoEChartsRef = useRef<echarts.EChartsType[]>([])
+    const isLoadingRef = useRef(false)
     const [isLoading, setIsLoading] = useState(true)
     const [refreshInterval, setRefreshInterval] = useState('5')
-    const [storageInfoEChartsOption, setStorageInfoEChartsOption] = useState<EChartsOption[]>([])
+    const [storageChartData, setStorageChartData] = useState<StorageChartData[]>([])
 
-    const storageDefaultSeriesOption: BarSeriesOption = {
-        ...barDefaultSeriesOption,
-        tooltip: { valueFormatter: (value) => formatByteSize(value as number) }
-    }
+    const getStorageInfo = useCallback(() => {
+        if (isLoadingRef.current) {
+            return
+        }
+
+        isLoadingRef.current = true
+
+        r_sys_statistics_storage()
+            .then((res) => {
+                const response = res.data
+                if (!response.success) {
+                    return
+                }
+                const data = response.data
+                if (!data) {
+                    return
+                }
+
+                const chartData: StorageChartData[] = [
+                    {
+                        label: '物理内存',
+                        used: data.memoryTotal - data.memoryFree,
+                        free: data.memoryFree
+                    },
+                    {
+                        label: '虚拟内存',
+                        used: data.virtualMemoryInUse,
+                        free: data.virtualMemoryMax - data.virtualMemoryInUse
+                    },
+                    {
+                        label: 'swap',
+                        used: data.swapUsed,
+                        free: data.swapTotal - data.swapUsed
+                    },
+                    {
+                        label: 'jvm 内存',
+                        used: data.jvmTotal - data.jvmFree,
+                        free: data.jvmFree
+                    }
+                ]
+                data.fileStores.forEach((value) => {
+                    chartData.push({
+                        label: value.mount,
+                        used: value.total - value.free,
+                        free: value.free
+                    })
+                })
+
+                setStorageChartData(chartData)
+            })
+            .finally(() => {
+                isLoadingRef.current = false
+                setIsLoading(false)
+            })
+    }, [])
 
     useEffect(() => {
+        const container = chartValueDivRef.current
+        if (!container || !storageChartData.length) {
+            return
+        }
+
+        const chartDoms = Array.from(container.children) as HTMLDivElement[]
+
+        chartDoms.forEach((dom, index) => {
+            let chart = echarts.getInstanceByDom(dom)
+            if (!chart) {
+                chart = echarts.init(dom, null, { renderer: 'svg' })
+            }
+
+            const item = storageChartData[index]
+            chart.setOption({
+                ...barEChartsBaseOption,
+                xAxis: {
+                    ...barEChartsBaseOption.xAxis,
+                    max: item.used + item.free
+                },
+                yAxis: {
+                    ...barEChartsBaseOption.yAxis,
+                    data: [item.label]
+                },
+                series: [
+                    {
+                        ...storageDefaultSeriesOption,
+                        name: 'used',
+                        data: [item.used]
+                    },
+                    {
+                        ...storageDefaultSeriesOption,
+                        name: 'free',
+                        data: [item.free]
+                    }
+                ]
+            })
+            storageInfoEChartsRef.current[index] = chart
+        })
+
+        if (chartDoms.length < storageInfoEChartsRef.current.length) {
+            storageInfoEChartsRef.current
+                .slice(chartDoms.length)
+                .forEach((value) => value.dispose())
+        }
+        storageInfoEChartsRef.current.length = chartDoms.length
+    }, [storageChartData])
+
+    useEffect(() => {
+        const container = chartValueDivRef.current
+        if (!container) {
+            return
+        }
+
         const chartResizeObserver = new ResizeObserver(() => {
             storageInfoEChartsRef.current.forEach((value) => value.resize())
         })
-
-        storageInfoDivRef.current && chartResizeObserver.observe(storageInfoDivRef.current)
+        chartResizeObserver.observe(container)
 
         return () => {
-            storageInfoDivRef.current && chartResizeObserver.unobserve(storageInfoDivRef.current)
+            chartResizeObserver.disconnect()
         }
-    }, [storageInfoDivRef.current])
+    }, [isLoading])
 
     useEffect(() => {
-        const intervalId = setInterval(getStorageInfo(), parseInt(refreshInterval) * 1000)
+        return () => {
+            storageInfoEChartsRef.current.forEach((value) => value.dispose())
+            storageInfoEChartsRef.current = []
+        }
+    }, [])
+
+    useEffect(() => {
+        getStorageInfo()
+        const intervalId = setInterval(getStorageInfo, parseInt(refreshInterval) * 1000)
 
         return () => {
             clearInterval(intervalId)
         }
-    }, [refreshInterval])
-
-    const getStorageInfo = () => {
-        r_sys_statistics_storage().then((res) => {
-            const response = res.data
-            if (response.success) {
-                const data = response.data
-                if (data) {
-                    if (isLoading) {
-                        setIsLoading(false)
-                    }
-
-                    setTimeout(() => {
-                        const eChartsOptions = [
-                            storageInfoVoToStorageEChartsOption(
-                                '物理内存',
-                                data.memoryTotal - data.memoryFree,
-                                data.memoryFree
-                            ),
-                            storageInfoVoToStorageEChartsOption(
-                                '虚拟内存',
-                                data.virtualMemoryInUse,
-                                data.virtualMemoryMax - data.virtualMemoryInUse
-                            ),
-                            storageInfoVoToStorageEChartsOption(
-                                'swap',
-                                data.swapUsed,
-                                data.swapTotal - data.swapUsed
-                            ),
-                            storageInfoVoToStorageEChartsOption(
-                                'jvm 内存',
-                                data.jvmTotal - data.jvmFree,
-                                data.jvmFree
-                            )
-                        ]
-                        data.fileStores.forEach((value) =>
-                            eChartsOptions.push(
-                                storageInfoVoToStorageEChartsOption(
-                                    value.mount,
-                                    value.total - value.free,
-                                    value.free
-                                )
-                            )
-                        )
-                        setStorageInfoEChartsOption(eChartsOptions)
-
-                        if (percentDivRef.current && keyDivRef.current) {
-                            keyDivRef.current.innerHTML = ''
-                            percentDivRef.current.innerHTML = ''
-                            eChartsOptions.forEach((value) => {
-                                const keyElement = document.createElement('div')
-                                const percentElement = document.createElement('div')
-                                keyElement.innerText = value.yAxis.data[0]
-                                percentElement.innerText = `${(
-                                    (value.series[0].data[0] /
-                                        (value.series[0].data[0] + value.series[1].data[0])) *
-                                    100
-                                ).toFixed(2)}%`
-
-                                keyDivRef.current?.appendChild(keyElement)
-                                percentDivRef.current?.appendChild(percentElement)
-                            })
-                        }
-
-                        if (!storageInfoEChartsRef.current.length) {
-                            storageInfoDivRef.current && (storageInfoDivRef.current.innerHTML = '')
-
-                            eChartsOptions.forEach(() => {
-                                const element = document.createElement('div')
-                                storageInfoDivRef.current?.appendChild(element)
-                                storageInfoEChartsRef.current.push(
-                                    echarts.init(element, null, { renderer: 'svg' })
-                                )
-                            })
-                        }
-                    })
-                }
-            }
-        })
-
-        return getStorageInfo
-    }
-
-    const storageInfoVoToStorageEChartsOption = (label: string, used: number, free: number) => ({
-        ...barEChartsBaseOption,
-        xAxis: {
-            ...barEChartsBaseOption.xAxis,
-            max: used + free
-        },
-        yAxis: {
-            ...barEChartsBaseOption.yAxis,
-            data: [label]
-        },
-        series: [
-            {
-                ...storageDefaultSeriesOption,
-                name: 'used',
-                data: [used]
-            },
-            {
-                ...storageDefaultSeriesOption,
-                name: 'free',
-                data: [free]
-            }
-        ]
-    })
-
-    useEffect(() => {
-        storageInfoEChartsRef.current?.forEach((value, index) => {
-            try {
-                value.setOption(storageInfoEChartsOption[index])
-            } catch (e) {
-                /* empty */
-            }
-        })
-    }, [storageInfoEChartsOption])
+    }, [getStorageInfo, refreshInterval])
 
     return (
         <StatisticsCard
@@ -185,9 +188,28 @@ const StorageInfo = () => {
             }
         >
             <FlexBox className={styles.content} direction={'horizontal'}>
-                <FlexBox className={styles.key} ref={keyDivRef} />
-                <FlexBox className={styles.chartValue} ref={storageInfoDivRef} />
-                <FlexBox className={styles.percentValue} ref={percentDivRef} />
+                <FlexBox className={styles.key}>
+                    {storageChartData.map((value, index) => (
+                        <div key={index}>{value.label}</div>
+                    ))}
+                </FlexBox>
+                <FlexBox className={styles.chartValue} ref={chartValueDivRef}>
+                    {storageChartData.map((_, index) => (
+                        <div key={index} />
+                    ))}
+                </FlexBox>
+                <FlexBox className={styles.percentValue}>
+                    {storageChartData.map((value, index) => {
+                        const total = value.used + value.free
+                        return (
+                            <div key={index}>
+                                {total > 0
+                                    ? `${((value.used / total) * 100).toFixed(2)}%`
+                                    : '0.00%'}
+                            </div>
+                        )
+                    })}
+                </FlexBox>
             </FlexBox>
         </StatisticsCard>
     )

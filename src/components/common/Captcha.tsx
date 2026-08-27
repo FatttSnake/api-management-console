@@ -24,7 +24,7 @@ const Captcha = forwardRef<CaptchaElement, CaptchaProps>(
             []
         )
 
-        const turnstileRef = useRef<TurnstileInstance>()
+        const turnstileRef = useRef<TurnstileInstance>(null)
 
         return (
             <Turnstile

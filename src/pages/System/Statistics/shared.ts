@@ -56,7 +56,12 @@ export const barDefaultSeriesOption: BarSeriesOption = {
 }
 
 export const barEChartsBaseOption: EChartsOption = {
-    tooltip: {},
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
     xAxis: {
         show: false
     },
@@ -71,9 +76,6 @@ export const barEChartsBaseOption: EChartsOption = {
             show: false
         },
         splitLine: {
-            show: false
-        },
-        axisPointer: {
             show: false
         }
     }
