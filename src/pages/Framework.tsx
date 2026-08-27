@@ -1,5 +1,6 @@
 import useStyles from '@/assets/css/pages/framework.style'
-import { getRouteJson } from '@/routers/framework'
+import { getUserZoneRouteJson } from '@/routers/user'
+import { getSystemZoneRouteJson } from '@/routers/system'
 import FitFullscreen from '@/components/common/FitFullscreen'
 import Sidebar from '@/components/common/Sidebar'
 import FullscreenLoadingMask from '@/components/common/FullscreenLoadingMask'
@@ -8,6 +9,39 @@ const SystemFramework = () => {
     const { styles, cx } = useStyles()
     const location = useLocation()
     const navigate = useNavigate()
+    const userZone = getUserZoneRouteJson()
+    const systemZone = getSystemZoneRouteJson()
+
+    const mapToMenu = (routeJsonList: RouteJsonObject[]): ReactNode[] =>
+        routeJsonList.map(
+            (route) =>
+                route.menu &&
+                route.name && (
+                    <Sidebar.Item
+                        icon={route.icon}
+                        text={route.name}
+                        key={route.id}
+                        active={
+                            location.pathname === route.absolutePath &&
+                            !route.children?.some((item) => location.pathname === item.absolutePath)
+                        }
+                        onClick={() => navigate(route.absolutePath)}
+                    >
+                        {route.children?.map(
+                            (subRoute) =>
+                                subRoute.menu &&
+                                subRoute.name && (
+                                    <Sidebar.Item
+                                        text={subRoute.name}
+                                        key={subRoute.id}
+                                        active={location.pathname === subRoute.absolutePath}
+                                        onClick={() => navigate(subRoute.absolutePath)}
+                                    />
+                                )
+                        )}
+                    </Sidebar.Item>
+                )
+        )
 
     return (
         <FitFullscreen className={cx(styles.root, 'flex-horizontal')}>
@@ -15,43 +49,13 @@ const SystemFramework = () => {
                 <Sidebar title={'API Management'}>
                     <Sidebar.Scroll>
                         <Sidebar.ItemList>
-                            {getRouteJson().map(
-                                (route) =>
-                                    route.menu &&
-                                    route.name && (
-                                        <Sidebar.Item
-                                            icon={route.icon}
-                                            text={route.name}
-                                            key={route.id}
-                                            active={
-                                                location.pathname === route.absolutePath &&
-                                                !route.children?.some(
-                                                    (item) =>
-                                                        location.pathname === item.absolutePath
-                                                )
-                                            }
-                                            onClick={() => navigate(route.absolutePath)}
-                                        >
-                                            {route.children?.map(
-                                                (subRoute) =>
-                                                    subRoute.menu &&
-                                                    subRoute.name && (
-                                                        <Sidebar.Item
-                                                            text={subRoute.name}
-                                                            key={subRoute.id}
-                                                            active={
-                                                                location.pathname ===
-                                                                subRoute.absolutePath
-                                                            }
-                                                            onClick={() =>
-                                                                navigate(subRoute.absolutePath)
-                                                            }
-                                                        />
-                                                    )
-                                            )}
-                                        </Sidebar.Item>
-                                    )
-                            )}
+                            {mapToMenu(userZone)}
+                            {systemZone.length ? (
+                                <>
+                                    <Sidebar.Separate />
+                                    {mapToMenu(systemZone)}
+                                </>
+                            ) : undefined}
                         </Sidebar.ItemList>
                     </Sidebar.Scroll>
                 </Sidebar>

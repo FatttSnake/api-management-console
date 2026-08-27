@@ -448,6 +448,85 @@ interface TwoFactorSettingsParam {
     secretKeyLength: number
 }
 
+interface ApiSettingsVo {
+    defaultRateLimitPerMin: number
+    defaultQuota: number
+    defaultQuotaPeriodSeconds: number
+    accessKeyLength: number
+    secretKeyLength: number
+    balanceCheckEnabled: boolean
+    cacheTtlSeconds: number
+}
+
+interface ApiSettingsParam {
+    defaultRateLimitPerMin: number
+    defaultQuota: number
+    defaultQuotaPeriodSeconds: number
+    accessKeyLength: number
+    secretKeyLength: number
+    balanceCheckEnabled: boolean
+    cacheTtlSeconds: number
+}
+
+interface SoftwareInfoVo {
+    serviceVersion: string
+    os: string
+    bitness: number
+    javaVersion: string
+    javaVersionDate: string
+    javaVendor: string
+    jvm: string
+    jvmVersion: string
+    jvmInfo: string
+    jvmVendor: string
+    javaClassVersion: string
+    osBootTime: string
+    serverStartupTime: string
+}
+
+interface HardwareInfoVo {
+    cpu: string
+    arch: string
+    is64Bit: boolean
+    cpuPhysicalPackageCount: number
+    cpuPhysicalProcessorCount: number
+    cpuLogicalProcessorCount: number
+    microarchitecture: string
+    memories: string
+    disks: string
+}
+
+interface CpuInfoVo {
+    user: number
+    nice: number
+    system: number
+    idle: number
+    iowait: number
+    irq: number
+    softirq: number
+    steal: number
+    total: number
+    processors: CpuInfoVo[]
+}
+
+interface StorageInfoVo {
+    memoryTotal: number
+    memoryFree: number
+    virtualMemoryInUse: number
+    virtualMemoryMax: number
+    swapTotal: number
+    swapUsed: number
+    jvmTotal: number
+    jvmFree: number
+    fileStores: FileStoreInfoVo[]
+}
+
+interface FileStoreInfoVo {
+    mount: string
+    total: number
+    free: number
+}
+
 interface OnlineInfoVo {
     current: number
     history: {
@@ -477,4 +556,241 @@ interface ActiveInfoVo {
 
 interface ActiveInfoGetParam {
     scope: string
+}
+
+interface ApiAccountVo {
+    id: string
+    userId: string
+    balance: string
+    status: boolean
+    createTime: string
+    updateTime: string
+}
+
+interface ApiAuditVo {
+    id: string
+    event: string
+    operateUserId: string
+    operateTime: string
+    detail: string
+}
+
+interface ApiAuditGetParam {
+    event: string
+    startTime: string
+    endTime: string
+}
+
+interface ApiInterfaceVo {
+    id: string
+    pluginId: string
+    code: string
+    name: string
+    description: string
+    path: string
+    method: string
+    apiVersion: number
+    price: string
+    billingMode: string
+    needKey: boolean
+    rateLimit: number
+    enabled: boolean
+    createTime: string
+    updateTime: string
+}
+
+interface ApiInterfaceGetParam {
+    searchCode: string
+    searchName: string
+    pluginId: string
+    enabled: boolean
+}
+
+interface ApiInterfaceUpdateParam {
+    id: string
+    price: string
+    billingMode: string
+    needKey: boolean
+    rateLimit: number
+    enabled: boolean
+}
+
+interface ApiKeyVo {
+    id: string
+    userId: string
+    accessKey: string
+    name: string
+    permissions: string[]
+    status: boolean
+    expireTime: string
+    ipWhitelist: string
+    rateLimit: number
+    quota: number
+    quotaPeriod: number
+    lastUsedTime: string
+    remark: string
+    createTime: string
+    updateTime: string
+}
+
+interface ApiKeyWithSecretVo {
+    apiKey: ApiKeyVo
+    secretKey: string
+}
+
+interface ApiKeyAddParam {
+    userId: string
+    name: string
+    permissionCodes: string[]
+    expireTime: string
+    ipWhitelist: string
+    rateLimit: number
+    quota: number
+    quotaPeriod: number
+    remark: string
+}
+
+interface ApiKeyDeleteParam {
+    ids: string[]
+}
+
+interface ApiKeyGetParam {
+    searchName: string
+    status: boolean
+    userIds: string
+}
+
+interface ApiKeyUpdateParam {
+    id: string
+    name: string
+    permissionCodes: string[]
+    expireTime: string
+    ipWhitelist: string
+    rateLimit: number
+    quota: number
+    quotaPeriod: number
+    remark: string
+}
+
+interface ApiKeyUpdateStatusParam {
+    id: string
+    status: boolean
+}
+
+interface ApiMonitorItemVo {
+    apiCode: string
+    count: number
+    error: number
+    latencyMs: number
+}
+
+interface ApiTopVo {
+    apiCode: string
+    apiName: string
+    count: number
+    cost: string
+}
+
+interface ApiTopUpParam {
+    userId: string
+    amount: string
+    orderNo: string
+    remark: string
+}
+
+interface ApiMonitorDashboardVo {
+    live: ApiMonitorItemVo[]
+    totalToday: number
+    errorToday: number
+    activeKeys: number
+    topApis: ApiTopVo[]
+}
+
+interface ApiPluginVo {
+    id: string
+    pluginId: string
+    name: string
+    description: string
+    enabled: boolean
+    defaultPrice: string
+    defaultRateLimit: number
+    createTime: string
+    updateTime: string
+}
+
+interface ApiPluginGetParam {
+    searchName: string
+    enabled: boolean
+}
+
+interface ApiPluginUpdateParam {
+    id: string
+    name: string
+    description: string
+    enabled: boolean
+    defaultPrice: string
+    defaultRateLimit: number
+}
+
+interface ApiReportVo {
+    apiKeyId: string
+    date: string
+    apiCode: string
+    apiName: string
+    count: number
+    cost: string
+}
+
+interface ApiReportGetParam {
+    apiKeyId: string
+    startTime: string
+    endTime: string
+    limit: number
+}
+
+interface ApiTransactionVo {
+    id: string
+    userId: string
+    apiKeyId: string
+    apiUsageId: string
+    orderNo: string
+    type: string
+    amount: string
+    balanceAfter: string
+    remark: string
+    createTime: string
+}
+
+interface ApiTransactionGetParam {
+    userId: string
+    type: string
+    startTime: string
+    endTime: string
+}
+
+interface ApiUsageVo {
+    id: string
+    apiKeyId: string
+    apiId: string
+    apiCode: string
+    userId: string
+    requestPath: string
+    requestMethod: string
+    responseCode: number
+    success: boolean
+    executeTime: number
+    requestIp: string
+    traceId: string
+    cost: string
+    billingMode: string
+    createTime: string
+}
+
+interface ApiUsageGetParam {
+    userId: string
+    apiKeyId: string
+    apiCode: string
+    success: boolean
+    startTime: string
+    endTime: string
 }
