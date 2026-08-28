@@ -36,7 +36,7 @@ const Footer = () => {
         r_auth_logout().finally(() => {
             removeAllToken()
             notification.info({
-                message: '已退出登录',
+                title: '已退出登录',
                 icon: <Icon component={IconConsoleExit} style={{ color: theme.colorErrorText }} />
             })
             setTimeout(() => {

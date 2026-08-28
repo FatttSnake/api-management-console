@@ -188,7 +188,9 @@ const Group = () => {
         modal
             .confirm({
                 centered: true,
-                maskClosable: true,
+                mask: {
+                    closable: true
+                },
                 title: '确定删除',
                 content: `确定删除选中的 ${tableSelectedItem.length} 个用户组吗？`
             })
@@ -242,7 +244,7 @@ const Group = () => {
             modal
                 .confirm({
                     centered: true,
-                    maskClosable: true,
+                    mask: { closable: true },
                     title: '确定删除',
                     content: `确定删除用户组 ${value.name} 吗？`
                 })
@@ -516,34 +518,30 @@ const Group = () => {
                 </AntdButton>
             </Card>
             <Card style={{ overflow: 'inherit' }}>
-                <AntdInput
-                    addonBefore={
-                        <span
-                            style={{
-                                fontSize: '0.9em',
-                                color: theme.colorTextSecondary
-                            }}
-                        >
-                            名称
-                        </span>
-                    }
-                    suffix={
-                        <>
-                            {!isRegexLegal && (
-                                <span style={{ color: theme.colorErrorText }}>非法表达式</span>
-                            )}
-                            <AntdCheckbox checked={isUseRegex} onChange={handleOnUseRegexChange}>
-                                <AntdTooltip title={'正则表达式'}>.*</AntdTooltip>
-                            </AntdCheckbox>
-                        </>
-                    }
-                    allowClear
-                    value={searchName}
-                    onChange={handleOnSearchNameChange}
-                    onKeyDown={handleOnSearchNameKeyDown}
-                    status={isRegexLegal ? undefined : 'error'}
-                    placeholder={'请输入搜索内容'}
-                />
+                <AntdSpace.Compact style={{ width: '100%' }}>
+                    <AntdSpace.Addon>名称</AntdSpace.Addon>
+                    <AntdInput
+                        suffix={
+                            <>
+                                {!isRegexLegal && (
+                                    <span style={{ color: theme.colorErrorText }}>非法表达式</span>
+                                )}
+                                <AntdCheckbox
+                                    checked={isUseRegex}
+                                    onChange={handleOnUseRegexChange}
+                                >
+                                    <AntdTooltip title={'正则表达式'}>.*</AntdTooltip>
+                                </AntdCheckbox>
+                            </>
+                        }
+                        allowClear
+                        value={searchName}
+                        onChange={handleOnSearchNameChange}
+                        onKeyDown={handleOnSearchNameKeyDown}
+                        status={isRegexLegal ? undefined : 'error'}
+                        placeholder={'请输入搜索内容'}
+                    />
+                </AntdSpace.Compact>
             </Card>
             <Card style={{ overflow: 'inherit', flex: '0 0 auto' }}>
                 <AntdButton onClick={handleOnQueryBtnClick} type={'primary'}>
@@ -612,8 +610,7 @@ const Group = () => {
                 <AntdSelect
                     mode={'multiple'}
                     allowClear
-                    showSearch
-                    filterOption={filterOption}
+                    showSearch={{ filterOption }}
                     options={roleData.map((value) => ({
                         value: value.id,
                         label: `${value.name}${!value.enable ? '(已禁用)' : ''}`
@@ -651,7 +648,7 @@ const Group = () => {
                 onClose={handleOnDrawerClose}
                 open={isDrawerOpen}
                 closable={!isSubmitting}
-                maskClosable={!isSubmitting}
+                mask={{ closable: !isSubmitting }}
                 extra={drawerToolbar}
             >
                 {addAndEditForm}

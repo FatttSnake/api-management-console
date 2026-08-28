@@ -190,12 +190,16 @@ const Forget = () => {
                                     { max: 30, message: '密码最多为30位' }
                                 ]}
                             >
-                                <AntdInput.Password
-                                    id={'forget-password'}
-                                    addonBefore={<span>新&nbsp;&nbsp;密&nbsp;&nbsp;码</span>}
-                                    disabled={isChanging}
-                                    placeholder={'密码'}
-                                />
+                                <AntdSpace.Compact>
+                                    <AntdSpace.Addon>
+                                        新&nbsp;&nbsp;密&nbsp;&nbsp;码
+                                    </AntdSpace.Addon>
+                                    <AntdInput.Password
+                                        id={'forget-password'}
+                                        disabled={isChanging}
+                                        placeholder={'密码'}
+                                    />
+                                </AntdSpace.Compact>
                             </AntdForm.Item>
                             <AntdForm.Item
                                 name={'passwordConfirm'}
@@ -211,12 +215,14 @@ const Forget = () => {
                                     })
                                 ]}
                             >
-                                <AntdInput.Password
-                                    id={'forget-password-confirm'}
-                                    addonBefore={'确认密码'}
-                                    disabled={isChanging}
-                                    placeholder={'确认密码'}
-                                />
+                                <AntdSpace.Compact>
+                                    <AntdSpace.Addon>确认密码</AntdSpace.Addon>
+                                    <AntdInput.Password
+                                        id={'forget-password-confirm'}
+                                        disabled={isChanging}
+                                        placeholder={'确认密码'}
+                                    />
+                                </AntdSpace.Compact>
                             </AntdForm.Item>
                             {location.pathname === '/forget' &&
                                 searchParams.get('code') &&

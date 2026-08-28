@@ -101,7 +101,7 @@ const Profile = () => {
 
         void modal.confirm({
             centered: true,
-            maskClosable: true,
+            mask: { closable: true },
             icon: <Icon style={{ color: theme.colorPrimary }} component={IconConsolePassword} />,
             title: '修改密码',
             content: (
@@ -173,7 +173,7 @@ const Profile = () => {
                                     case DATABASE_UPDATE_SUCCESS:
                                         removeAllToken()
                                         notification.info({
-                                            message: '已退出登录',
+                                            title: '已退出登录',
                                             icon: (
                                                 <Icon
                                                     component={IconConsoleExit}
@@ -216,15 +216,15 @@ const Profile = () => {
             if (enable) {
                 void modal.confirm({
                     centered: true,
-                    maskClosable: true,
-                    focusTriggerAfterClose: false,
+                    mask: { closable: true },
+                    focusable: { focusTriggerAfterClose: false },
                     icon: <Icon style={{ color: theme.colorPrimary }} component={IconConsole2fa} />,
                     title: '双因素',
                     content: '确定解除双因素？',
                     onOk: () => {
                         void modal.confirm({
                             centered: true,
-                            maskClosable: true,
+                            mask: { closable: true },
                             icon: (
                                 <Icon
                                     style={{ color: theme.colorPrimary }}
@@ -303,7 +303,7 @@ const Profile = () => {
                         if (response.success) {
                             void modal.confirm({
                                 centered: true,
-                                maskClosable: true,
+                                mask: { closable: true },
                                 icon: (
                                     <Icon
                                         style={{ color: theme.colorPrimary }}

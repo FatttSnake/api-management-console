@@ -281,7 +281,7 @@ const User = () => {
         modal
             .confirm({
                 centered: true,
-                maskClosable: true,
+                mask: { closable: true },
                 title: '确定删除',
                 content: `确定删除选中的 ${tableSelectedItem.length} 个用户吗？`
             })
@@ -323,7 +323,7 @@ const User = () => {
             )
             void modal.confirm({
                 centered: true,
-                maskClosable: true,
+                mask: { closable: true },
                 icon: (
                     <Icon style={{ color: theme.colorPrimary }} component={IconConsolePassword} />
                 ),
@@ -457,7 +457,7 @@ const User = () => {
             modal
                 .confirm({
                     centered: true,
-                    maskClosable: true,
+                    mask: { closable: true },
                     title: '确定删除',
                     content: `确定删除用户 ${value.username} 吗？`
                 })
@@ -817,8 +817,7 @@ const User = () => {
                         <AntdSelect
                             mode={'multiple'}
                             allowClear
-                            showSearch
-                            filterOption={filterOption}
+                            showSearch={{ filterOption }}
                             options={roleData.map((value) => ({
                                 value: value.id,
                                 label: `${value.name}${!value.enable ? '(已禁用)' : ''}`
@@ -830,8 +829,7 @@ const User = () => {
                         <AntdSelect
                             mode={'multiple'}
                             allowClear
-                            showSearch
-                            filterOption={filterOption}
+                            showSearch={{ filterOption }}
                             options={groupData.map((value) => ({
                                 value: value.id,
                                 label: `${value.name}${!value.enable ? '(已禁用)' : ''}`
@@ -895,38 +893,42 @@ const User = () => {
                 </AntdButton>
             </Card>
             <Card style={{ overflow: 'inherit' }}>
-                <AntdInput
-                    addonBefore={
-                        <AntdSelect
-                            value={searchType}
-                            onChange={handleOnSearchTypeChange}
-                            style={{ width: '6em' }}
-                            dropdownStyle={{ textAlign: 'center' }}
-                        >
-                            <AntdSelect.Option value={'ALL'}>全部</AntdSelect.Option>
-                            <AntdSelect.Option value={'ID'}>ID</AntdSelect.Option>
-                            <AntdSelect.Option value={'USERNAME'}>用户名</AntdSelect.Option>
-                            <AntdSelect.Option value={'NICKNAME'}>昵称</AntdSelect.Option>
-                            <AntdSelect.Option value={'EMAIL'}>邮箱</AntdSelect.Option>
-                        </AntdSelect>
-                    }
-                    suffix={
-                        <>
-                            {!isRegexLegal && (
-                                <span style={{ color: theme.colorErrorText }}>非法表达式</span>
-                            )}
-                            <AntdCheckbox checked={isUseRegex} onChange={handleOnUseRegexChange}>
-                                <AntdTooltip title={'正则表达式'}>.*</AntdTooltip>
-                            </AntdCheckbox>
-                        </>
-                    }
-                    allowClear
-                    value={searchValue}
-                    onChange={handleOnSearchValueChange}
-                    onKeyDown={handleOnSearchValueKeyDown}
-                    status={isRegexLegal ? undefined : 'error'}
-                    placeholder={'请输入搜索内容'}
-                />
+                <AntdSpace.Compact style={{ width: '100%' }}>
+                    <AntdSelect
+                        value={searchType}
+                        onChange={handleOnSearchTypeChange}
+                        style={{ width: '6em' }}
+                        styles={{ popup: { listItem: { textAlign: 'center' } } }}
+                        options={[
+                            { label: '全部', value: 'ALL' },
+                            { label: 'ID', value: 'ID' },
+                            { label: '用户名', value: 'USERNAME' },
+                            { label: '昵称', value: 'NICKNAME' },
+                            { label: '邮箱', value: 'EMAIL' }
+                        ]}
+                    />
+                    <AntdInput
+                        suffix={
+                            <>
+                                {!isRegexLegal && (
+                                    <span style={{ color: theme.colorErrorText }}>非法表达式</span>
+                                )}
+                                <AntdCheckbox
+                                    checked={isUseRegex}
+                                    onChange={handleOnUseRegexChange}
+                                >
+                                    <AntdTooltip title={'正则表达式'}>.*</AntdTooltip>
+                                </AntdCheckbox>
+                            </>
+                        }
+                        allowClear
+                        value={searchValue}
+                        onChange={handleOnSearchValueChange}
+                        onKeyDown={handleOnSearchValueKeyDown}
+                        status={isRegexLegal ? undefined : 'error'}
+                        placeholder={'请输入搜索内容'}
+                    />
+                </AntdSpace.Compact>
             </Card>
             <Card style={{ overflow: 'inherit', flex: '0 0 auto' }}>
                 <AntdButton onClick={handleOnQueryBtnClick} type={'primary'}>
@@ -999,7 +1001,7 @@ const User = () => {
                 onClose={handleOnDrawerClose}
                 open={isDrawerOpen}
                 closable={!isDrawerSubmitting}
-                maskClosable={!isDrawerSubmitting}
+                mask={{ closable: !isDrawerSubmitting }}
                 extra={drawerToolbar}
             >
                 {addAndEditForm}

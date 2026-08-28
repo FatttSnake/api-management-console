@@ -74,7 +74,7 @@ const SignIn = () => {
                                 navigateToRedirect(navigate, searchParams, '/repository')
 
                                 notification.success({
-                                    message: '欢迎回来',
+                                    title: '欢迎回来',
                                     description: (
                                         <>
                                             <span>

@@ -188,16 +188,17 @@ const ActiveInfo = () => {
                         onChange={handleOnScopeChange}
                         disabled={isLoading}
                         style={{ width: '8em' }}
-                    >
-                        <AntdSelect.Option key={'WEEK'}>最近7天</AntdSelect.Option>
-                        <AntdSelect.Option key={'MONTH'}>最近30天</AntdSelect.Option>
-                        <AntdSelect.Option key={'QUARTER'}>最近3月</AntdSelect.Option>
-                        <AntdSelect.Option key={'YEAR'}>最近12月</AntdSelect.Option>
-                        <AntdSelect.Option key={'TWO_YEARS'}>最近2年</AntdSelect.Option>
-                        <AntdSelect.Option key={'THREE_YEARS'}>最近3年</AntdSelect.Option>
-                        <AntdSelect.Option key={'FIVE_YEARS'}>最近5年</AntdSelect.Option>
-                        <AntdSelect.Option key={'ALL'}>全部</AntdSelect.Option>
-                    </AntdSelect>
+                        options={[
+                            { label: '最近7天', value: 'WEEK' },
+                            { label: '最近30天', value: 'MONTH' },
+                            { label: '最近3月', value: 'QUARTER' },
+                            { label: '最近12月', value: 'YEAR' },
+                            { label: '最近2年', value: 'TWO_YEARS' },
+                            { label: '最近3年', value: 'THREE_YEARS' },
+                            { label: '最近5年', value: 'FIVE_YEARS' },
+                            { label: '全部', value: 'ALL' }
+                        ]}
+                    />
                     <AntdButton title={'刷新'} onClick={handleOnRefresh} disabled={isLoading}>
                         <Icon component={IconConsoleRefresh} />
                     </AntdButton>

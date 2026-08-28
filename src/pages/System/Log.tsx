@@ -1,5 +1,4 @@
 import { ChangeEvent, KeyboardEvent } from 'react'
-import { useTheme } from 'antd-style'
 import dayjs from 'dayjs'
 import { DATABASE_SELECT_SUCCESS } from '@/constants/common.constants'
 import { message } from '@/utils/common'
@@ -11,7 +10,6 @@ import HideScrollbar from '@/components/common/HideScrollbar'
 import FlexBox from '@/components/common/FlexBox'
 
 const Log = () => {
-    const theme = useTheme()
     const [logData, setLogData] = useState<SysLogGetVo[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [tableParams, setTableParams] = useState<TableParam>({
@@ -242,42 +240,28 @@ const Log = () => {
     const toolbar = (
         <FlexBox direction={'horizontal'} gap={10}>
             <Card style={{ overflow: 'inherit' }}>
-                <AntdInput
-                    addonBefore={
-                        <span
-                            style={{
-                                fontSize: '0.9em',
-                                color: theme.colorTextSecondary
-                            }}
-                        >
-                            Trace ID
-                        </span>
-                    }
-                    allowClear
-                    value={searchTraceId}
-                    onChange={handleOnSearchTraceIdChange}
-                    onKeyDown={handleOnSearchTraceIdKeyDown}
-                    placeholder={'请输入搜索内容'}
-                />
+                <AntdSpace.Compact style={{ width: '100%' }}>
+                    <AntdSpace.Addon>Trace ID</AntdSpace.Addon>
+                    <AntdInput
+                        allowClear
+                        value={searchTraceId}
+                        onChange={handleOnSearchTraceIdChange}
+                        onKeyDown={handleOnSearchTraceIdKeyDown}
+                        placeholder={'请输入搜索内容'}
+                    />
+                </AntdSpace.Compact>
             </Card>
             <Card style={{ overflow: 'inherit' }}>
-                <AntdInput
-                    addonBefore={
-                        <span
-                            style={{
-                                fontSize: '0.9em',
-                                color: theme.colorTextSecondary
-                            }}
-                        >
-                            请求 Url
-                        </span>
-                    }
-                    allowClear
-                    value={searchRequestUrl}
-                    onChange={handleOnSearchUrlChange}
-                    onKeyDown={handleOnSearchUrlKeyDown}
-                    placeholder={'请输入搜索内容'}
-                />
+                <AntdSpace.Compact style={{ width: '100%' }}>
+                    <AntdSpace.Addon>请求 Url</AntdSpace.Addon>
+                    <AntdInput
+                        allowClear
+                        value={searchRequestUrl}
+                        onChange={handleOnSearchUrlChange}
+                        onKeyDown={handleOnSearchUrlKeyDown}
+                        placeholder={'请输入搜索内容'}
+                    />
+                </AntdSpace.Compact>
             </Card>
             <Card style={{ overflow: 'inherit', flex: '0 0 auto' }}>
                 <AntdDatePicker.RangePicker

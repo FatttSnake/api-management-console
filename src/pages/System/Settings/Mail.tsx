@@ -16,7 +16,7 @@ const Mail = () => {
     const handleOnTest = () => {
         void modal.confirm({
             centered: true,
-            maskClosable: true,
+            mask: { closable: true },
             title: '发送测试邮件',
             content: (
                 <>
@@ -150,11 +150,14 @@ const Mail = () => {
                     name={'securityType'}
                     rules={[{ required: true }]}
                 >
-                    <AntdSelect placeholder={'请选择安全类型'}>
-                        <AntdSelect.Option key={'None'}>None</AntdSelect.Option>
-                        <AntdSelect.Option key={'SSL/TLS'}>SSL/TLS</AntdSelect.Option>
-                        <AntdSelect.Option key={'StartTls'}>StartTls</AntdSelect.Option>
-                    </AntdSelect>
+                    <AntdSelect
+                        placeholder={'请选择安全类型'}
+                        options={[
+                            { label: 'None', value: 'None' },
+                            { label: 'SSL/TLS', value: 'SSL/TLS' },
+                            { label: 'StartTls', value: 'StartTls' }
+                        ]}
+                    />
                 </AntdForm.Item>
                 <AntdForm.Item
                     label={'用户名'}

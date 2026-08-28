@@ -186,12 +186,10 @@ const Verify = () => {
                                 { min: 3, message: '昵称至少为3个字符' }
                             ]}
                         >
-                            <AntdInput
-                                disabled={isVerifying}
-                                maxLength={20}
-                                showCount
-                                addonBefore={'昵称'}
-                            />
+                            <AntdSpace.Compact>
+                                <AntdSpace.Addon>昵称</AntdSpace.Addon>
+                                <AntdInput disabled={isVerifying} maxLength={20} showCount />
+                            </AntdSpace.Compact>
                         </AntdForm.Item>
                         <AntdForm.Item>
                             <AntdButton

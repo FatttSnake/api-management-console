@@ -180,7 +180,7 @@ const Role = () => {
         modal
             .confirm({
                 centered: true,
-                maskClosable: true,
+                mask: { closable: true },
                 title: '确定删除',
                 content: `确定删除选中的 ${tableSelectedItem.length} 个角色吗？`
             })
@@ -234,7 +234,7 @@ const Role = () => {
             modal
                 .confirm({
                     centered: true,
-                    maskClosable: true,
+                    mask: { closable: true },
                     title: '确定删除',
                     content: `确定删除角色 ${value.name} 吗？`
                 })
@@ -525,34 +525,30 @@ const Role = () => {
                 </AntdButton>
             </Card>
             <Card style={{ overflow: 'inherit' }}>
-                <AntdInput
-                    addonBefore={
-                        <span
-                            style={{
-                                fontSize: '0.9em',
-                                color: theme.colorTextSecondary
-                            }}
-                        >
-                            名称
-                        </span>
-                    }
-                    suffix={
-                        <>
-                            {!isRegexLegal && (
-                                <span style={{ color: theme.colorErrorText }}>非法表达式</span>
-                            )}
-                            <AntdCheckbox checked={isUseRegex} onChange={handleOnUseRegexChange}>
-                                <AntdTooltip title={'正则表达式'}>.*</AntdTooltip>
-                            </AntdCheckbox>
-                        </>
-                    }
-                    allowClear
-                    value={searchName}
-                    onChange={handleOnSearchNameChange}
-                    onKeyDown={handleOnSearchNameKeyDown}
-                    status={isRegexLegal ? undefined : 'error'}
-                    placeholder={'请输入搜索内容'}
-                />
+                <AntdSpace.Compact style={{ width: '100%' }}>
+                    <AntdSpace.Addon>名称</AntdSpace.Addon>
+                    <AntdInput
+                        suffix={
+                            <>
+                                {!isRegexLegal && (
+                                    <span style={{ color: theme.colorErrorText }}>非法表达式</span>
+                                )}
+                                <AntdCheckbox
+                                    checked={isUseRegex}
+                                    onChange={handleOnUseRegexChange}
+                                >
+                                    <AntdTooltip title={'正则表达式'}>.*</AntdTooltip>
+                                </AntdCheckbox>
+                            </>
+                        }
+                        allowClear
+                        value={searchName}
+                        onChange={handleOnSearchNameChange}
+                        onKeyDown={handleOnSearchNameKeyDown}
+                        status={isRegexLegal ? undefined : 'error'}
+                        placeholder={'请输入搜索内容'}
+                    />
+                </AntdSpace.Compact>
             </Card>
             <Card style={{ overflow: 'inherit', flex: '0 0 auto' }}>
                 <AntdButton onClick={handleOnQueryBtnClick} type={'primary'}>
@@ -623,7 +619,7 @@ const Role = () => {
                     treeCheckable
                     treeNodeLabelProp={'fullTitle'}
                     allowClear
-                    treeNodeFilterProp={'fullTitle'}
+                    showSearch={{ treeNodeFilterProp: 'fullTitle' }}
                     loading={isLoadingPower}
                     placeholder={'请选择权限'}
                 />
@@ -658,7 +654,7 @@ const Role = () => {
                 onClose={handleOnDrawerClose}
                 open={isDrawerOpen}
                 closable={!isSubmitting}
-                maskClosable={!isSubmitting}
+                mask={{ closable: !isSubmitting }}
                 extra={drawerToolbar}
             >
                 {addAndEditForm}

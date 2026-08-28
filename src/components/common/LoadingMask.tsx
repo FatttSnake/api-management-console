@@ -11,7 +11,11 @@ const LoadingMask = (props: PropsWithChildren<LoadingMaskProps>) => {
     const { styles, theme } = useStyles()
 
     const loadingIcon = (
-        <Icon component={IconConsoleLoading} style={{ fontSize: 24, color: theme.colorText }} spin />
+        <Icon
+            component={IconConsoleLoading}
+            style={{ fontSize: 24, color: theme.colorText }}
+            spin
+        />
     )
     return props.hidden ? (
         props.children

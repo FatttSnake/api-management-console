@@ -133,21 +133,25 @@ const CPUInfo = () => {
             title={'CPU 信息'}
             loading={isLoading}
             expand={
-                <AntdSelect value={refreshInterval} onChange={(value) => setRefreshInterval(value)}>
-                    <AntdSelect.Option key={1}>1秒</AntdSelect.Option>
-                    <AntdSelect.Option key={2}>2秒</AntdSelect.Option>
-                    <AntdSelect.Option key={3}>3秒</AntdSelect.Option>
-                    <AntdSelect.Option key={5}>5秒</AntdSelect.Option>
-                    <AntdSelect.Option key={10}>10秒</AntdSelect.Option>
-                    <AntdSelect.Option key={15}>15秒</AntdSelect.Option>
-                    <AntdSelect.Option key={20}>20秒</AntdSelect.Option>
-                    <AntdSelect.Option key={30}>30秒</AntdSelect.Option>
-                    <AntdSelect.Option key={60}>60秒</AntdSelect.Option>
-                    <AntdSelect.Option key={120}>2分</AntdSelect.Option>
-                    <AntdSelect.Option key={180}>3分</AntdSelect.Option>
-                    <AntdSelect.Option key={300}>5分</AntdSelect.Option>
-                    <AntdSelect.Option key={600}>10分</AntdSelect.Option>
-                </AntdSelect>
+                <AntdSelect
+                    value={refreshInterval}
+                    onChange={(value) => setRefreshInterval(value)}
+                    options={[
+                        { label: '1秒', value: '1' },
+                        { label: '2秒', value: '2' },
+                        { label: '3秒', value: '3' },
+                        { label: '5秒', value: '5' },
+                        { label: '10秒', value: '10' },
+                        { label: '15秒', value: '15' },
+                        { label: '20秒', value: '20' },
+                        { label: '30秒', value: '30' },
+                        { label: '60秒', value: '60' },
+                        { label: '2分', value: '120' },
+                        { label: '3分', value: '180' },
+                        { label: '5分', value: '300' },
+                        { label: '10分', value: '600' }
+                    ]}
+                />
             }
         >
             <FlexBox className={styles.content} direction={'horizontal'}>

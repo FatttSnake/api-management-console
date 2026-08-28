@@ -109,7 +109,7 @@ const SensitiveWord = () => {
             modifyOperationCode={['system:settings:modify:sensitive']}
         >
             <AntdTransfer
-                listStyle={{ width: '100%', height: 400 }}
+                styles={{ section: { width: '100%', height: 400 } }}
                 oneWay
                 showSearch
                 pagination
