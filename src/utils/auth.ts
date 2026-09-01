@@ -6,7 +6,6 @@ import {
     STORAGE_USER_INFO_KEY,
     DATABASE_SELECT_SUCCESS
 } from '@/constants/common.constants'
-import { floorNumber } from '@/utils/common'
 import { getLocalStorage, removeLocalStorage, setLocalStorage } from '@/utils/browser'
 import { getFullTitle } from '@/utils/route'
 import { r_sys_user_info_get } from '@/services/system'
@@ -81,22 +80,22 @@ export const getUserId = async () => {
 export const powerListToPowerTree = (
     modules: ModuleVo[],
     menus: MenuVo[],
-    funcs: FuncVo[],
+    scopes: ScopeVo[],
     operations: OperationVo[]
 ): _DataNode[] => {
     const moduleChildrenMap = new Map<string, _DataNode[]>()
     const menuChildrenMap = new Map<string, _DataNode[]>()
-    const funcChildrenMap = new Map<string, _DataNode[]>()
+    const scopeChildrenMap = new Map<string, _DataNode[]>()
 
     operations.forEach((operation) => {
-        if (funcChildrenMap.get(String(operation.funcId))) {
-            funcChildrenMap.get(String(operation.funcId))?.push({
+        if (scopeChildrenMap.get(operation.scopeId)) {
+            scopeChildrenMap.get(operation.scopeId)?.push({
                 title: operation.name,
                 key: operation.id,
                 value: operation.id
             })
         } else {
-            funcChildrenMap.set(String(operation.funcId), [
+            scopeChildrenMap.set(operation.scopeId, [
                 {
                     title: operation.name,
                     key: operation.id,
@@ -106,21 +105,23 @@ export const powerListToPowerTree = (
         }
     })
 
-    const funcTrees = parentToTree(
-        funcs.map((func) => ({
-            title: func.name,
-            key: func.id,
-            value: func.id,
-            parentId: func.parentId,
-            children: funcChildrenMap.get(String(func.id))
-        }))
-    )
-
-    funcTrees.forEach((func) => {
-        if (menuChildrenMap.get(String(floorNumber(func.key as number, 5)))) {
-            menuChildrenMap.get(String(floorNumber(func.key as number, 5)))?.push(func)
+    scopes.forEach((scope) => {
+        if (menuChildrenMap.get(scope.menuId)) {
+            menuChildrenMap.get(scope.menuId)?.push({
+                title: scope.name,
+                key: scope.id,
+                value: scope.id,
+                children: scopeChildrenMap.get(scope.id)
+            })
         } else {
-            menuChildrenMap.set(String(floorNumber(func.key as number, 5)), [func])
+            menuChildrenMap.set(scope.menuId, [
+                {
+                    title: scope.name,
+                    key: scope.id,
+                    value: scope.id,
+                    children: scopeChildrenMap.get(scope.id)
+                }
+            ])
         }
     })
 
@@ -130,15 +131,19 @@ export const powerListToPowerTree = (
             key: menu.id,
             value: menu.id,
             parentId: menu.parentId,
-            children: menuChildrenMap.get(String(menu.id))
+            children: menuChildrenMap.get(menu.id)
         }))
     )
 
+    const menuModuleIdMap = new Map<string, string>()
+    menus.forEach((menu) => menuModuleIdMap.set(menu.id, menu.moduleId))
+
     menuTrees.forEach((menu) => {
-        if (moduleChildrenMap.get(String(floorNumber(menu.key as number, 7)))) {
-            moduleChildrenMap.get(String(floorNumber(menu.key as number, 7)))?.push(menu)
-        } else {
-            moduleChildrenMap.set(String(floorNumber(menu.key as number, 7)), [menu])
+        const moduleId = menuModuleIdMap.get(menu.key as string)
+        if (moduleId && moduleChildrenMap.get(moduleId)) {
+            moduleChildrenMap.get(moduleId)?.push(menu)
+        } else if (moduleId) {
+            moduleChildrenMap.set(moduleId, [menu])
         }
     })
 
@@ -147,7 +152,7 @@ export const powerListToPowerTree = (
             title: module.name,
             key: module.id,
             value: module.id,
-            children: moduleChildrenMap.get(String(module.id))
+            children: moduleChildrenMap.get(module.id)
         })
     )
 }

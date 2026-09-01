@@ -16,18 +16,18 @@ const Settings = () => {
             <HideScrollbar isShowVerticalScrollbar autoHideWaitingTime={1000}>
                 <FlexBox direction={'horizontal'} className={styles.root}>
                     <FlexBox className={styles.rootCol}>
-                        <Permission operationCode={['system:settings:query:base']}>
+                        <Permission operationCode={['system:settings:base:query']}>
                             <Base />
                         </Permission>
-                        <Permission operationCode={['system:settings:query:sensitive']}>
+                        <Permission operationCode={['system:settings:sensitive:query']}>
                             <SensitiveWord />
                         </Permission>
                     </FlexBox>
                     <FlexBox className={styles.rootCol}>
-                        <Permission operationCode={['system:settings:query:mail']}>
+                        <Permission operationCode={['system:settings:mail:query']}>
                             <Mail />
                         </Permission>
-                        <Permission operationCode={['system:settings:query:two-factor']}>
+                        <Permission operationCode={['system:settings:two-factor:query']}>
                             <TwoFactor />
                         </Permission>
                     </FlexBox>

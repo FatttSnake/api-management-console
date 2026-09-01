@@ -104,24 +104,24 @@ const Group = () => {
             align: 'center',
             render: (value, record) => (
                 <AntdSpace size={'middle'}>
-                    <Permission operationCode={['system:group:modify:status']}>
+                    <Permission operationCode={['system:group:one:status']}>
                         {value ? (
                             <a
                                 style={{ color: theme.colorPrimary }}
-                                onClick={handleOnChangStatusBtnClick(record.id, false)}
+                                onClick={handleOnChangeStatusBtnClick(record.id, false)}
                             >
                                 禁用
                             </a>
                         ) : (
                             <a
                                 style={{ color: theme.colorPrimary }}
-                                onClick={handleOnChangStatusBtnClick(record.id, true)}
+                                onClick={handleOnChangeStatusBtnClick(record.id, true)}
                             >
                                 启用
                             </a>
                         )}
                     </Permission>
-                    <Permission operationCode={['system:group:modify:one']}>
+                    <Permission operationCode={['system:group:one:modify']}>
                         <a
                             style={{ color: theme.colorPrimary }}
                             onClick={handleOnEditBtnClick(record)}
@@ -129,7 +129,7 @@ const Group = () => {
                             编辑
                         </a>
                     </Permission>
-                    <Permission operationCode={['system:group:delete:one']}>
+                    <Permission operationCode={['system:group:one:remove']}>
                         <a
                             style={{ color: theme.colorPrimary }}
                             onClick={handleOnDeleteBtnClick(record)}
@@ -372,7 +372,7 @@ const Group = () => {
         getGroup()
     }
 
-    const handleOnChangStatusBtnClick = (id: string, newStatus: boolean) => {
+    const handleOnChangeStatusBtnClick = (id: string, newStatus: boolean) => {
         return () => {
             if (isLoading) {
                 return
@@ -498,7 +498,7 @@ const Group = () => {
 
     const toolbar = (
         <FlexBox direction={'horizontal'} gap={10}>
-            <Permission operationCode={['system:group:add:one']}>
+            <Permission operationCode={['system:group:one:add']}>
                 <Card style={{ overflow: 'inherit', flex: '0 0 auto' }}>
                     <AntdButton
                         type={'primary'}
@@ -562,7 +562,7 @@ const Group = () => {
                 scroll={{ x: true }}
                 onChange={handleOnTableChange}
                 rowSelection={
-                    hasPermission('system:group:delete:multiple')
+                    hasPermission('system:group:all:remove')
                         ? {
                               type: 'checkbox',
                               onChange: handleOnTableSelectChange

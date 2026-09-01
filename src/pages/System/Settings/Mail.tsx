@@ -118,7 +118,7 @@ const Mail = () => {
             loading={isLoading}
             onReset={handleOnReset}
             onSave={handleOnSave}
-            modifyOperationCode={['system:settings:modify:mail']}
+            modifyOperationCode={['system:settings:mail:modify']}
             expand={
                 <AntdButton onClick={handleOnTest} title={'测试'}>
                     <Icon component={IconConsoleTest} />
@@ -127,7 +127,7 @@ const Mail = () => {
         >
             <AntdForm
                 form={mailForm}
-                disabled={!hasPermission('system:settings:modify:mail')}
+                disabled={!hasPermission('system:settings:mail:modify')}
                 layout={'vertical'}
             >
                 <AntdForm.Item

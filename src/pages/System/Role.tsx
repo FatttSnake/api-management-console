@@ -96,24 +96,24 @@ const Role = () => {
             align: 'center',
             render: (value, record) => (
                 <AntdSpace size={'middle'}>
-                    <Permission operationCode={['system:role:modify:status']}>
+                    <Permission operationCode={['system:role:one:status']}>
                         {value ? (
                             <a
                                 style={{ color: theme.colorPrimary }}
-                                onClick={handleOnChangStatusBtnClick(record.id, false)}
+                                onClick={handleOnChangeStatusBtnClick(record.id, false)}
                             >
                                 禁用
                             </a>
                         ) : (
                             <a
                                 style={{ color: theme.colorPrimary }}
-                                onClick={handleOnChangStatusBtnClick(record.id, true)}
+                                onClick={handleOnChangeStatusBtnClick(record.id, true)}
                             >
                                 启用
                             </a>
                         )}
                     </Permission>
-                    <Permission operationCode={['system:role:modify:one']}>
+                    <Permission operationCode={['system:role:one:modify']}>
                         <a
                             style={{ color: theme.colorPrimary }}
                             onClick={handleOnEditBtnClick(record)}
@@ -121,7 +121,7 @@ const Role = () => {
                             编辑
                         </a>
                     </Permission>
-                    <Permission operationCode={['system:role:delete:one']}>
+                    <Permission operationCode={['system:role:one:remove']}>
                         <a
                             style={{ color: theme.colorPrimary }}
                             onClick={handleOnDeleteBtnClick(record)}
@@ -359,7 +359,7 @@ const Role = () => {
         getRole()
     }
 
-    const handleOnChangStatusBtnClick = (id: string, newStatus: boolean) => {
+    const handleOnChangeStatusBtnClick = (id: string, newStatus: boolean) => {
         return () => {
             if (isLoading) {
                 return
@@ -418,7 +418,7 @@ const Role = () => {
                         value.tree = powerListToPowerTree(
                             value.modules,
                             value.menus,
-                            value.funcs,
+                            value.scopes,
                             value.operations
                         )
 
@@ -461,7 +461,7 @@ const Role = () => {
                             powerListToPowerTree(
                                 powerSet.moduleList,
                                 powerSet.menuList,
-                                powerSet.funcList,
+                                powerSet.scopeList,
                                 powerSet.operationList
                             )
                         )
@@ -505,7 +505,7 @@ const Role = () => {
 
     const toolbar = (
         <FlexBox direction={'horizontal'} gap={10}>
-            <Permission operationCode={['system:role:add:one']}>
+            <Permission operationCode={['system:role:one:add']}>
                 <Card style={{ overflow: 'inherit', flex: '0 0 auto' }}>
                     <AntdButton
                         type={'primary'}
@@ -569,7 +569,7 @@ const Role = () => {
                 scroll={{ x: true }}
                 onChange={handleOnTableChange}
                 rowSelection={
-                    hasPermission('system:role:delete:multiple')
+                    hasPermission('system:role:all:remove')
                         ? {
                               type: 'checkbox',
                               onChange: handleOnTableSelectChange

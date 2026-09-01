@@ -154,7 +154,7 @@ interface UserWithPowerInfoVo {
     userInfo: UserInfoVo
     modules: ModuleVo[]
     menus: MenuVo[]
-    funcs: FuncVo[]
+    scopes: ScopeVo[]
     operations: OperationVo[]
 }
 
@@ -191,32 +191,31 @@ interface TwoFactorVo {
 }
 
 interface ModuleVo {
-    id: number
+    id: string
     name: string
 }
 
 interface MenuVo {
-    id: number
+    id: string
     name: string
     url: string
-    parentId: number
-    moduleId: number
+    parentId: string
+    moduleId: string
     children: MenuVo[]
 }
 
-interface FuncVo {
-    id: number
+interface ScopeVo {
+    id: string
     name: string
-    parentId: number
-    menuId: number
-    children: FuncVo[]
+    menuId: string
+    children: ScopeVo[]
 }
 
 interface OperationVo {
-    id: number
+    id: string
     name: string
     code: string
-    funcId: number
+    scopeId: string
 }
 
 interface RoleVo {
@@ -325,7 +324,7 @@ interface RoleWithPowerGetVo {
     updateTime: string
     modules: ModuleVo[]
     menus: MenuVo[]
-    funcs: FuncVo[]
+    scopes: ScopeVo[]
     operations: OperationVo[]
     tree: _DataNode[]
 }
@@ -345,7 +344,7 @@ interface RoleAddEditParam {
 interface PowerSetVo {
     moduleList: ModuleVo[]
     menuList: MenuVo[]
-    funcList: FuncVo[]
+    scopeList: ScopeVo[]
     operationList: OperationVo[]
 }
 

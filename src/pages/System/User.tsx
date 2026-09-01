@@ -191,7 +191,7 @@ const User = () => {
             align: 'center',
             render: (_, record) => (
                 <AntdSpace size={'middle'}>
-                    <Permission operationCode={['system:user:modify:password']}>
+                    <Permission operationCode={['system:user:one:password']}>
                         <a
                             style={{ color: theme.colorPrimary }}
                             onClick={handleOnChangePasswordBtnClick(record)}
@@ -199,7 +199,7 @@ const User = () => {
                             更改密码
                         </a>
                     </Permission>
-                    <Permission operationCode={['system:user:modify:one']}>
+                    <Permission operationCode={['system:user:one:modify']}>
                         <a
                             style={{ color: theme.colorPrimary }}
                             onClick={handleOnEditBtnClick(record)}
@@ -207,7 +207,7 @@ const User = () => {
                             编辑
                         </a>
                     </Permission>
-                    <Permission operationCode={['system:user:delete:one']}>
+                    <Permission operationCode={['system:user:one:remove']}>
                         {record.id !== '0' && (
                             <a
                                 style={{ color: theme.colorPrimary }}
@@ -873,7 +873,7 @@ const User = () => {
 
     const toolbar = (
         <FlexBox direction={'horizontal'} gap={10}>
-            <Permission operationCode={['system:user:add:one']}>
+            <Permission operationCode={['system:user:one:add']}>
                 <Card style={{ overflow: 'inherit', flex: '0 0 auto' }}>
                     <AntdButton
                         type={'primary'}
@@ -949,7 +949,7 @@ const User = () => {
                 scroll={{ x: true }}
                 onChange={handleOnTableChange}
                 rowSelection={
-                    hasPermission('system:user:delete:multiple')
+                    hasPermission('system:user:all:remove')
                         ? {
                               type: 'checkbox',
                               onChange: handleOnTableSelectChange,

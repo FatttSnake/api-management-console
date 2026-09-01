@@ -63,11 +63,11 @@ const Base = () => {
             loading={isLoading}
             onReset={handleOnReset}
             onSave={handleOnSave}
-            modifyOperationCode={['system:settings:modify:base']}
+            modifyOperationCode={['system:settings:base:modify']}
         >
             <AntdForm
                 form={baseForm}
-                disabled={!hasPermission('system:settings:modify:base')}
+                disabled={!hasPermission('system:settings:base:modify')}
                 layout={'vertical'}
                 onChange={handleOnFormChange}
             >

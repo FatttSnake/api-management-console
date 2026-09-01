@@ -55,11 +55,11 @@ const TwoFactor = () => {
             loading={isLoading}
             onReset={handleOnReset}
             onSave={handleOnSave}
-            modifyOperationCode={['system:settings:modify:two-factor']}
+            modifyOperationCode={['system:settings:two-factor:modify']}
         >
             <AntdForm
                 form={twoFactorForm}
-                disabled={!hasPermission('system:settings:modify:two-factor')}
+                disabled={!hasPermission('system:settings:two-factor:modify')}
                 layout={'vertical'}
             >
                 <AntdForm.Item

@@ -20,7 +20,7 @@ declare global {
     interface _DataNode extends DataNode {
         value: SafeKey
         fullTitle?: string
-        parentId?: number
+        parentId?: string
         children?: _DataNode[]
     }
 
