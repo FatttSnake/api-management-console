@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash'
 import { getAuthRoute, mapJsonToRoute, setTitle } from '@/utils/route'
-import { framework } from '@/routers/framework.tsx'
+import { framework } from '@/routers/framework'
 
 export const getRouter = () => {
     const lazySignPage = lazy(() => import('@/pages/Sign'))

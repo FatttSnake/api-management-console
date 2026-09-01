@@ -375,10 +375,6 @@ interface GroupChangeStatusParam {
     enable: boolean
 }
 
-interface AvatarBase64Vo {
-    base64: string
-}
-
 interface BaseSettingsVo {
     systemName?: string
     tokenExpiryBufferMs?: number

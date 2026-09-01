@@ -12,17 +12,20 @@ import { useConfigValue } from '@/components/config/ConfigContext'
 import { message, notification, modal, getThemeMode, ThemeMode, setThemeMode } from '@/utils/common'
 import { utcToLocalTime } from '@/utils/datetime'
 import { getUserInfo, removeAllToken } from '@/utils/auth'
-import { r_sys_user_info_change_password, r_sys_user_info_update } from '@/services/system'
+import {
+    r_sys_avatar_generate,
+    r_sys_user_info_change_password,
+    r_sys_user_info_update
+} from '@/services/system'
 import {
     r_auth_two_factor_create,
     r_auth_two_factor_remove,
     r_auth_two_factor_validate
 } from '@/services/auth.ts'
-import { r_api_avatar_random_base64 } from '@/services/api/avatar.ts'
-import FitFullscreen from '@/components/common/FitFullscreen.tsx'
-import Card from '@/components/common/Card.tsx'
-import FlexBox from '@/components/common/FlexBox.tsx'
-import HideScrollbar from '@/components/common/HideScrollbar.tsx'
+import FitFullscreen from '@/components/common/FitFullscreen'
+import Card from '@/components/common/Card'
+import FlexBox from '@/components/common/FlexBox'
+import HideScrollbar from '@/components/common/HideScrollbar'
 
 const Profile = () => {
     const { styles, theme } = useStyles()
@@ -84,11 +87,11 @@ const Profile = () => {
             return
         }
         setIsGettingAvatar(true)
-        r_api_avatar_random_base64()
+        r_sys_avatar_generate()
             .then((res) => {
                 const response = res.data
                 if (response.success) {
-                    response.data?.base64 && setAvatar(response.data.base64)
+                    response.data && setAvatar(response.data)
                 }
             })
             .finally(() => {

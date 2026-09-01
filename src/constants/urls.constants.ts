@@ -9,6 +9,7 @@ export const URL_LOGOUT = '/logout'
 export const URL_TWO_FACTOR = '/two-factor'
 
 export const URL_SYS_LOG = '/system/log'
+export const URL_SYS_AVATAR_GENERATE = '/system/user/avatar/generate'
 export const URL_SYS_USER_INFO = '/system/user/info'
 export const URL_SYS_USER = '/system/user'
 export const URL_SYS_ROLE = '/system/role'
@@ -50,7 +51,3 @@ export const URL_USER_API_ACCOUNT_TRANSACTIONS = `${URL_USER_API_ACCOUNT}/transa
 export const URL_USER_API_KEY = '/user/api/key'
 export const URL_USER_API_KEY_AVAILABLE_APIS = `${URL_USER_API_KEY}/available-apis`
 export const URL_USER_API_USAGE = '/user/api/usage'
-
-export const URL_API = '/api'
-export const URL_API_AVATAR_V1 = `${URL_API}/avatar/v1`
-export const URL_API_AVATAR_V1_BASE64 = `${URL_API_AVATAR_V1}/base64`

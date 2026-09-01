@@ -31,10 +31,13 @@ import {
     URL_SYS_STATISTICS_SOFTWARE,
     URL_SYS_STATISTICS_HARDWARE,
     URL_SYS_STATISTICS_CPU,
-    URL_SYS_STATISTICS_STORAGE
+    URL_SYS_STATISTICS_STORAGE,
+    URL_SYS_AVATAR_GENERATE,
 } from '@/constants/urls.constants'
 import { SHA512 } from '@/utils/crypto'
 import request from '@/services'
+
+export const r_sys_avatar_generate = () => request.get<string>(URL_SYS_AVATAR_GENERATE)
 
 export const r_sys_user_info_get = () => request.get<UserWithPowerInfoVo>(URL_SYS_USER_INFO)
 

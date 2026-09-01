@@ -13,6 +13,7 @@ import { message, modal } from '@/utils/common'
 import { hasPermission } from '@/utils/auth'
 import { utcToLocalTime, isPastTime, localTimeToUtc, dayjsToUtc, getNowUtc } from '@/utils/datetime'
 import {
+    r_sys_avatar_generate,
     r_sys_group_get_list,
     r_sys_role_get_list,
     r_sys_user_add,
@@ -23,7 +24,6 @@ import {
     r_sys_user_update
 } from '@/services/system'
 import Permission from '@/components/common/Permission'
-import { r_api_avatar_random_base64 } from '@/services/api/avatar'
 import FitFullscreen from '@/components/common/FitFullscreen'
 import HideScrollbar from '@/components/common/HideScrollbar'
 import FlexBox from '@/components/common/FlexBox'
@@ -704,11 +704,11 @@ const User = () => {
     }
 
     const getAvatar = () => {
-        r_api_avatar_random_base64().then((res) => {
+        r_sys_avatar_generate().then((res) => {
             const response = res.data
             if (response.success) {
-                response.data && setAvatar(response.data.base64)
-                response.data && form.setFieldValue('avatar', response.data.base64)
+                response.data && setAvatar(response.data)
+                response.data && form.setFieldValue('avatar', response.data)
             }
         })
     }

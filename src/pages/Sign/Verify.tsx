@@ -10,7 +10,7 @@ import { message } from '@/utils/common'
 import { getLoginStatus, getUserInfo, requestUserInfo } from '@/utils/auth'
 import { navigateToLogin, navigateToRedirect, navigateToRoot } from '@/utils/navigation'
 import { r_auth_resend, r_auth_verify } from '@/services/auth'
-import { r_api_avatar_random_base64 } from '@/services/api/avatar'
+import { r_sys_avatar_generate } from '@/services/system'
 import { AppContext } from '@/App'
 import FitCenter from '@/components/common/FitCenter'
 import FlexBox from '@/components/common/FlexBox'
@@ -100,11 +100,11 @@ const Verify = () => {
             return
         }
         setIsGettingAvatar(true)
-        r_api_avatar_random_base64()
+        r_sys_avatar_generate()
             .then((res) => {
                 const response = res.data
                 if (response.success) {
-                    response.data?.base64 && setAvatar(response.data.base64)
+                    response.data && setAvatar(response.data)
                 }
             })
             .finally(() => {
