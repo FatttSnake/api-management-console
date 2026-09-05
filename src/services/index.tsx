@@ -130,6 +130,10 @@ const setupInterceptors = (instance: AxiosInstance, apiUrl: string) => {
             return response
         },
         async (error: AxiosError) => {
+            if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+                return Promise.reject(error)
+            }
+
             if (
                 error.code === 'ETIMEDOUT' ||
                 (error.code === 'ECONNABORTED' && error.message.includes('timeout'))
