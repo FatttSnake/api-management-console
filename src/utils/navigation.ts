@@ -42,8 +42,8 @@ export const navigateToRegister = (
     navigate(`/register/${locationSearch}`, options)
 }
 
-export const navigateToUser = (navigate: NavigateFunction, options?: NavigateOptions) => {
-    navigate('/user', options)
+export const navigateToProfile = (navigate: NavigateFunction, options?: NavigateOptions) => {
+    navigate('/profile', options)
 }
 
 export const checkIsSamePathname = (a: string, b: string) => {

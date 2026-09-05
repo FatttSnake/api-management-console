@@ -4,7 +4,7 @@ import { THEME_DARK, THEME_FOLLOW_SYSTEM, THEME_LIGHT } from '@/constants/common
 import { getThemeMode, notification, setThemeMode, ThemeMode } from '@/utils/common'
 import { getRedirectUrl } from '@/utils/route'
 import { getAvatar, getLoginStatus, getNickname, removeAllToken } from '@/utils/auth'
-import { navigateToLogin, navigateToUser } from '@/utils/navigation'
+import { navigateToLogin, navigateToProfile } from '@/utils/navigation'
 import { r_auth_logout } from '@/services/auth'
 import { SidebarContext } from '@/components/common/Sidebar/index'
 
@@ -21,7 +21,7 @@ const Footer = () => {
 
     const handleClickAvatar = () => {
         if (getLoginStatus()) {
-            navigateToUser(navigate)
+            navigateToProfile(navigate)
         } else {
             navigateToLogin(navigate, undefined, `${lastMatch.pathname}${location.search}`)
         }
