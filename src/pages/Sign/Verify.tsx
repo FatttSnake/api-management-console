@@ -193,11 +193,11 @@ const Verify = () => {
                         </AntdForm.Item>
                         <AntdForm.Item>
                             <AntdButton
-                                style={{ width: '100%' }}
                                 type={'primary'}
                                 htmlType={'submit'}
                                 disabled={isVerifying}
                                 loading={isVerifying}
+                                block
                             >
                                 确&ensp;&ensp;&ensp;&ensp;定
                             </AntdButton>

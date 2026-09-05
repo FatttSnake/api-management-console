@@ -190,7 +190,7 @@ const User = () => {
             width: '14em',
             align: 'center',
             render: (_, record) => (
-                <AntdSpace size={'middle'}>
+                <AntdSpace size={'medium'}>
                     <Permission operationCode={['system:user:one:password']}>
                         <a
                             style={{ color: theme.colorPrimary }}
@@ -893,7 +893,7 @@ const User = () => {
                 </AntdButton>
             </Card>
             <Card style={{ overflow: 'inherit' }}>
-                <AntdSpace.Compact style={{ width: '100%' }}>
+                <AntdSpace.Compact block>
                     <AntdSelect
                         value={searchType}
                         onChange={handleOnSearchTypeChange}

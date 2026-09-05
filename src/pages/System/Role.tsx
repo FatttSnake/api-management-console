@@ -95,7 +95,7 @@ const Role = () => {
             width: '15em',
             align: 'center',
             render: (value, record) => (
-                <AntdSpace size={'middle'}>
+                <AntdSpace size={'medium'}>
                     <Permission operationCode={['system:role:one:status']}>
                         {value ? (
                             <a
@@ -525,7 +525,7 @@ const Role = () => {
                 </AntdButton>
             </Card>
             <Card style={{ overflow: 'inherit' }}>
-                <AntdSpace.Compact style={{ width: '100%' }}>
+                <AntdSpace.Compact block>
                     <AntdSpace.Addon>名称</AntdSpace.Addon>
                     <AntdInput
                         suffix={

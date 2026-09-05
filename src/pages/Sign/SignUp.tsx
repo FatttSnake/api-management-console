@@ -208,11 +208,11 @@ const SignUp = () => {
                             )}
                             <AntdForm.Item>
                                 <AntdButton
-                                    style={{ width: '100%' }}
                                     type={'primary'}
                                     htmlType={'submit'}
                                     disabled={isSigningUp}
                                     loading={isSigningUp}
+                                    block
                                 >
                                     注&ensp;&ensp;&ensp;&ensp;册
                                 </AntdButton>

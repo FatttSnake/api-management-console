@@ -163,11 +163,11 @@ const Forget = () => {
                                     )}
                                 <AntdForm.Item>
                                     <AntdButton
-                                        style={{ width: '100%' }}
                                         type={'primary'}
                                         htmlType={'submit'}
                                         disabled={isSending}
                                         loading={isSending}
+                                        block
                                     >
                                         确&ensp;&ensp;&ensp;&ensp;定
                                     </AntdButton>
@@ -239,11 +239,11 @@ const Forget = () => {
                                 )}
                             <AntdForm.Item>
                                 <AntdButton
-                                    style={{ width: '100%' }}
                                     type={'primary'}
                                     htmlType={'submit'}
                                     disabled={isChanging}
                                     loading={isChanging}
+                                    block
                                 >
                                     更&ensp;&ensp;&ensp;&ensp;改
                                 </AntdButton>

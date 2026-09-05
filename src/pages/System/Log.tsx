@@ -240,7 +240,7 @@ const Log = () => {
     const toolbar = (
         <FlexBox direction={'horizontal'} gap={10}>
             <Card style={{ overflow: 'inherit' }}>
-                <AntdSpace.Compact style={{ width: '100%' }}>
+                <AntdSpace.Compact block>
                     <AntdSpace.Addon>Trace ID</AntdSpace.Addon>
                     <AntdInput
                         allowClear
@@ -252,7 +252,7 @@ const Log = () => {
                 </AntdSpace.Compact>
             </Card>
             <Card style={{ overflow: 'inherit' }}>
-                <AntdSpace.Compact style={{ width: '100%' }}>
+                <AntdSpace.Compact block>
                     <AntdSpace.Addon>请求 Url</AntdSpace.Addon>
                     <AntdInput
                         allowClear

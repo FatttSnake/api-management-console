@@ -274,8 +274,8 @@ interface UserAddEditParam {
     nickname?: string
     avatar?: string
     email?: string
-    roleIds: number[]
-    groupIds: number[]
+    roleIds: string[]
+    groupIds: string[]
 }
 
 interface UserUpdatePasswordParam {
@@ -337,7 +337,7 @@ interface RoleChangeStatusParam {
 interface RoleAddEditParam {
     id?: string
     name: string
-    powerIds: number[]
+    powerIds: string[]
     enable: boolean
 }
 
@@ -365,7 +365,7 @@ interface GroupWithRoleGetVo {
 interface GroupAddEditParam {
     id?: string
     name: string
-    roleIds: number[]
+    roleIds: string[]
     enable: boolean
 }
 

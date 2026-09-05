@@ -250,11 +250,11 @@ const SignIn = () => {
                     </FlexBox>
                     <AntdForm.Item>
                         <AntdButton
-                            style={{ width: '100%' }}
                             type={'primary'}
                             htmlType={'submit'}
                             disabled={isSigningIn}
                             loading={isSigningIn}
+                            block
                         >
                             登&ensp;&ensp;&ensp;&ensp;录
                         </AntdButton>
