@@ -10,6 +10,7 @@ import {
     DATABASE_UPDATE_SUCCESS
 } from '@/constants/common.constants'
 import { message, modal } from '@/utils/common'
+import { navigateToApiKeys } from '@/utils/navigation'
 import { hasPermission } from '@/utils/auth'
 import { utcToLocalTime, isPastTime, localTimeToUtc, dayjsToUtc, getNowUtc } from '@/utils/datetime'
 import {
@@ -36,6 +37,7 @@ interface ChangePasswordFields extends UserUpdatePasswordParam {
 
 const User = () => {
     const theme = useTheme()
+    const navigate = useNavigate()
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [isDrawerEdit, setIsDrawerEdit] = useState(false)
@@ -191,6 +193,14 @@ const User = () => {
             align: 'center',
             render: (_, record) => (
                 <AntdSpace size={'medium'}>
+                    <Permission operationCode={['system:api-keys:all:query']}>
+                        <a
+                            style={{ color: theme.colorPrimary }}
+                            onClick={() => navigateToApiKeys(navigate, record.id)}
+                        >
+                            密钥管理
+                        </a>
+                    </Permission>
                     <Permission operationCode={['system:user:one:password']}>
                         <a
                             style={{ color: theme.colorPrimary }}

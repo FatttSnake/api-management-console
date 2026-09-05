@@ -4,6 +4,7 @@ import { GetProp, StepProps, TablePaginationConfig, TreeDataNode, UploadProps } 
 import { ColumnsType, FilterValue, SafeKey, SorterResult, SortOrder } from 'antd/es/table/interface'
 import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import type { DataNode } from 'antd/es/tree'
+import { DefaultOptionType } from 'antd/es/cascader'
 
 declare global {
     type IconComponent =
@@ -23,6 +24,7 @@ declare global {
         parentId?: string
         children?: _DataNode[]
     }
+    type _OptionType = DefaultOptionType
 
     type _UploadProps = UploadProps
     type _GetProp<T, PropName> = GetProp<T, PropName>

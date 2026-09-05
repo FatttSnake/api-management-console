@@ -2,6 +2,65 @@ import { getAuthRoute } from '@/utils/route'
 
 export const systemZone: RouteJsonObject[] = [
     {
+        path: 'plugin',
+        absolutePath: '/system/plugin',
+        id: 'system-plugin',
+        name: '插件管理',
+        icon: lazy(() => import('~icons/console/plugin')),
+        menu: true,
+        permission: true,
+        children: [
+            {
+                path: '',
+                absolutePath: '/system/plugin',
+                id: 'system-plugin-index',
+                component: lazy(() => import('@/pages/System/Plugin')),
+                name: '插件',
+                menu: true,
+                permission: true
+            },
+            {
+                path: 'key',
+                absolutePath: '/system/plugin/key',
+                id: 'system-plugin-key',
+                component: lazy(() => import('@/pages/System/Plugin/PluginTrustKey')),
+                name: '签名',
+                menu: true,
+                permission: true
+            }
+        ]
+    },
+    {
+        path: 'interface',
+        absolutePath: '/system/interface',
+        id: 'system-interface',
+        component: lazy(() => import('@/pages/System/Interface')),
+        name: '接口管理',
+        icon: lazy(() => import('~icons/console/api')),
+        menu: true,
+        permission: true
+    },
+    {
+        path: 'api-keys/:userId',
+        absolutePath: '/system/api-keys',
+        id: 'system-api-keys',
+        component: lazy(() => import('@/pages/System/Keys')),
+        name: '密钥管理',
+        icon: lazy(() => import('~icons/console/key')),
+        menu: false,
+        permission: true
+    },
+    {
+        path: 'operations',
+        absolutePath: '/system/operations',
+        id: 'system-operations',
+        component: lazy(() => import('@/pages/System/Operations')),
+        name: '运营管理',
+        icon: lazy(() => import('~icons/console/operations')),
+        menu: true,
+        permission: true
+    },
+    {
         path: 'statistics',
         absolutePath: '/system/statistics',
         id: 'system-statistics',

@@ -7,6 +7,7 @@ import Base from '@/pages/System/Settings/Base'
 import Mail from '@/pages/System/Settings/Mail'
 import SensitiveWord from '@/pages/System/Settings/SensitiveWord'
 import TwoFactor from '@/pages/System/Settings/TwoFactor'
+import Api from '@/pages/System/Settings/Api'
 
 const Settings = () => {
     const { styles } = useStyles()
@@ -29,6 +30,9 @@ const Settings = () => {
                         </Permission>
                         <Permission operationCode={['system:settings:two-factor:query']}>
                             <TwoFactor />
+                        </Permission>
+                        <Permission operationCode={['system:settings:api:query']}>
+                            <Api />
                         </Permission>
                     </FlexBox>
                 </FlexBox>

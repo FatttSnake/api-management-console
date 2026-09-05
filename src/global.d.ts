@@ -557,7 +557,7 @@ interface ApiAccountVo {
     id: string
     userId: string
     balance: string
-    status: boolean
+    enable: boolean
     createTime: string
     updateTime: string
 }
@@ -570,7 +570,7 @@ interface ApiAuditVo {
     detail: string
 }
 
-interface ApiAuditGetParam {
+interface ApiAuditGetParam extends PageParam {
     event: string
     startTime: string
     endTime: string
@@ -589,16 +589,24 @@ interface ApiInterfaceVo {
     billingMode: string
     needKey: boolean
     rateLimit: number
-    enabled: boolean
+    enable: boolean
+    accessMode: string
     createTime: string
     updateTime: string
 }
 
-interface ApiInterfaceGetParam {
-    searchCode: string
-    searchName: string
+interface ApiGroupVo {
     pluginId: string
-    enabled: boolean
+    pluginName: string
+    pluginDescription: string
+    interfaces: ApiInterfaceVo[]
+}
+
+interface ApiInterfaceGetParam extends PageParam {
+    searchCode?: string
+    searchName?: string
+    pluginId?: string
+    enable?: boolean
 }
 
 interface ApiInterfaceUpdateParam {
@@ -607,7 +615,13 @@ interface ApiInterfaceUpdateParam {
     billingMode: string
     needKey: boolean
     rateLimit: number
-    enabled: boolean
+    enable: boolean
+    accessMode: string
+}
+
+interface ApiInterfaceUpdateStatusParam {
+    id: string
+    enable: boolean
 }
 
 interface ApiKeyVo {
@@ -616,7 +630,7 @@ interface ApiKeyVo {
     accessKey: string
     name: string
     permissions: string[]
-    status: boolean
+    enable: boolean
     expireTime: string
     ipWhitelist: string
     rateLimit: number
@@ -634,42 +648,43 @@ interface ApiKeyWithSecretVo {
 }
 
 interface ApiKeyAddParam {
-    userId: string
+    userId?: string
     name: string
-    permissionCodes: string[]
-    expireTime: string
-    ipWhitelist: string
-    rateLimit: number
-    quota: number
-    quotaPeriod: number
-    remark: string
+    permissionCodes?: string[]
+    expireTime?: string
+    ipWhitelist?: string
+    rateLimit?: number
+    quota?: number
+    quotaPeriod?: number
+    remark?: string
 }
 
 interface ApiKeyDeleteParam {
     ids: string[]
 }
 
-interface ApiKeyGetParam {
-    searchName: string
-    status: boolean
-    userIds: string
+interface ApiKeyGetParam extends PageParam {
+    searchName?: string
+    enable?: boolean
+    userId?: string
 }
 
 interface ApiKeyUpdateParam {
     id: string
     name: string
-    permissionCodes: string[]
-    expireTime: string
-    ipWhitelist: string
-    rateLimit: number
-    quota: number
-    quotaPeriod: number
-    remark: string
+    permissionCodes?: string[]
+    enable: boolean
+    expireTime?: string
+    ipWhitelist?: string
+    rateLimit?: number
+    quota?: number
+    quotaPeriod?: number
+    remark?: string
 }
 
 interface ApiKeyUpdateStatusParam {
     id: string
-    status: boolean
+    enable: boolean
 }
 
 interface ApiMonitorItemVo {
@@ -701,30 +716,66 @@ interface ApiMonitorDashboardVo {
     topApis: ApiTopVo[]
 }
 
+interface ApiPluginTrustKeyVo {
+    id: string
+    keyId: string
+    alias: string
+    enable: boolean
+    createTime: string
+}
+
+interface ApiPluginTrustKeyGetParam extends PageParam {
+    searchAlias?: string
+    enable?: boolean
+}
+
+interface ApiPluginTrustKeyAddParam {
+    publicKey: string
+    alias: string
+}
+
+interface apiPluginTrustKeyUpdateStatusParam {
+    keyId: string
+    enable: boolean
+}
+
 interface ApiPluginVo {
     id: string
     pluginId: string
     name: string
     description: string
-    enabled: boolean
+    enable: boolean
     defaultPrice: string
     defaultRateLimit: number
+    defaultAccessMode: string
+    source: string
+    versionName: string
+    versionCode: number
+    jarName: string
+    signerKeyId: string
+    loadError: string
     createTime: string
     updateTime: string
 }
 
-interface ApiPluginGetParam {
-    searchName: string
-    enabled: boolean
+interface ApiPluginGetParam extends PageParam {
+    searchName?: string
+    enable?: boolean
 }
 
 interface ApiPluginUpdateParam {
     id: string
     name: string
     description: string
-    enabled: boolean
+    enable: boolean
     defaultPrice: string
     defaultRateLimit: number
+    defaultAccessMode: string
+}
+
+interface ApiPluginUpdateStatusParam {
+    id: string
+    enable: boolean
 }
 
 interface ApiReportVo {
@@ -736,7 +787,7 @@ interface ApiReportVo {
     cost: string
 }
 
-interface ApiReportGetParam {
+interface ApiReportGetParam extends PageParam {
     apiKeyId: string
     startTime: string
     endTime: string
@@ -756,11 +807,11 @@ interface ApiTransactionVo {
     createTime: string
 }
 
-interface ApiTransactionGetParam {
-    userId: string
-    type: string
-    startTime: string
-    endTime: string
+interface ApiTransactionGetParam extends PageParam {
+    userId?: string
+    type?: string
+    startTime?: string
+    endTime?: string
 }
 
 interface ApiUsageVo {
@@ -768,6 +819,8 @@ interface ApiUsageVo {
     apiKeyId: string
     apiId: string
     apiCode: string
+    apiName: string
+    apiDescription: string
     userId: string
     requestPath: string
     requestMethod: string
@@ -781,11 +834,22 @@ interface ApiUsageVo {
     createTime: string
 }
 
-interface ApiUsageGetParam {
-    userId: string
-    apiKeyId: string
-    apiCode: string
-    success: boolean
-    startTime: string
-    endTime: string
+interface ApiUsageGetParam extends PageParam {
+    userId?: string
+    apiKeyId?: string
+    apiCode?: string
+    success?: boolean
+    startTime?: string
+    endTime?: string
+}
+
+interface ApiDocPluginVo {
+    pluginId: string
+    name: string
+    description: string
+    versionName: string
+    versionCode: string
+    enable: boolean
+    interfaces: ApiInterfaceVo[]
+    openapi: unknown
 }

@@ -36,7 +36,7 @@ export const r_user_api_key_delete_list = (param: ApiKeyDeleteParam) =>
     request.delete(URL_USER_API_KEY, param)
 
 export const r_user_api_key_available_apis = () =>
-    request.get<ApiInterfaceVo[]>(URL_USER_API_KEY_AVAILABLE_APIS)
+    request.get<ApiGroupVo[]>(URL_USER_API_KEY_AVAILABLE_APIS)
 
 export const r_user_api_key_usage_get = (param: ApiUsageGetParam) =>
     request.get<PageVo<ApiUsageVo>>(URL_USER_API_USAGE, param)

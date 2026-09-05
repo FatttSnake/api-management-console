@@ -33,6 +33,10 @@ import {
     URL_SYS_STATISTICS_CPU,
     URL_SYS_STATISTICS_STORAGE,
     URL_SYS_AVATAR_GENERATE,
+    URL_SYS_API_PLUGIN_INSTALL,
+    URL_SYS_API_PLUGIN_KEY,
+    URL_SYS_API_KEY_AVAILABLE_APIS,
+    URL_SYS_USER_INFO_BY_ID
 } from '@/constants/urls.constants'
 import { SHA512 } from '@/utils/crypto'
 import request from '@/services'
@@ -43,6 +47,9 @@ export const r_sys_user_info_get = () => request.get<UserWithPowerInfoVo>(URL_SY
 
 export const r_sys_user_info_get_basic = (username: string) =>
     request.get<UserWithInfoVo>(`${URL_SYS_USER_INFO}/${username}`)
+
+export const r_sys_user_info_get_basic_by_id = (id: string) =>
+    request.get<UserWithInfoVo>(`${URL_SYS_USER_INFO_BY_ID}/${id}`)
 
 export const r_sys_user_info_update = (param: UserInfoUpdateParam) =>
     request.patch(URL_SYS_USER_INFO, param)
@@ -163,16 +170,60 @@ export const r_sys_statistics_online = (param: OnlineInfoGetParam) =>
 export const r_sys_statistics_active = (param: ActiveInfoGetParam) =>
     request.get<ActiveInfoVo>(URL_SYS_STATISTICS_ACTIVE, param)
 
-export const r_sys_api_get_plugin = (param: ApiPluginGetParam) =>
+export const r_sys_api_plugin_get = (param: ApiPluginGetParam) =>
     request.get<PageVo<ApiPluginVo>>(URL_SYS_API_PLUGIN, param)
 
-export const r_sys_api_get = (param: ApiInterfaceGetParam) =>
-    request.get<PageVo<ApiInterfaceVo>>(URL_SYS_API, param)
+export const r_sys_api_plugin_install = (
+    file: File,
+    onProgress?: (percent: number) => void,
+    signal?: AbortSignal
+) => {
+    const formData = new FormData()
+    formData.append('file', file)
 
-export const r_sys_api_update_plugin = (param: ApiPluginUpdateParam) =>
+    return request.post<ApiPluginVo>(URL_SYS_API_PLUGIN_INSTALL, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        timeout: 6e5,
+        signal,
+        onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+                onProgress?.(Math.round((progressEvent.loaded / progressEvent.total) * 100))
+            }
+        }
+    })
+}
+
+export const r_sys_api_plugin_update = (param: ApiPluginUpdateParam) =>
     request.put(URL_SYS_API_PLUGIN, param)
 
-export const r_sys_api_update = (param: ApiInterfaceUpdateParam) => request.put(URL_SYS_API, param)
+export const r_sys_api_plugin_status = (param: ApiPluginUpdateStatusParam) =>
+    request.patch(URL_SYS_API_PLUGIN, param)
+
+export const r_sys_api_plugin_uninstall = (pluginId: string) =>
+    request.delete(`${URL_SYS_API_PLUGIN}/${pluginId}`)
+
+export const r_sys_api_interface_get = (param: ApiInterfaceGetParam) =>
+    request.get<PageVo<ApiGroupVo>>(URL_SYS_API, param)
+
+export const r_sys_api_interface_update = (param: ApiInterfaceUpdateParam) =>
+    request.put(URL_SYS_API, param)
+
+export const r_sys_api_interface_status = (param: ApiInterfaceUpdateStatusParam) =>
+    request.patch(URL_SYS_API, param)
+
+export const r_sys_api_plugin_key_get = (param: ApiPluginTrustKeyGetParam) =>
+    request.get<PageVo<ApiPluginTrustKeyVo>>(URL_SYS_API_PLUGIN_KEY, param)
+
+export const r_sys_api_plugin_key_add = (param: ApiPluginTrustKeyAddParam) =>
+    request.post<ApiPluginTrustKeyVo>(URL_SYS_API_PLUGIN_KEY, param)
+
+export const r_sys_api_plugin_key_update = (param: apiPluginTrustKeyUpdateStatusParam) =>
+    request.put(URL_SYS_API_PLUGIN_KEY, param)
+
+export const r_sys_api_plugin_key_delete = (keyId: string) =>
+    request.delete(`${URL_SYS_API_PLUGIN_KEY}/${keyId}`)
 
 export const r_sys_api_account_get = (userId?: string) =>
     request.get<ApiAccountVo>(URL_SYS_API_ACCOUNT, { userId })
@@ -205,6 +256,9 @@ export const r_sys_api_key_delete = (id: string) => request.delete(`${URL_SYS_AP
 
 export const r_sys_api_key_delete_list = (param: ApiKeyDeleteParam) =>
     request.delete(URL_SYS_API_KEY, param)
+
+export const r_sys_api_key_available_apis = (userId: string) =>
+    request.get<ApiGroupVo[]>(`${URL_SYS_API_KEY_AVAILABLE_APIS}/${userId}`)
 
 export const r_sys_api_usage_get = (param: ApiUsageGetParam) =>
     request.get<PageVo<ApiUsageVo>>(URL_SYS_API_USAGE, param)

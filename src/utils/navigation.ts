@@ -46,6 +46,18 @@ export const navigateToProfile = (navigate: NavigateFunction, options?: Navigate
     navigate('/profile', options)
 }
 
+export const navigateToApiKeys = (
+    navigate: NavigateFunction,
+    userId: string,
+    options?: NavigateOptions
+) => {
+    navigate(`/system/api-keys/${userId}`, options)
+}
+
+export const navigateToUserManagement = (navigate: NavigateFunction, options?: NavigateOptions) => {
+    navigate('/system/user', options)
+}
+
 export const checkIsSamePathname = (a: string, b: string) => {
     const aPathname = a.substring(0, a.indexOf('?') === -1 ? a.length : a.indexOf('?'))
     const bPathname = b.substring(0, b.indexOf('?') === -1 ? b.length : b.indexOf('?'))
