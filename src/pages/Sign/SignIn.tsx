@@ -10,7 +10,7 @@ import {
     SYSTEM_INVALID_CAPTCHA_CODE
 } from '@/constants/common.constants'
 import { useConfigValue } from '@/components/config/ConfigContext'
-import { message, notification, modal } from '@/utils/common'
+import { message, modal, notification } from '@/utils/common'
 import { getUserInfo, setAccessToken, setCsrfToken } from '@/utils/auth'
 import { utcToLocalTime } from '@/utils/datetime'
 import {
@@ -30,8 +30,8 @@ const SignIn = () => {
     const { refreshRouter, isDarkMode } = useContext(AppContext)
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
-    const [twoFactorForm] = AntdForm.useForm<{ twoFactorCode: string }>()
     const captchaRef = useRef<CaptchaElement>(null)
+    const isOtpHasFocusRef = useRef<boolean>(false)
     const [isSigningIn, setIsSigningIn] = useState(false)
     const [captchaCode, setCaptchaCode] = useState('')
     const turnstileSiteKey = useConfigValue('turnstileSiteKey')
@@ -97,9 +97,10 @@ const SignIn = () => {
                         })
                         break
                     case PERMISSION_NEED_TWO_FACTOR:
-                        twoFactorForm.resetFields()
-                        void modal.confirm({
+                    case PERMISSION_TWO_FACTOR_VERIFICATION_CODE_ERROR: {
+                        const m = modal.info({
                             centered: true,
+                            width: 300,
                             icon: (
                                 <Icon
                                     style={{ color: theme.colorPrimary }}
@@ -108,48 +109,39 @@ const SignIn = () => {
                             ),
                             title: '双因素验证',
                             content: (
-                                <AntdForm
-                                    form={twoFactorForm}
-                                    ref={() => {
-                                        setTimeout(() => {
-                                            twoFactorForm.getFieldInstance('twoFactorCode')?.focus()
-                                        }, 50)
+                                <AntdInput.OTP
+                                    ref={(ref) => {
+                                        if (ref && !isOtpHasFocusRef.current) {
+                                            isOtpHasFocusRef.current = true
+                                            setTimeout(() => ref.focus(), 100)
+                                        }
                                     }}
-                                >
-                                    <AntdForm.Item
-                                        name={'twoFactorCode'}
-                                        label={'验证码'}
-                                        style={{ marginTop: 10 }}
-                                        rules={[{ required: true, whitespace: true, len: 6 }]}
-                                    >
-                                        <AntdInput showCount maxLength={6} autoComplete={'off'} />
-                                    </AntdForm.Item>
-                                </AntdForm>
-                            ),
-                            onOk: () =>
-                                twoFactorForm.validateFields().then(
-                                    () => {
-                                        return new Promise<void>((resolve) => {
-                                            handleOnFinish({
-                                                ...loginParam,
-                                                twoFactorCode: twoFactorForm.getFieldValue(
-                                                    'twoFactorCode'
-                                                ) as string
-                                            })
-                                            resolve()
-                                        })
-                                    },
-                                    () => {
-                                        return new Promise((_, reject) => {
-                                            reject('输入有误')
-                                        })
+                                    style={{ margin: '8px 0' }}
+                                    status={
+                                        code === PERMISSION_TWO_FACTOR_VERIFICATION_CODE_ERROR
+                                            ? 'error'
+                                            : undefined
                                     }
-                                ),
-                            onCancel: () => {
+                                    onChange={(value) => {
+                                        handleOnFinish({
+                                            ...loginParam,
+                                            twoFactorCode: value
+                                        })
+                                        m.destroy()
+                                        isOtpHasFocusRef.current = false
+                                    }}
+                                />
+                            ),
+                            okText: '取消',
+                            okType: 'default',
+                            onOk: () => {
+                                m.destroy()
+                                isOtpHasFocusRef.current = false
                                 setIsSigningIn(false)
                             }
                         })
                         break
+                    }
                     case PERMISSION_USERNAME_NOT_FOUND:
                     case PERMISSION_LOGIN_USERNAME_PASSWORD_ERROR:
                         void message.error(
@@ -157,10 +149,6 @@ const SignIn = () => {
                                 <strong>账号</strong>或<strong>密码</strong>错误，请重试
                             </>
                         )
-                        setIsSigningIn(false)
-                        break
-                    case PERMISSION_TWO_FACTOR_VERIFICATION_CODE_ERROR:
-                        void message.error('双因素验证码错误')
                         setIsSigningIn(false)
                         break
                     case PERMISSION_USER_DISABLE:
