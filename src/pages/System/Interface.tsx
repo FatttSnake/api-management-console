@@ -548,7 +548,12 @@ const Interface = () => {
                 />
             </AntdForm.Item>
             <AntdForm.Item name={'rateLimit'} label={'每分钟限流次数'}>
-                <AntdInputNumber style={{ width: '100%' }} min={0} placeholder={'继承插件'} />
+                <AntdInputNumber
+                    style={{ width: '100%' }}
+                    min={0}
+                    precision={0}
+                    placeholder={'继承插件'}
+                />
             </AntdForm.Item>
             <AntdForm.Item name={'accessMode'} label={'访问模式'}>
                 <AntdSelect

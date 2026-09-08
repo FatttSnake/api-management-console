@@ -58,6 +58,26 @@ export const navigateToUserManagement = (navigate: NavigateFunction, options?: N
     navigate('/system/user', options)
 }
 
+export const navigateToUsage = (
+    navigate: NavigateFunction,
+    userId: string,
+    options?: NavigateOptions
+) => {
+    navigate(`/system/operations/usage/${userId}`, options)
+}
+
+export const navigateToApiAccount = (navigate: NavigateFunction, options?: NavigateOptions) => {
+    navigate('/system/operations/account', options)
+}
+
+export const navigateToTransactions = (
+    navigate: NavigateFunction,
+    userId: string,
+    options?: NavigateOptions
+) => {
+    navigate(`/system/operations/transactions/${userId}`, options)
+}
+
 export const checkIsSamePathname = (a: string, b: string) => {
     const aPathname = a.substring(0, a.indexOf('?') === -1 ? a.length : a.indexOf('?'))
     const bPathname = b.substring(0, b.indexOf('?') === -1 ? b.length : b.indexOf('?'))

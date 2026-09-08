@@ -52,13 +52,39 @@ export const systemZone: RouteJsonObject[] = [
     },
     {
         path: 'operations',
-        absolutePath: '/system/operations',
+        absolutePath: '/system/operations/account',
         id: 'system-operations',
-        component: lazy(() => import('@/pages/System/Operations')),
         name: '运营管理',
         icon: lazy(() => import('~icons/console/operations')),
         menu: true,
-        permission: true
+        permission: true,
+        children: [
+            {
+                path: 'usage/:userId',
+                absolutePath: '/system/operations/usage',
+                id: 'system-operations-usage',
+                component: lazy(() => import('@/pages/System/Operations/Usage')),
+                name: '用量信息',
+                permission: true
+            },
+            {
+                path: 'account',
+                absolutePath: '/system/operations/account',
+                id: 'system-operations-account',
+                component: lazy(() => import('@/pages/System/Operations/Account')),
+                name: 'API 账户',
+                menu: true,
+                permission: true
+            },
+            {
+                path: 'transactions/:userId',
+                absolutePath: '/system/operations/transactions',
+                id: 'system-operations-transactions',
+                component: lazy(() => import('@/pages/System/Operations/Transactions')),
+                name: '账单',
+                permission: true
+            }
+        ]
     },
     {
         path: 'statistics',

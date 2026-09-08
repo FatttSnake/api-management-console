@@ -1,5 +1,5 @@
 import useStyles from '@/assets/css/pages/framework.style'
-import { getUserZoneRouteJson } from '@/routers/user'
+import { getUserZoneRouteJson } from '@/routers/user.tsx'
 import { getSystemZoneRouteJson } from '@/routers/system'
 import FitFullscreen from '@/components/common/FitFullscreen'
 import Sidebar from '@/components/common/Sidebar'

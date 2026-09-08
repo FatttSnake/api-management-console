@@ -11,7 +11,7 @@ import {
 import SettingsCard from '@/components/system/SettingCard'
 
 const SensitiveWord = () => {
-    const [dataSource, setDataSource] = useState<SensitiveWordVo[]>()
+    const [dataSource, setDataSource] = useState<SensitiveWordVo[]>([])
     const [targetKeys, setTargetKeys] = useState<string[]>([])
     const [selectedKeys, setSelectedKeys] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState(false)

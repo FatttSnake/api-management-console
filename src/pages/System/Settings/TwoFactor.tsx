@@ -75,9 +75,10 @@ const TwoFactor = () => {
                     rules={[{ required: true }]}
                 >
                     <AntdInputNumber
+                        style={{ width: '100%' }}
                         min={3}
                         max={64}
-                        style={{ width: '100%' }}
+                        precision={0}
                         placeholder={'请输入密钥长度'}
                     />
                 </AntdForm.Item>

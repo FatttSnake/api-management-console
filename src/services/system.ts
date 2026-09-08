@@ -225,8 +225,11 @@ export const r_sys_api_plugin_key_update = (param: apiPluginTrustKeyUpdateStatus
 export const r_sys_api_plugin_key_delete = (keyId: string) =>
     request.delete(`${URL_SYS_API_PLUGIN_KEY}/${keyId}`)
 
-export const r_sys_api_account_get = (userId?: string) =>
-    request.get<ApiAccountVo>(URL_SYS_API_ACCOUNT, { userId })
+export const r_sys_api_account_get = (param: ApiAccountGetParam) =>
+    request.get<PageVo<ApiAccountVo>>(URL_SYS_API_ACCOUNT, param)
+
+export const r_sys_api_account_get_one = (userId: string) =>
+    request.get<ApiAccountVo>(`${URL_SYS_API_ACCOUNT}/${userId}`)
 
 export const r_sys_api_account_transactions = (param: ApiTransactionGetParam) =>
     request.get<PageVo<ApiTransactionVo>>(URL_SYS_API_ACCOUNT_TRANSACTIONS, param)

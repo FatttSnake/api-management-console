@@ -1,13 +1,20 @@
+import Icon from '@ant-design/icons'
+import { useTheme } from 'antd-style'
+import { DATABASE_SELECT_SUCCESS } from '@/constants/common.constants'
 import { message } from '@/utils/common'
 import { utcToLocalTime } from '@/utils/datetime'
-import { r_user_api_key_usage_get } from '@/services/user'
+import { navigateToTransactions } from '@/utils/navigation'
+import { r_sys_api_account_get } from '@/services/system'
+import Card from '@/components/common/Card'
 import FitFullscreen from '@/components/common/FitFullscreen'
 import HideScrollbar from '@/components/common/HideScrollbar'
 import FlexBox from '@/components/common/FlexBox'
-import Card from '@/components/common/Card'
+import { hasPermission } from '@/utils/auth.ts'
 
-const Usage = () => {
-    const [usageData, setUsageData] = useState<ApiUsageVo[]>([])
+const Account = () => {
+    const navigate = useNavigate()
+    const theme = useTheme()
+    const [accountData, setAccountData] = useState<ApiAccountVo[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [tableParams, setTableParams] = useState<TableParam>({
         pagination: {
@@ -21,88 +28,68 @@ const Usage = () => {
         }
     })
 
-    const dataColumns: _ColumnsType<ApiUsageVo> = [
+    const dataColumns: _ColumnsType<ApiAccountVo> = [
         {
-            title: '接口名称',
-            dataIndex: 'apiName',
-            ellipsis: true
+            dataIndex: ['userVo', 'username'],
+            title: '用户名'
         },
         {
-            title: '接口描述',
-            dataIndex: 'apiDescription',
-            ellipsis: true
-        },
-        {
-            title: '请求路径',
-            dataIndex: 'requestPath',
-            ellipsis: true
-        },
-        {
-            title: '请求方式',
-            dataIndex: 'requestMethod',
-            align: 'center',
-            ellipsis: true,
-            render: (value) => <AntdTag>{value}</AntdTag>
-        },
-        {
-            title: '响应码',
-            dataIndex: 'responseCode',
-            ellipsis: true
-        },
-        {
-            title: '结果',
-            dataIndex: 'success',
-            align: 'center',
-            render: (value) =>
-                value ? (
-                    <AntdTag color={'success'}>成功</AntdTag>
-                ) : (
-                    <AntdTag color={'error'}>失败</AntdTag>
-                )
-        },
-        {
-            title: '执行耗时',
-            dataIndex: 'executeTime',
-            align: 'center',
-            ellipsis: true,
-            render: (value) => `${value}ms`
-        },
-        {
-            title: '请求 IP',
-            dataIndex: 'requestIp',
-            align: 'center',
-            ellipsis: true
-        },
-        {
-            title: '计费金额',
-            dataIndex: 'cost',
-            ellipsis: true,
-            render: (value) => <AntdTag>{Number(value).toFixed(4)}</AntdTag>
-        },
-        {
-            title: '计费模式',
-            dataIndex: 'billingMode',
-            align: 'center',
-            ellipsis: true,
+            dataIndex: ['userVo', 'userInfo', 'avatar'],
+            title: '头像',
             render: (value) => (
-                <AntdTag>
-                    {value === 'SUCCESS_ONLY' ? '仅成功' : value === 'ALWAYS' ? '总是' : '免费'}
-                </AntdTag>
-            )
+                <AntdAvatar
+                    src={
+                        <AntdImage
+                            preview={{ mask: <Icon component={IconConsoleEye} /> }}
+                            src={`data:image/png;base64,${value}`}
+                            alt={''}
+                        />
+                    }
+                    style={{ background: theme.colorBgLayout }}
+                />
+            ),
+            width: '0',
+            align: 'center'
         },
         {
-            title: '调用时间',
+            dataIndex: ['userVo', 'userInfo', 'nickname'],
+            title: '昵称'
+        },
+        {
+            dataIndex: ['balance'],
+            title: '余额',
+            align: 'center',
+            ellipsis: true,
+            render: (value: string) => Number(value).toFixed(4)
+        },
+        {
+            title: '创建时间',
             dataIndex: 'createTime',
             align: 'center',
             ellipsis: true,
-            render: (value: string) => utcToLocalTime(value, 'YYYY-MM-DD HH:mm:ss')
+            render: (value: string) => utcToLocalTime(value)
+        },
+        {
+            title: '修改时间',
+            dataIndex: 'updateTime',
+            align: 'center',
+            ellipsis: true,
+            render: (value: string) => utcToLocalTime(value)
+        },
+        {
+            title: '状态',
+            dataIndex: 'enable',
+            align: 'center',
+            ellipsis: true,
+            render: (value) =>
+                value ? <AntdTag color={'success'}>启用</AntdTag> : <AntdTag>禁用</AntdTag>
         }
     ]
 
     const handleOnTableChange = (
         pagination: _TablePaginationConfig,
         filters: Record<string, _FilterValue | null>,
-        sorter: _SorterResult<ApiUsageVo> | _SorterResult<ApiUsageVo>[]
+        sorter: _SorterResult<ApiAccountVo> | _SorterResult<ApiAccountVo>[]
     ) => {
         pagination = { ...tableParams.pagination, ...pagination }
         if (Array.isArray(sorter)) {
@@ -121,17 +108,17 @@ const Usage = () => {
         }
 
         if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-            setUsageData([])
+            setAccountData([])
         }
     }
 
-    const getUsage = () => {
+    const getAccount = () => {
         if (isLoading) {
             return
         }
         setIsLoading(true)
 
-        r_user_api_key_usage_get({
+        r_sys_api_account_get({
             currentPage: tableParams.pagination?.current,
             pageSize: tableParams.pagination?.pageSize,
             sortField:
@@ -144,9 +131,9 @@ const Usage = () => {
         })
             .then((res) => {
                 const response = res.data
-                if (response.success) {
+                if (response.code === DATABASE_SELECT_SUCCESS) {
                     const records = response.data!.records
-                    setUsageData(records)
+                    setAccountData(records)
                     setTableParams({
                         ...tableParams,
                         pagination: {
@@ -155,7 +142,7 @@ const Usage = () => {
                         }
                     })
                 } else {
-                    void message.error('获取用量信息失败，请稍后重试')
+                    void message.error('获取失败，请稍后重试')
                 }
             })
             .finally(() => {
@@ -164,7 +151,7 @@ const Usage = () => {
     }
 
     useEffect(() => {
-        getUsage()
+        getAccount()
     }, [
         JSON.stringify(tableParams.filters),
         JSON.stringify(tableParams.sortField),
@@ -173,22 +160,26 @@ const Usage = () => {
         JSON.stringify(tableParams.pagination?.current)
     ])
 
-    const title = (
-        <AntdTypography>
-            <AntdTypography.Title level={3}>用量信息</AntdTypography.Title>
-        </AntdTypography>
-    )
+    const toolbar = <></>
 
     const table = (
         <Card>
             <AntdTable
                 rowKey={(record) => record.id}
                 columns={dataColumns}
-                dataSource={usageData}
+                dataSource={accountData}
                 pagination={tableParams.pagination}
                 loading={isLoading}
                 scroll={{ x: true }}
                 onChange={handleOnTableChange}
+                onRow={(record) =>
+                    hasPermission('system:operations:account:transactions')
+                        ? {
+                              style: { cursor: 'pointer' },
+                              onClick: () => navigateToTransactions(navigate, record.userId)
+                          }
+                        : {}
+                }
             />
         </Card>
     )
@@ -196,12 +187,12 @@ const Usage = () => {
     return (
         <FitFullscreen>
             <HideScrollbar
-                style={{ padding: '32px 40px' }}
+                style={{ padding: 20 }}
                 isShowVerticalScrollbar
                 autoHideWaitingTime={1000}
             >
                 <FlexBox gap={20}>
-                    {title}
+                    {toolbar}
                     {table}
                 </FlexBox>
             </HideScrollbar>
@@ -209,4 +200,4 @@ const Usage = () => {
     )
 }
 
-export default Usage
+export default Account

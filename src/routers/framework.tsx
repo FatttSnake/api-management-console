@@ -1,4 +1,4 @@
-import { userZone } from '@/routers/user'
+import { userZone } from '@/routers/user.tsx'
 import { systemZone } from '@/routers/system'
 
 export const framework: RouteJsonObject[] = [
@@ -16,6 +16,6 @@ export const framework: RouteJsonObject[] = [
     {
         path: '*',
         absolutePath: '*',
-        element: <Navigate to="/usage" replace />
+        element: <Navigate to="/api-keys" replace />
     }
 ]

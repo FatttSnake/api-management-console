@@ -31,7 +31,7 @@ const Plugin = () => {
     const uploadControllerRef = useRef(new AbortController())
     const [form] = AntdForm.useForm<ApiPluginUpdateParam>()
     const formValues = AntdForm.useWatch([], form)
-    const [pluginData, setPluginData] = useState<ApiPluginVo[]>()
+    const [pluginData, setPluginData] = useState<ApiPluginVo[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [tableParams, setTableParams] = useState<TableParam>({
         pagination: {
@@ -625,7 +625,12 @@ const Plugin = () => {
                 />
             </AntdForm.Item>
             <AntdForm.Item name={'defaultRateLimit'} label={'默认每分钟限流次数'}>
-                <AntdInputNumber style={{ width: '100%' }} min={0} placeholder={'不限制'} />
+                <AntdInputNumber
+                    style={{ width: '100%' }}
+                    min={0}
+                    precision={0}
+                    placeholder={'不限制'}
+                />
             </AntdForm.Item>
             <AntdForm.Item
                 name={'defaultAccessMode'}

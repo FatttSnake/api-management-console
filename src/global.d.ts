@@ -560,6 +560,11 @@ interface ApiAccountVo {
     enable: boolean
     createTime: string
     updateTime: string
+    userVo: UserWithInfoVo
+}
+
+interface ApiAccountGetParam extends PageParam {
+    enable?: boolean
 }
 
 interface ApiAuditVo {
@@ -704,8 +709,8 @@ interface ApiTopVo {
 interface ApiTopUpParam {
     userId: string
     amount: string
-    orderNo: string
-    remark: string
+    orderNo?: string
+    remark?: string
 }
 
 interface ApiMonitorDashboardVo {

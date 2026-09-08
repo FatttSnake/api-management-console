@@ -6,7 +6,7 @@ import useStyles from '@/assets/css/pages/system/keys.style'
 import { DATABASE_NO_RECORD_FOUND, DATABASE_SELECT_SUCCESS } from '@/constants/common.constants'
 import { message, modal } from '@/utils/common'
 import { dayjsToUtc, isPastTime, utcToLocalTime } from '@/utils/datetime'
-import { navigateToUserManagement } from '@/utils/navigation'
+import { navigateToUsage, navigateToUserManagement } from '@/utils/navigation'
 import {
     r_sys_api__key_regenerate,
     r_sys_api_key_add,
@@ -93,6 +93,7 @@ const Keys = () => {
                 value ? utcToLocalTime(value, 'YYYY-MM-DD HH:mm:ss') : '未使用'
         },
         {
+            align: 'center',
             render: (_, record) => (
                 <AntdSpace size={0}>
                     <Permission operationCode={['system:api-keys:one:regenerate']}>
@@ -239,16 +240,28 @@ const Keys = () => {
                                             name={'rateLimit'}
                                             label={'每分钟限流次数 (0=用全局默认)'}
                                         >
-                                            <AntdInputNumber style={{ width: '100%' }} min={0} />
+                                            <AntdInputNumber
+                                                style={{ width: '100%' }}
+                                                min={0}
+                                                precision={0}
+                                            />
                                         </AntdForm.Item>
                                         <AntdForm.Item
                                             name={'quota'}
                                             label={'周期额度次数 (0=用全局默认)'}
                                         >
-                                            <AntdInputNumber style={{ width: '100%' }} min={0} />
+                                            <AntdInputNumber
+                                                style={{ width: '100%' }}
+                                                min={0}
+                                                precision={0}
+                                            />
                                         </AntdForm.Item>
                                         <AntdForm.Item name={'quotaPeriod'} label={'额度周期(秒)'}>
-                                            <AntdInputNumber style={{ width: '100%' }} min={1} />
+                                            <AntdInputNumber
+                                                style={{ width: '100%' }}
+                                                min={1}
+                                                precision={0}
+                                            />
                                         </AntdForm.Item>
                                     </>
                                 )
@@ -589,6 +602,7 @@ const Keys = () => {
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={0}
+                                                    precision={0}
                                                 />
                                             </AntdForm.Item>
                                             <AntdForm.Item
@@ -599,6 +613,7 @@ const Keys = () => {
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={0}
+                                                    precision={0}
                                                 />
                                             </AntdForm.Item>
                                             <AntdForm.Item
@@ -609,6 +624,7 @@ const Keys = () => {
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={1}
+                                                    precision={0}
                                                 />
                                             </AntdForm.Item>
                                         </>
@@ -918,16 +934,27 @@ const Keys = () => {
                         <div className={styles.nickname}>{userData?.userInfo.nickname}</div>
                     </FlexBox>
                 </FlexBox>
-                <Permission operationCode={['system:api-keys:one:add']}>
-                    <AntdButton
-                        type={'primary'}
-                        onClick={handleOnCreateBtnClick}
-                        loading={isLoadingAvailableKeys}
-                        size={'small'}
-                    >
-                        创建 API key
-                    </AntdButton>
-                </Permission>
+
+                <AntdSpace>
+                    <Permission operationCode={['system:operations:usage:query']}>
+                        <AntdButton
+                            onClick={() => navigateToUsage(navigate, userId!)}
+                            size={'small'}
+                        >
+                            用量信息
+                        </AntdButton>
+                    </Permission>
+                    <Permission operationCode={['system:api-keys:one:add']}>
+                        <AntdButton
+                            type={'primary'}
+                            onClick={handleOnCreateBtnClick}
+                            loading={isLoadingAvailableKeys}
+                            size={'small'}
+                        >
+                            创建 API key
+                        </AntdButton>
+                    </Permission>
+                </AntdSpace>
             </FlexBox>
         </Card>
     )
@@ -953,7 +980,7 @@ const Keys = () => {
     return (
         <FitFullscreen>
             <HideScrollbar
-                className={styles.root}
+                style={{ padding: 20 }}
                 isShowVerticalScrollbar
                 autoHideWaitingTime={1000}
             >

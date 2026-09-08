@@ -1,13 +1,21 @@
-import { message } from '@/utils/common'
-import { utcToLocalTime } from '@/utils/datetime'
-import { r_user_api_key_usage_get } from '@/services/user'
-import FitFullscreen from '@/components/common/FitFullscreen'
-import HideScrollbar from '@/components/common/HideScrollbar'
-import FlexBox from '@/components/common/FlexBox'
-import Card from '@/components/common/Card'
+import useStyles from '@/assets/css/pages/system/usage.style'
+import { utcToLocalTime } from '@/utils/datetime.tsx'
+import { message } from '@/utils/common.tsx'
+import Card from '@/components/common/Card.tsx'
+import FitFullscreen from '@/components/common/FitFullscreen.tsx'
+import HideScrollbar from '@/components/common/HideScrollbar.tsx'
+import FlexBox from '@/components/common/FlexBox.tsx'
+import { r_sys_api_usage_get, r_sys_user_info_get_basic_by_id } from '@/services/system.ts'
+import { DATABASE_NO_RECORD_FOUND, DATABASE_SELECT_SUCCESS } from '@/constants/common.constants.ts'
+import { navigateToApiKeys, navigateToUserManagement } from '@/utils/navigation.ts'
+import Icon from '@ant-design/icons'
 
 const Usage = () => {
+    const navigate = useNavigate()
+    const { userId } = useParams()
+    const { styles, theme } = useStyles()
     const [usageData, setUsageData] = useState<ApiUsageVo[]>([])
+    const [userData, setUserData] = useState<UserWithInfoVo>()
     const [isLoading, setIsLoading] = useState(false)
     const [tableParams, setTableParams] = useState<TableParam>({
         pagination: {
@@ -131,7 +139,7 @@ const Usage = () => {
         }
         setIsLoading(true)
 
-        r_user_api_key_usage_get({
+        r_sys_api_usage_get({
             currentPage: tableParams.pagination?.current,
             pageSize: tableParams.pagination?.pageSize,
             sortField:
@@ -140,6 +148,7 @@ const Usage = () => {
                     : undefined,
             sortOrder:
                 tableParams.sortField && tableParams.sortOrder ? tableParams.sortOrder : undefined,
+            userId,
             ...tableParams.filters
         })
             .then((res) => {
@@ -163,6 +172,24 @@ const Usage = () => {
             })
     }
 
+    const getUserInfo = () => {
+        r_sys_user_info_get_basic_by_id(userId!).then((res) => {
+            const response = res.data
+            switch (response.code) {
+                case DATABASE_SELECT_SUCCESS:
+                    setUserData(response.data!)
+                    break
+                case DATABASE_NO_RECORD_FOUND:
+                    message.warning('用户不存在').then(() => {
+                        navigateToUserManagement(navigate)
+                    })
+                    break
+                default:
+                    void message.error('获取失败请稍后重试')
+            }
+        })
+    }
+
     useEffect(() => {
         getUsage()
     }, [
@@ -173,10 +200,43 @@ const Usage = () => {
         JSON.stringify(tableParams.pagination?.current)
     ])
 
-    const title = (
-        <AntdTypography>
-            <AntdTypography.Title level={3}>用量信息</AntdTypography.Title>
-        </AntdTypography>
+    useEffect(() => {
+        getUserInfo()
+    }, [])
+
+    const toolbar = (
+        <Card>
+            <FlexBox className={styles.toolbar} direction={'horizontal'}>
+                <FlexBox className={styles.title} direction={'horizontal'} gap={12}>
+                    <AntdButton
+                        color={'default'}
+                        variant={'link'}
+                        size={'small'}
+                        icon={<Icon component={IconConsoleBack} />}
+                        onClick={() => {
+                            navigateToApiKeys(navigate, userId!)
+                        }}
+                    />
+                    <FlexBox direction={'horizontal'} gap={4}>
+                        <div className={styles.avatarBox}>
+                            <AntdAvatar
+                                src={
+                                    <img
+                                        src={`data:image/png;base64,${userData?.userInfo.avatar}`}
+                                        alt={''}
+                                    />
+                                }
+                                style={{
+                                    background: theme.colorBgLayout
+                                }}
+                                className={styles.avatar}
+                            />
+                        </div>
+                        <div className={styles.nickname}>{userData?.userInfo.nickname}</div>
+                    </FlexBox>
+                </FlexBox>
+            </FlexBox>
+        </Card>
     )
 
     const table = (
@@ -196,12 +256,12 @@ const Usage = () => {
     return (
         <FitFullscreen>
             <HideScrollbar
-                style={{ padding: '32px 40px' }}
+                style={{ padding: 20 }}
                 isShowVerticalScrollbar
                 autoHideWaitingTime={1000}
             >
                 <FlexBox gap={20}>
-                    {title}
+                    {toolbar}
                     {table}
                 </FlexBox>
             </HideScrollbar>

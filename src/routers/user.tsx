@@ -2,6 +2,11 @@ import { getAuthRoute } from '@/utils/route'
 
 export const userZone: RouteJsonObject[] = [
     {
+        path: '',
+        absolutePath: '',
+        element: <Navigate to="/api-keys" replace />
+    },
+    {
         path: 'usage',
         absolutePath: '/usage',
         id: 'user-usage',

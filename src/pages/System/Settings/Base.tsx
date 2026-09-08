@@ -86,6 +86,7 @@ const Base = () => {
                     <AntdInputNumber
                         style={{ width: '100%' }}
                         min={0}
+                        precision={0}
                         placeholder={'请输入 Token 缓冲时间（毫秒）'}
                     />
                 </AntdForm.Item>
@@ -97,6 +98,7 @@ const Base = () => {
                     <AntdInputNumber
                         style={{ width: '100%' }}
                         min={0}
+                        precision={0}
                         placeholder={'请输入 Token 检查周期（毫秒）'}
                     />
                 </AntdForm.Item>

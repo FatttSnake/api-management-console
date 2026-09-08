@@ -139,9 +139,10 @@ const Mail = () => {
                 </AntdForm.Item>
                 <AntdForm.Item label={'端口号'} name={'port'} rules={[{ required: true }]}>
                     <AntdInputNumber
+                        style={{ width: '100%' }}
                         min={0}
                         max={65535}
-                        style={{ width: '100%' }}
+                        precision={0}
                         placeholder={'请输入端口号'}
                     />
                 </AntdForm.Item>

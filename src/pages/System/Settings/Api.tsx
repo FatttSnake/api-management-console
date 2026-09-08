@@ -66,25 +66,25 @@ const Api = () => {
                     label={'每 Key 每分钟默认限流次数 (0=不限)'}
                     name={'defaultRateLimitPerMin'}
                 >
-                    <AntdInputNumber min={0} style={{ width: '100%' }} />
+                    <AntdInputNumber style={{ width: '100%' }} min={0} precision={0} />
                 </AntdForm.Item>
                 <AntdForm.Item label={'每 Key 每个周期默认额度次数 (0=不限)'} name={'defaultQuota'}>
-                    <AntdInputNumber min={0} style={{ width: '100%' }} />
+                    <AntdInputNumber style={{ width: '100%' }} min={0} precision={0} />
                 </AntdForm.Item>
                 <AntdForm.Item label={'默认额度周期(秒)'} name={'defaultQuotaPeriodSeconds'}>
-                    <AntdInputNumber min={1} style={{ width: '100%' }} />
+                    <AntdInputNumber style={{ width: '100%' }} min={1} precision={0} />
                 </AntdForm.Item>
                 <AntdForm.Item label={'生成的 AccessKey 长度'} name={'accessKeyLength'}>
-                    <AntdInputNumber min={8} style={{ width: '100%' }} />
+                    <AntdInputNumber style={{ width: '100%' }} min={8} precision={0} />
                 </AntdForm.Item>
                 <AntdForm.Item label={'生成的 SecretKey 长度'} name={'secretKeyLength'}>
-                    <AntdInputNumber min={16} style={{ width: '100%' }} />
+                    <AntdInputNumber style={{ width: '100%' }} min={16} precision={0} />
                 </AntdForm.Item>
                 <AntdForm.Item label={'计费前是否校验余额'} name={'balanceCheckEnabled'}>
                     <AntdSwitch />
                 </AntdForm.Item>
                 <AntdForm.Item label={'ApiKey 缓存 TTL(秒)'} name={'cacheTtlSeconds'}>
-                    <AntdInputNumber min={1} style={{ width: '100%' }} />
+                    <AntdInputNumber style={{ width: '100%' }} min={1} precision={0} />
                 </AntdForm.Item>
             </AntdForm>
         </SettingsCard>

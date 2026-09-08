@@ -227,16 +227,28 @@ const Keys = () => {
                                             name={'rateLimit'}
                                             label={'每分钟限流次数 (0=用全局默认)'}
                                         >
-                                            <AntdInputNumber style={{ width: '100%' }} min={0} />
+                                            <AntdInputNumber
+                                                style={{ width: '100%' }}
+                                                min={0}
+                                                precision={0}
+                                            />
                                         </AntdForm.Item>
                                         <AntdForm.Item
                                             name={'quota'}
                                             label={'周期额度次数 (0=用全局默认)'}
                                         >
-                                            <AntdInputNumber style={{ width: '100%' }} min={0} />
+                                            <AntdInputNumber
+                                                style={{ width: '100%' }}
+                                                min={0}
+                                                precision={0}
+                                            />
                                         </AntdForm.Item>
                                         <AntdForm.Item name={'quotaPeriod'} label={'额度周期(秒)'}>
-                                            <AntdInputNumber style={{ width: '100%' }} min={1} />
+                                            <AntdInputNumber
+                                                style={{ width: '100%' }}
+                                                min={1}
+                                                precision={0}
+                                            />
                                         </AntdForm.Item>
                                     </>
                                 )
@@ -576,6 +588,7 @@ const Keys = () => {
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={0}
+                                                    precision={0}
                                                 />
                                             </AntdForm.Item>
                                             <AntdForm.Item
@@ -586,6 +599,7 @@ const Keys = () => {
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={0}
+                                                    precision={0}
                                                 />
                                             </AntdForm.Item>
                                             <AntdForm.Item
@@ -596,6 +610,7 @@ const Keys = () => {
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={1}
+                                                    precision={0}
                                                 />
                                             </AntdForm.Item>
                                         </>
