@@ -42,11 +42,13 @@ const Interface = () => {
     const dataColumns: _ColumnsType<ApiGroupVo> = [
         {
             title: '插件名称',
-            dataIndex: 'pluginName'
+            dataIndex: 'pluginName',
+            ellipsis: true
         },
         {
             title: '插件描述',
-            dataIndex: 'pluginDescription'
+            dataIndex: 'pluginDescription',
+            ellipsis: true
         }
     ]
 
@@ -54,7 +56,7 @@ const Interface = () => {
         {
             title: '名称',
             dataIndex: 'name',
-            width: '20%',
+            ellipsis: true,
             render: (value, record) => (
                 <AntdSpace>
                     {value}
@@ -65,49 +67,47 @@ const Interface = () => {
         {
             title: '描述',
             dataIndex: 'description',
-            width: '30%',
-            minWidth: 300
+            ellipsis: true
         },
         {
             title: '请求路径',
             dataIndex: 'path',
-            width: '30%',
-            minWidth: 250
+            ellipsis: true
         },
         {
             title: '请求方式',
             dataIndex: 'method',
-            minWidth: 100,
             align: 'center',
+            ellipsis: true,
             render: (value) => <AntdTag>{value}</AntdTag>
         },
         {
             title: '创建时间',
             dataIndex: 'createTime',
-            width: '10%',
             align: 'center',
+            ellipsis: true,
             render: (value: string) => utcToLocalTime(value)
         },
         {
             title: '修改时间',
             dataIndex: 'updateTime',
-            width: '10%',
             align: 'center',
+            ellipsis: true,
             render: (value: string) => utcToLocalTime(value)
         },
         {
             title: '状态',
             dataIndex: 'enable',
-            width: '5%',
             align: 'center',
+            ellipsis: true,
             render: (value) =>
                 value ? <AntdTag color={'success'}>启用</AntdTag> : <AntdTag>禁用</AntdTag>
         },
         {
             title: '操作',
             dataIndex: 'enable',
-            width: '15em',
             align: 'center',
+            ellipsis: true,
             render: (value, record) => (
                 <AntdSpace size={'medium'}>
                     <Permission operationCode={['system:interface:interface:status']}>
@@ -265,6 +265,7 @@ const Interface = () => {
             columns={subDataColumns}
             dataSource={record.interfaces}
             pagination={false}
+            scroll={{ x: true }}
             onRow={(record) => ({
                 style: { cursor: 'pointer' },
                 onClick: handleOnShowDetail(record)
