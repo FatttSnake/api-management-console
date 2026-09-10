@@ -7,6 +7,10 @@ export const getNowLocalTime = (format: string = 'YYYY-MM-DD HH:mm:ssZ') => {
     return dayjs().local().format(format)
 }
 
+export const getTimeZoneOffsetMinutes = () => {
+    return dayjs().utcOffset()
+}
+
 export const getNowUtc = () => {
     return dayjs().toISOString()
 }

@@ -257,6 +257,20 @@ const request = {
     ): Promise<AxiosResponse<_Response<T>>> {
         return await request.request('DELETE', url, { ...config, data })
     },
+    async download(url: string, data?: object): Promise<Blob> {
+        const response = await getService()({
+            method: 'GET',
+            url,
+            params: data,
+            responseType: 'blob'
+        })
+        const body = response.data as Blob
+        if (body.type.includes('json')) {
+            // Errors are returned with a JSON body, throw it as a response object
+            throw JSON.parse(await body.text()) as _Response<never>
+        }
+        return body
+    },
     async request<T>(
         method = 'GET',
         url: string,

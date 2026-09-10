@@ -1,13 +1,22 @@
 import dayjs from 'dayjs'
 import * as echarts from 'echarts/core'
 import useStyles from '@/assets/css/pages/system/report.style'
-import { DATABASE_SELECT_SUCCESS } from '@/constants/common.constants'
+import {
+    DATABASE_SELECT_SUCCESS,
+    SYSTEM_EXPORT_TOO_MANY_RECORDS
+} from '@/constants/common.constants'
 import { message } from '@/utils/common'
-import { dayjsToUtc, getTimesBetweenTwoTimes } from '@/utils/datetime'
+import {
+    dayjsToUtc,
+    getNowLocalTime,
+    getTimeZoneOffsetMinutes,
+    getTimesBetweenTwoTimes
+} from '@/utils/datetime'
 import {
     r_sys_api_report_cost,
     r_sys_api_report_download,
     r_sys_api_report_export,
+    r_sys_api_report_export_detail,
     r_sys_api_report_top,
     r_sys_api_report_usage
 } from '@/services/system'
@@ -85,6 +94,15 @@ const buildUsageOption = (rows: DailyRow[], metric: UsageMetric): echarts.EChart
         metric === 'cost' ? '费用' : '调用次数',
         METRIC_DIGIT[metric]
     )
+}
+
+const saveBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    link.click()
+    URL.revokeObjectURL(url)
 }
 
 const Report = () => {
@@ -369,20 +387,16 @@ const Report = () => {
         }
         setIsLoading(true)
 
+        const param = {
+            startTime: timeRange && timeRange[0],
+            endTime: timeRange && timeRange[1],
+            tzOffset: getTimeZoneOffsetMinutes()
+        }
+
         Promise.all([
-            r_sys_api_report_usage({
-                startTime: timeRange && timeRange[0],
-                endTime: timeRange && timeRange[1]
-            }),
-            r_sys_api_report_cost({
-                startTime: timeRange && timeRange[0],
-                endTime: timeRange && timeRange[1]
-            }),
-            r_sys_api_report_top({
-                startTime: timeRange && timeRange[0],
-                endTime: timeRange && timeRange[1],
-                limit: topLimit
-            })
+            r_sys_api_report_usage(param),
+            r_sys_api_report_cost(param),
+            r_sys_api_report_top({ ...param, limit: topLimit })
         ])
             .then((responses) => {
                 const usageResponse = responses[0].data
@@ -416,7 +430,8 @@ const Report = () => {
         r_sys_api_report_top({
             startTime: timeRange && timeRange[0],
             endTime: timeRange && timeRange[1],
-            limit
+            limit,
+            tzOffset: getTimeZoneOffsetMinutes()
         })
             .then((res) => {
                 const response = res.data
@@ -431,35 +446,42 @@ const Report = () => {
             })
     }
 
-    const handleOnExportBtnClick = () => {
+    const handleOnExportBtnClick = (detail: boolean) => {
         if (isLoading) {
             return
         }
         setIsLoading(true)
 
-        r_sys_api_report_export({
+        const exportApi = detail ? r_sys_api_report_export_detail : r_sys_api_report_export
+
+        exportApi({
             startTime: timeRange && timeRange[0],
-            endTime: timeRange && timeRange[1]
+            endTime: timeRange && timeRange[1],
+            tzOffset: getTimeZoneOffsetMinutes()
         })
             .then((res) => {
                 const response = res.data
                 if (response.code !== DATABASE_SELECT_SUCCESS || !response.data) {
-                    void message.error('导出失败，请稍后重试')
+                    void message.error(response.msg || '导出失败，请稍后重试')
                     return
                 }
 
-                r_sys_api_report_download(response.data).then((fileRes) => {
-                    const blob = new Blob([fileRes.data as unknown as string], {
-                        type: 'text/csv;charset=utf-8'
-                    })
-                    const url = URL.createObjectURL(blob)
-                    const link = document.createElement('a')
-                    link.href = url
-                    link.download = 'api-report.csv'
-                    link.click()
-                    URL.revokeObjectURL(url)
+                return r_sys_api_report_download(response.data).then((blob) => {
+                    saveBlob(
+                        blob,
+                        `api-report-${detail ? 'detail' : 'summary'}-${getNowLocalTime(
+                            'YYYYMMDD-HHmmss'
+                        )}.csv`
+                    )
                     void message.success('导出成功')
                 })
+            })
+            .catch((error: _Response<never> | undefined) => {
+                void message.error(
+                    error?.code === SYSTEM_EXPORT_TOO_MANY_RECORDS
+                        ? '导出数据量过大，请缩小时间范围后重试'
+                        : '导出失败，请稍后重试'
+                )
             })
             .finally(() => {
                 setIsLoading(false)
@@ -602,8 +624,17 @@ const Report = () => {
                                 >
                                     查询
                                 </AntdButton>
-                                <AntdButton onClick={handleOnExportBtnClick} disabled={isLoading}>
-                                    导出 CSV
+                                <AntdButton
+                                    onClick={() => handleOnExportBtnClick(false)}
+                                    disabled={isLoading}
+                                >
+                                    导出汇总
+                                </AntdButton>
+                                <AntdButton
+                                    onClick={() => handleOnExportBtnClick(true)}
+                                    disabled={isLoading}
+                                >
+                                    导出明细
                                 </AntdButton>
                             </AntdSpace>
                         }

@@ -26,6 +26,7 @@ import {
     URL_SYS_API_REPORT_COST,
     URL_SYS_API_REPORT_TOP,
     URL_SYS_API_REPORT_EXPORT,
+    URL_SYS_API_REPORT_EXPORT_DETAIL,
     URL_SYS_API_MONITOR_DASHBOARD,
     URL_SYS_API_AUDIT,
     URL_SYS_STATISTICS_SOFTWARE,
@@ -278,8 +279,11 @@ export const r_sys_api_report_top = (param: ApiReportGetParam) =>
 export const r_sys_api_report_export = (param: ApiReportGetParam) =>
     request.get<string>(URL_SYS_API_REPORT_EXPORT, param)
 
+export const r_sys_api_report_export_detail = (param: ApiReportGetParam) =>
+    request.get<string>(URL_SYS_API_REPORT_EXPORT_DETAIL, param)
+
 export const r_sys_api_report_download = (fileHash: string) =>
-    request.get(`${URL_SYS_API_REPORT_EXPORT}/${fileHash}`)
+    request.download(`${URL_SYS_API_REPORT_EXPORT}/${fileHash}`)
 
 export const r_sys_api_monitor_dashboard = () =>
     request.get<ApiMonitorDashboardVo>(URL_SYS_API_MONITOR_DASHBOARD)
