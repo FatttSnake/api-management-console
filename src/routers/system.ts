@@ -2,6 +2,16 @@ import { getAuthRoute } from '@/utils/route'
 
 export const systemZone: RouteJsonObject[] = [
     {
+        path: 'monitor',
+        absolutePath: '/system/operations/monitor',
+        id: 'system-operations-monitor-dashboard',
+        component: lazy(() => import('@/pages/System/Operations/Monitor')),
+        name: '监控看板',
+        icon: lazy(() => import('~icons/console/chart')),
+        menu: true,
+        permission: true
+    },
+    {
         path: 'plugin',
         absolutePath: '/system/plugin',
         id: 'system-plugin',
@@ -82,6 +92,33 @@ export const systemZone: RouteJsonObject[] = [
                 id: 'system-operations-transactions',
                 component: lazy(() => import('@/pages/System/Operations/Transactions')),
                 name: '账单',
+                permission: true
+            },
+            {
+                path: 'monitor',
+                absolutePath: '/system/operations/monitor',
+                id: 'system-operations-monitor',
+                component: lazy(() => import('@/pages/System/Operations/Monitor')),
+                name: '监控',
+                menu: true,
+                permission: true
+            },
+            {
+                path: 'report',
+                absolutePath: '/system/operations/report',
+                id: 'system-operations-report',
+                component: lazy(() => import('@/pages/System/Operations/Report')),
+                name: '报表',
+                menu: true,
+                permission: true
+            },
+            {
+                path: 'audit',
+                absolutePath: '/system/operations/audit',
+                id: 'system-operations-audit',
+                component: lazy(() => import('@/pages/System/Operations/Audit')),
+                name: '审计',
+                menu: true,
                 permission: true
             }
         ]

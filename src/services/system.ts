@@ -273,7 +273,7 @@ export const r_sys_api_report_cost = (param: ApiReportGetParam) =>
     request.get<ApiReportVo[]>(URL_SYS_API_REPORT_COST, param)
 
 export const r_sys_api_report_top = (param: ApiReportGetParam) =>
-    request.get<ApiTopVo>(URL_SYS_API_REPORT_TOP, param)
+    request.get<ApiTopVo[]>(URL_SYS_API_REPORT_TOP, param)
 
 export const r_sys_api_report_export = (param: ApiReportGetParam) =>
     request.get<string>(URL_SYS_API_REPORT_EXPORT, param)

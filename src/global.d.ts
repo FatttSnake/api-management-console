@@ -573,12 +573,15 @@ interface ApiAuditVo {
     operateUserId: string
     operateTime: string
     detail: string
+    userVo?: UserWithInfoVo
+    keyVo?: ApiKeyVo
+    targetUserVo?: UserWithInfoVo
 }
 
 interface ApiAuditGetParam extends PageParam {
-    event: string
-    startTime: string
-    endTime: string
+    event?: string
+    startTime?: string
+    endTime?: string
 }
 
 interface ApiInterfaceVo {
@@ -697,13 +700,16 @@ interface ApiMonitorItemVo {
     count: number
     error: number
     latencyMs: number
+    pluginVo?: ApiPluginVo
+    interfaceVo?: ApiInterfaceVo
 }
 
 interface ApiTopVo {
     apiCode: string
-    apiName: string
     count: number
     cost: string
+    pluginVo?: ApiPluginVo
+    interfaceVo?: ApiInterfaceVo
 }
 
 interface ApiTopUpParam {
@@ -790,13 +796,17 @@ interface ApiReportVo {
     apiName: string
     count: number
     cost: string
+    keyVo?: ApiKeyVo
+    userVo?: UserWithInfoVo
+    pluginVo?: ApiPluginVo
+    interfaceVo?: ApiInterfaceVo
 }
 
 interface ApiReportGetParam extends PageParam {
-    apiKeyId: string
-    startTime: string
-    endTime: string
-    limit: number
+    apiKeyId?: string
+    startTime?: string
+    endTime?: string
+    limit?: number
 }
 
 interface ApiTransactionVo {
