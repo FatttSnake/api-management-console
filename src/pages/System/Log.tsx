@@ -46,7 +46,6 @@ const Log = () => {
                 { text: 'Logout', value: 'LOGOUT' },
                 { text: 'Register', value: 'Register' },
                 { text: 'Statistics', value: 'STATISTICS' },
-                { text: 'API', value: 'API' },
                 { text: 'Error', value: 'ERROR' }
             ]
         },
