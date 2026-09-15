@@ -725,6 +725,7 @@ interface ApiMonitorDashboardVo {
     errorToday: number
     activeKeys: number
     topApis: ApiTopVo[]
+    todayTopApis: ApiTopVo[]
 }
 
 interface ApiPluginTrustKeyVo {

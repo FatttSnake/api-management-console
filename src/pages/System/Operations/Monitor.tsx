@@ -9,6 +9,8 @@ import FitFullscreen from '@/components/common/FitFullscreen'
 import HideScrollbar from '@/components/common/HideScrollbar'
 import FlexBox from '@/components/common/FlexBox'
 
+type TopRange = 'total' | 'today'
+
 const Monitor = () => {
     const { styles } = useStyles()
     const topChartDivRef = useRef<HTMLDivElement>(null)
@@ -19,13 +21,16 @@ const Monitor = () => {
     const isEnabledAutoRefreshRef = useRef(true)
     const [monitorData, setMonitorData] = useState<ApiMonitorDashboardVo>()
     const [isLoading, setIsLoading] = useState(false)
-    const [topChartOption, setTopChartOption] = useState<echarts.EChartsCoreOption | null>(null)
     const [isEnabledAutoRefresh, setIsEnabledAutoRefresh] = useState<boolean>(true)
+    const [topRange, setTopRange] = useState<TopRange>('today')
 
     const errorRate =
         monitorData && monitorData.totalToday > 0
             ? (monitorData.errorToday / monitorData.totalToday) * 100
             : 0
+
+    const topList = topRange === 'today' ? monitorData?.todayTopApis : monitorData?.topApis
+    const topChartOption = useMemo(() => (topList ? topBarOption(topList) : null), [topList])
 
     const liveColumns: _ColumnsType<ApiMonitorItemVo> = [
         {
@@ -85,6 +90,10 @@ const Monitor = () => {
         setIsEnabledAutoRefresh(!isEnabledAutoRefresh)
     }
 
+    const handleOnTopRangeChange = (value: string | number) => {
+        setTopRange(value as TopRange)
+    }
+
     const getMonitor = () => {
         if (isLoading) {
             return
@@ -97,7 +106,6 @@ const Monitor = () => {
                 if (response.success) {
                     const data = response.data
                     setMonitorData(data!)
-                    setTopChartOption(topBarOption(data!.topApis))
                 } else {
                     void message.error('获取监控数据失败，请稍后重试')
                 }
@@ -245,8 +253,15 @@ const Monitor = () => {
             <FlexBox className={styles.panelHead} direction={'horizontal'} gap={10}>
                 <FlexBox className={styles.panelTitle} direction={'horizontal'} gap={8}>
                     <span style={{ whiteSpace: 'nowrap' }}>调用排行 Top</span>
-                    <AntdTag>累计</AntdTag>
                 </FlexBox>
+                <AntdSegmented
+                    value={topRange}
+                    onChange={handleOnTopRangeChange}
+                    options={[
+                        { label: '今日', value: 'today' },
+                        { label: '累计', value: 'total' }
+                    ]}
+                />
             </FlexBox>
             <div className={styles.chart} ref={topChartDivRef} />
         </Card>
