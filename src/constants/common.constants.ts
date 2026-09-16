@@ -5,6 +5,7 @@ export const STORAGE_USER_INFO_KEY = 'USER_INFO'
 export const STORAGE_COLLAPSE_SIDEBAR_KEY = 'COLLAPSE_SIDEBAR'
 export const STORAGE_THEME_MODE_KEY = 'THEME_MODE'
 export const HEADER_CSRF_TOKEN_KEY = 'X-CSRF-TOKEN'
+export const HEADER_TIMEZONE_OFFSET_KEY = 'X-Timezone-Offset'
 export const COLOR_PRODUCTION = '#29b7b5'
 export const COLOR_PRIMARY = COLOR_PRODUCTION
 export const COLOR_HOVER = '#4bc4be'

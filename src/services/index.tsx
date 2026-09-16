@@ -2,6 +2,7 @@ import axios, { type AxiosError, AxiosInstance, AxiosRequestConfig, AxiosRespons
 import { jwtDecode, JwtPayload } from 'jwt-decode'
 import {
     HEADER_CSRF_TOKEN_KEY,
+    HEADER_TIMEZONE_OFFSET_KEY,
     PERMISSION_ACCESS_DENIED,
     PERMISSION_TOKEN_HAS_EXPIRED,
     PERMISSION_TOKEN_ILLEGAL,
@@ -12,6 +13,7 @@ import {
 import { URL_LOGIN, URL_TOKEN } from '@/constants/urls.constants'
 import ConfigLoader from '@/components/config/loader'
 import { message } from '@/utils/common'
+import { getTimeZoneOffsetMinutes } from '@/utils/datetime'
 import { getRedirectUrl } from '@/utils/route'
 import {
     getAccessToken,
@@ -78,6 +80,8 @@ const setupInterceptors = (instance: AxiosInstance, apiUrl: string) => {
             if (token) {
                 config.headers.set('Authorization', `Bearer ${token}`)
             }
+
+            config.headers.set(HEADER_TIMEZONE_OFFSET_KEY, String(getTimeZoneOffsetMinutes()))
 
             return config
         },

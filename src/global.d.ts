@@ -808,7 +808,6 @@ interface ApiReportGetParam extends PageParam {
     startTime?: string
     endTime?: string
     limit?: number
-    tzOffset?: number
 }
 
 interface ApiTransactionVo {

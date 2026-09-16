@@ -6,12 +6,7 @@ import {
     SYSTEM_EXPORT_TOO_MANY_RECORDS
 } from '@/constants/common.constants'
 import { message } from '@/utils/common'
-import {
-    dayjsToUtc,
-    getNowLocalTime,
-    getTimeZoneOffsetMinutes,
-    getTimesBetweenTwoTimes
-} from '@/utils/datetime'
+import { dayjsToUtc, getNowLocalTime, getTimesBetweenTwoTimes } from '@/utils/datetime'
 import {
     r_sys_api_report_cost,
     r_sys_api_report_download,
@@ -389,8 +384,7 @@ const Report = () => {
 
         const param = {
             startTime: timeRange && timeRange[0],
-            endTime: timeRange && timeRange[1],
-            tzOffset: getTimeZoneOffsetMinutes()
+            endTime: timeRange && timeRange[1]
         }
 
         Promise.all([
@@ -430,8 +424,7 @@ const Report = () => {
         r_sys_api_report_top({
             startTime: timeRange && timeRange[0],
             endTime: timeRange && timeRange[1],
-            limit,
-            tzOffset: getTimeZoneOffsetMinutes()
+            limit
         })
             .then((res) => {
                 const response = res.data
@@ -456,8 +449,7 @@ const Report = () => {
 
         exportApi({
             startTime: timeRange && timeRange[0],
-            endTime: timeRange && timeRange[1],
-            tzOffset: getTimeZoneOffsetMinutes()
+            endTime: timeRange && timeRange[1]
         })
             .then((res) => {
                 const response = res.data
