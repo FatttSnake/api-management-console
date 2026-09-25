@@ -8,6 +8,17 @@
 <div align="center">
     <b>The web console of <a href="https://github.com/FatttSnake/api-management">API Management</a> — a self-service &amp; administration UI</b>
 </div>
+<div align="center">
+    <a href="https://ci.fatweb.top/job/API%20Management%20Console/">
+        <img alt="Build" src="https://ci.fatweb.top/job/API%20Management%20Console/badge/icon">
+    </a>
+    <a href="https://github.com/FatttSnake/api-management-console/releases/latest">
+        <img alt="Release" src="https://img.shields.io/github/v/release/FatttSnake/api-management-console">
+    </a>
+    <a href="LICENSE">
+        <img alt="LICENSE" src="https://img.shields.io/github/license/FatttSnake/api-management-console">
+    </a>
+</div>
 
 # Overview ([简体中文](README_zh.md), EN)
 
