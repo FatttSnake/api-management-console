@@ -58,6 +58,21 @@ export const navigateToUserManagement = (navigate: NavigateFunction, options?: N
     navigate('/system/user', options)
 }
 
+export const navigateToPluginManagement = (
+    navigate: NavigateFunction,
+    options?: NavigateOptions
+) => {
+    navigate('/system/plugin', options)
+}
+
+export const navigateToPluginConfig = (
+    navigate: NavigateFunction,
+    pluginId: string,
+    options?: NavigateOptions
+) => {
+    navigate(`/system/plugin/config/${pluginId}`, options)
+}
+
 export const navigateToUsage = (
     navigate: NavigateFunction,
     userId: string,

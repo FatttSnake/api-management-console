@@ -6,6 +6,7 @@ import {
     r_sys_settings_mail_send,
     r_sys_settings_mail_update
 } from '@/services/system'
+import Permission from '@/components/common/Permission'
 import SettingsCard from '@/components/system/SettingCard'
 
 const Mail = () => {
@@ -120,9 +121,11 @@ const Mail = () => {
             onSave={handleOnSave}
             modifyOperationCode={['system:settings:mail:modify']}
             expand={
-                <AntdButton onClick={handleOnTest} title={'测试'}>
-                    <Icon component={IconConsoleTest} />
-                </AntdButton>
+                <Permission operationCode={['system:settings:mail:modify']}>
+                    <AntdButton onClick={handleOnTest} title={'测试'}>
+                        <Icon component={IconConsoleTest} />
+                    </AntdButton>
+                </Permission>
             }
         >
             <AntdForm

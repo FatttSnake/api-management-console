@@ -37,7 +37,8 @@ import {
     URL_SYS_API_PLUGIN_INSTALL,
     URL_SYS_API_PLUGIN_KEY,
     URL_SYS_API_KEY_AVAILABLE_APIS,
-    URL_SYS_USER_INFO_BY_ID
+    URL_SYS_USER_INFO_BY_ID,
+    URL_SYS_API_PLUGIN_CONFIG
 } from '@/constants/urls.constants'
 import { SHA512 } from '@/utils/crypto'
 import request from '@/services'
@@ -85,11 +86,11 @@ export const r_sys_user_delete_list = (ids: Key[]) => request.delete(URL_SYS_USE
 export const r_sys_power_get_list = () => request.get<PowerSetVo>(URL_SYS_POWER_LIST)
 
 export const r_sys_role_get = (param: RoleGetParam) =>
-    request.get<PageVo<RoleWithPowerGetVo>>(URL_SYS_ROLE, param)
+    request.get<PageVo<RoleWithPowerVo>>(URL_SYS_ROLE, param)
 
 export const r_sys_role_get_list = () => request.get<RoleVo[]>(URL_SYS_ROLE_LIST)
 
-export const r_sys_role_change_status = (param: RoleChangeStatusParam) =>
+export const r_sys_role_change_status = (param: RoleUpdateStatusParam) =>
     request.patch<never>(URL_SYS_ROLE, param)
 
 export const r_sys_role_add = (param: RoleAddEditParam) => request.post(URL_SYS_ROLE, param)
@@ -101,11 +102,11 @@ export const r_sys_role_delete = (id: string) => request.delete(`${URL_SYS_ROLE}
 export const r_sys_role_delete_list = (ids: Key[]) => request.delete(URL_SYS_ROLE, { ids })
 
 export const r_sys_group_get = (param: GroupGetParam) =>
-    request.get<PageVo<GroupWithRoleGetVo>>(URL_SYS_GROUP, param)
+    request.get<PageVo<GroupWithRoleVo>>(URL_SYS_GROUP, param)
 
 export const r_sys_group_get_list = () => request.get<GroupVo[]>(URL_SYS_GROUP_LIST)
 
-export const r_sys_group_change_status = (param: GroupChangeStatusParam) =>
+export const r_sys_group_change_status = (param: GroupUpdateStatusParam) =>
     request.patch<never>(URL_SYS_GROUP, param)
 
 export const r_sys_group_add = (param: GroupAddEditParam) => request.post(URL_SYS_GROUP, param)
@@ -117,7 +118,7 @@ export const r_sys_group_delete = (id: string) => request.delete(`${URL_SYS_GROU
 export const r_sys_group_delete_list = (ids: Key[]) => request.delete(URL_SYS_GROUP, { ids })
 
 export const r_sys_log_get = (param: SysLogGetParam) =>
-    request.get<PageVo<SysLogGetVo>>(URL_SYS_LOG, param)
+    request.get<PageVo<SysLogVo>>(URL_SYS_LOG, param)
 
 export const r_sys_settings_base_get = () => request.get<BaseSettingsVo>(URL_SYS_SETTINGS_BASE)
 
@@ -205,6 +206,23 @@ export const r_sys_api_plugin_status = (param: ApiPluginUpdateStatusParam) =>
 export const r_sys_api_plugin_uninstall = (pluginId: string) =>
     request.delete(`${URL_SYS_API_PLUGIN}/${pluginId}`)
 
+export const r_sys_api_plugin_info_get = (pluginId: string) =>
+    request.get<ApiPluginVo>(`${URL_SYS_API_PLUGIN}/${pluginId}/info`)
+
+export const r_sys_api_plugin_config_get = (pluginId: string) =>
+    request.get<ApiPluginConfigVo>(`${URL_SYS_API_PLUGIN}/${pluginId}/config`)
+
+export const r_sys_api_plugin_config_update = (param: ApiPluginConfigUpdateParam) =>
+    request.put(URL_SYS_API_PLUGIN_CONFIG, param)
+
+export const r_sys_api_plugin_datasource_test = (
+    pluginId: string,
+    param: ApiPluginDatasourceTestParam
+) => request.post(`${URL_SYS_API_PLUGIN}/${pluginId}/config/datasource/test`, param)
+
+export const r_sys_api_plugin_reload = (pluginId: string) =>
+    request.post<ApiPluginVo>(`${URL_SYS_API_PLUGIN}/${pluginId}/reload`)
+
 export const r_sys_api_interface_get = (param: ApiInterfaceGetParam) =>
     request.get<PageVo<ApiGroupVo>>(URL_SYS_API, param)
 
@@ -220,7 +238,7 @@ export const r_sys_api_plugin_key_get = (param: ApiPluginTrustKeyGetParam) =>
 export const r_sys_api_plugin_key_add = (param: ApiPluginTrustKeyAddParam) =>
     request.post<ApiPluginTrustKeyVo>(URL_SYS_API_PLUGIN_KEY, param)
 
-export const r_sys_api_plugin_key_update = (param: apiPluginTrustKeyUpdateStatusParam) =>
+export const r_sys_api_plugin_key_update = (param: ApiPluginTrustKeyUpdateStatusParam) =>
     request.put(URL_SYS_API_PLUGIN_KEY, param)
 
 export const r_sys_api_plugin_key_delete = (keyId: string) =>

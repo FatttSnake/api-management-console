@@ -35,6 +35,7 @@ export const URL_SYS_API = '/system/api'
 export const URL_SYS_API_PLUGIN = `${URL_SYS_API}/plugin`
 export const URL_SYS_API_PLUGIN_INSTALL = `${URL_SYS_API_PLUGIN}/install`
 export const URL_SYS_API_PLUGIN_KEY = `${URL_SYS_API_PLUGIN}/key`
+export const URL_SYS_API_PLUGIN_CONFIG = `${URL_SYS_API_PLUGIN}/config`
 export const URL_SYS_API_ACCOUNT = `${URL_SYS_API}/account`
 export const URL_SYS_API_ACCOUNT_TRANSACTIONS = `${URL_SYS_API_ACCOUNT}/transactions`
 export const URL_SYS_API_ACCOUNT_TOPUP = `${URL_SYS_API_ACCOUNT}/topup`

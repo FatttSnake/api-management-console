@@ -12,6 +12,7 @@ import {
 } from '@/constants/common.constants'
 import { message, modal } from '@/utils/common'
 import { utcToLocalTime } from '@/utils/datetime'
+import { navigateToPluginConfig } from '@/utils/navigation'
 import {
     r_sys_api_plugin_get,
     r_sys_api_plugin_install,
@@ -26,6 +27,7 @@ import FitFullscreen from '@/components/common/FitFullscreen'
 import HideScrollbar from '@/components/common/HideScrollbar'
 
 const Plugin = () => {
+    const navigate = useNavigate()
     const theme = useTheme()
     const fileInputRef = useRef<HTMLInputElement>(null)
     const uploadControllerRef = useRef(new AbortController())
@@ -129,9 +131,17 @@ const Plugin = () => {
                     <Permission operationCode={['system:plugin:plugin:modify']}>
                         <a
                             style={{ color: theme.colorPrimary }}
-                            onClick={handleOnEditBtnClick(record)}
+                            onClick={handleOnPriceBtnClick(record)}
                         >
-                            编辑
+                            定价
+                        </a>
+                    </Permission>
+                    <Permission operationCode={['system:plugin:config:query']}>
+                        <a
+                            style={{ color: theme.colorPrimary }}
+                            onClick={handleOnConfigBtnClick(record)}
+                        >
+                            配置
                         </a>
                     </Permission>
                     <Permission operationCode={['system:plugin:plugin:uninstall']}>
@@ -323,7 +333,7 @@ const Plugin = () => {
         }
     }
 
-    const handleOnEditBtnClick = (value: ApiPluginVo) => {
+    const handleOnPriceBtnClick = (value: ApiPluginVo) => {
         return (e: MouseEvent) => {
             e.stopPropagation()
 
@@ -334,6 +344,14 @@ const Plugin = () => {
             form.setFieldValue('defaultRateLimit', value.defaultRateLimit)
             form.setFieldValue('defaultAccessMode', value.defaultAccessMode)
             void form.validateFields()
+        }
+    }
+
+    const handleOnConfigBtnClick = (value: ApiPluginVo) => {
+        return (e: MouseEvent) => {
+            e.stopPropagation()
+
+            navigateToPluginConfig(navigate, value.pluginId)
         }
     }
 
@@ -601,9 +619,9 @@ const Plugin = () => {
         </AntdSpace>
     )
 
-    const editForm = (
+    const priceForm = (
         <AntdForm form={form} disabled={isSubmitting} layout={'vertical'}>
-            <AntdForm.Item hidden name={'id'} label={'ID'}>
+            <AntdForm.Item name={'id'} label={'ID'} hidden>
                 <AntdInput disabled />
             </AntdForm.Item>
             <AntdForm.Item
@@ -611,8 +629,9 @@ const Plugin = () => {
                 name={'enable'}
                 label={'状态'}
                 rules={[{ required: true, type: 'boolean' }]}
+                hidden
             >
-                <AntdSwitch checkedChildren={'启用'} unCheckedChildren={'禁用'} />
+                <AntdSwitch checkedChildren={'启用'} unCheckedChildren={'禁用'} disabled />
             </AntdForm.Item>
             <AntdForm.Item name={'defaultPrice'} label={'默认每次调用单价'}>
                 <AntdInputNumber
@@ -662,14 +681,14 @@ const Plugin = () => {
                 </HideScrollbar>
             </FitFullscreen>
             <AntdDrawer
-                title={'编辑插件'}
+                title={'插件定价'}
                 onClose={handleOnDrawerClose}
                 open={isDrawerOpen}
                 closable={!isSubmitting}
                 mask={{ closable: !isSubmitting }}
                 extra={drawerToolbar}
             >
-                {editForm}
+                {priceForm}
             </AntdDrawer>
         </>
     )

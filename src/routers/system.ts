@@ -37,6 +37,15 @@ export const systemZone: RouteJsonObject[] = [
                 name: '签名',
                 menu: true,
                 permission: true
+            },
+            {
+                path: 'config/:pluginId',
+                absolutePath: '/system/plugin/config',
+                id: 'system-plugin-config',
+                component: lazy(() => import('@/pages/System/Plugin/Config')),
+                name: '插件配置',
+                menu: false,
+                permission: true
             }
         ]
     },
