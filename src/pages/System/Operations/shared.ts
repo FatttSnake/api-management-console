@@ -150,7 +150,11 @@ export const topBarOption = (list: ApiTopVo[]): EChartsOption => {
         },
         yAxis: {
             type: 'category',
-            data: list.map((item) => `${item.pluginVo?.name}:${item.interfaceVo?.name}`),
+            data: list.map((item) =>
+                !!item.pluginVo && !!item.interfaceVo
+                    ? `${item.pluginVo.name}:${item.interfaceVo.name}`
+                    : item.apiCode
+            ),
             inverse: true
         },
         series: [

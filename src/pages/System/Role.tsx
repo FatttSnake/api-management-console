@@ -31,7 +31,7 @@ const Role = () => {
     const [form] = AntdForm.useForm<RoleAddEditParam>()
     const formValues = AntdForm.useWatch([], form)
     const [newFormValues, setNewFormValues] = useState<RoleAddEditParam>()
-    const [roleData, setRoleData] = useState<RoleWithPowerGetVo[]>([])
+    const [roleData, setRoleData] = useState<RoleWithPowerVo[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [tableParams, setTableParams] = useState<TableParam>({
         pagination: {
@@ -55,7 +55,7 @@ const Role = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [tableSelectedItem, setTableSelectedItem] = useState<Key[]>([])
 
-    const dataColumns: _ColumnsType<RoleWithPowerGetVo> = [
+    const dataColumns: _ColumnsType<RoleWithPowerVo> = [
         {
             title: '名称',
             dataIndex: 'name',
@@ -137,7 +137,7 @@ const Role = () => {
     const handleOnTableChange = (
         pagination: _TablePaginationConfig,
         filters: Record<string, _FilterValue | null>,
-        sorter: _SorterResult<RoleWithPowerGetVo> | _SorterResult<RoleWithPowerGetVo>[]
+        sorter: _SorterResult<RoleWithPowerVo> | _SorterResult<RoleWithPowerVo>[]
     ) => {
         pagination = { ...tableParams.pagination, ...pagination }
         if (Array.isArray(sorter)) {
@@ -211,7 +211,7 @@ const Role = () => {
             )
     }
 
-    const handleOnEditBtnClick = (value: RoleWithPowerGetVo) => {
+    const handleOnEditBtnClick = (value: RoleWithPowerVo) => {
         return () => {
             setIsDrawerEdit(true)
             setIsDrawerOpen(true)
@@ -229,7 +229,7 @@ const Role = () => {
         }
     }
 
-    const handleOnDeleteBtnClick = (value: RoleWithPowerGetVo) => {
+    const handleOnDeleteBtnClick = (value: RoleWithPowerVo) => {
         return () => {
             modal
                 .confirm({

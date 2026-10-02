@@ -184,6 +184,8 @@ interface UserInfoVo {
     nickname: string
     avatar: string
     email: string
+    createTime: string
+    updateTime: string
 }
 
 interface TwoFactorVo {
@@ -284,16 +286,20 @@ interface UserUpdatePasswordParam {
     credentialsExpiration?: string
 }
 
+type SysLogType = 'INFO' | 'ERROR' | 'LOGIN' | 'LOGOUT' | 'REGISTER' | 'STATISTICS'
+
 interface SysLogGetParam extends PageParam {
+    logType?: SysLogType
     searchTraceId?: string
+    requestMethod?: string
     searchRequestUrl?: string
     searchStartTime?: string
     searchEndTime?: string
 }
 
-interface SysLogGetVo {
+interface SysLogVo {
     id: string
-    logType: string
+    logType: SysLogType
     traceId?: string
     operateUserId: string
     operateTime: string
@@ -316,10 +322,10 @@ interface RoleGetParam extends PageParam {
     searchRegex?: boolean
 }
 
-interface RoleWithPowerGetVo {
+interface RoleWithPowerVo {
     id: string
     name: string
-    enable: string
+    enable: boolean
     createTime: string
     updateTime: string
     modules: ModuleVo[]
@@ -329,7 +335,7 @@ interface RoleWithPowerGetVo {
     tree: _DataNode[]
 }
 
-interface RoleChangeStatusParam {
+interface RoleUpdateStatusParam {
     id: string
     enable: boolean
 }
@@ -353,7 +359,7 @@ interface GroupGetParam extends PageParam {
     searchRegex?: boolean
 }
 
-interface GroupWithRoleGetVo {
+interface GroupWithRoleVo {
     id: string
     name: string
     enable: boolean
@@ -369,7 +375,7 @@ interface GroupAddEditParam {
     enable: boolean
 }
 
-interface GroupChangeStatusParam {
+interface GroupUpdateStatusParam {
     id: string
     enable: boolean
 }
@@ -392,10 +398,12 @@ interface BaseSettingsParam {
     homeUrl: string
 }
 
+type MailSecurityType = 'None' | 'SSL/TLS' | 'StartTls'
+
 interface MailSettingsVo {
     host?: string
     port?: number
-    securityType?: string
+    securityType?: MailSecurityType
     username?: string
     password?: string
     from?: string
@@ -405,7 +413,7 @@ interface MailSettingsVo {
 interface MailSettingsParam {
     host?: string
     port?: number
-    securityType?: string
+    securityType?: MailSecurityType
     username?: string
     password?: string
     from?: string
@@ -416,10 +424,12 @@ interface MailSendParam {
     to: string
 }
 
+type SensitiveWordUse = 'USERNAME' | 'TITLE'
+
 interface SensitiveWordVo {
     id: string
     word: string
-    useFor: string[]
+    useFor: SensitiveWordUse[]
     enable: boolean
 }
 
@@ -530,8 +540,19 @@ interface OnlineInfoVo {
     }[]
 }
 
+type OnlineInfoScope =
+    | 'DAY'
+    | 'WEEK'
+    | 'MONTH'
+    | 'QUARTER'
+    | 'YEAR'
+    | 'TWO_YEARS'
+    | 'THREE_YEARS'
+    | 'FIVE_YEARS'
+    | 'ALL'
+
 interface OnlineInfoGetParam {
-    scope: string
+    scope: OnlineInfoScope
 }
 
 interface ActiveInfoVo {
@@ -549,8 +570,11 @@ interface ActiveInfoVo {
     }[]
 }
 
+type ActiveInfoScope =
+    'WEEK' | 'MONTH' | 'QUARTER' | 'YEAR' | 'TWO_YEARS' | 'THREE_YEARS' | 'FIVE_YEARS' | 'ALL'
+
 interface ActiveInfoGetParam {
-    scope: string
+    scope: ActiveInfoScope
 }
 
 interface ApiAccountVo {
@@ -567,9 +591,22 @@ interface ApiAccountGetParam extends PageParam {
     enable?: boolean
 }
 
+type EventLogEvent =
+    | 'LOGIN'
+    | 'LOGOUT'
+    | 'REGISTER'
+    | 'VERIFY'
+    | 'API'
+    | 'KEY_CREATE'
+    | 'KEY_UPDATE'
+    | 'KEY_DELETE'
+    | 'KEY_STATUS'
+    | 'KEY_REGENERATE'
+    | 'KEY_TOPUP'
+
 interface ApiAuditVo {
     id: string
-    event: string
+    event: EventLogEvent
     operateUserId: string
     operateTime: string
     detail: string
@@ -579,10 +616,14 @@ interface ApiAuditVo {
 }
 
 interface ApiAuditGetParam extends PageParam {
-    event?: string
+    event?: EventLogEvent
     startTime?: string
     endTime?: string
 }
+
+type ApiInterfaceBillingMode = 'FREE' | 'SUCCESS_ONLY' | 'ALWAYS'
+
+type ApiInterfaceAccessMode = 'DEFAULT' | 'RESTRICTED'
 
 interface ApiInterfaceVo {
     id: string
@@ -594,11 +635,11 @@ interface ApiInterfaceVo {
     method: string
     apiVersion: number
     price: string
-    billingMode: string
+    billingMode: ApiInterfaceBillingMode
     needKey: boolean
     rateLimit: number
     enable: boolean
-    accessMode: string
+    accessMode: ApiInterfaceAccessMode
     createTime: string
     updateTime: string
 }
@@ -620,11 +661,11 @@ interface ApiInterfaceGetParam extends PageParam {
 interface ApiInterfaceUpdateParam {
     id: string
     price: string
-    billingMode: string
+    billingMode: ApiInterfaceBillingMode
     needKey: boolean
     rateLimit: number
     enable: boolean
-    accessMode: string
+    accessMode: ApiInterfaceAccessMode
 }
 
 interface ApiInterfaceUpdateStatusParam {
@@ -746,7 +787,7 @@ interface ApiPluginTrustKeyAddParam {
     alias: string
 }
 
-interface apiPluginTrustKeyUpdateStatusParam {
+interface ApiPluginTrustKeyUpdateStatusParam {
     keyId: string
     enable: boolean
 }
@@ -759,7 +800,7 @@ interface ApiPluginVo {
     enable: boolean
     defaultPrice: string
     defaultRateLimit: number
-    defaultAccessMode: string
+    defaultAccessMode: ApiInterfaceAccessMode
     source: string
     versionName: string
     versionCode: number
@@ -777,12 +818,10 @@ interface ApiPluginGetParam extends PageParam {
 
 interface ApiPluginUpdateParam {
     id: string
-    name: string
-    description: string
     enable: boolean
     defaultPrice: string
     defaultRateLimit: number
-    defaultAccessMode: string
+    defaultAccessMode: ApiInterfaceAccessMode
 }
 
 interface ApiPluginUpdateStatusParam {
@@ -790,11 +829,82 @@ interface ApiPluginUpdateStatusParam {
     enable: boolean
 }
 
+type ApiPluginConfigFieldType = 'STRING' | 'TEXT' | 'NUMBER' | 'BOOLEAN' | 'ENUM' | 'SECRET'
+
+type ApiPluginDatasourceType = 'MYSQL' | 'SQLITE'
+
+interface ApiPluginConfigVo {
+    pluginId: string
+    groups: ApiPluginConfigGroupVo[]
+    datasources: ApiPluginConfigDatasourceVo[]
+}
+
+interface ApiPluginConfigGroupVo {
+    key: string
+    title: string | null
+    description: string | null
+    fields: ApiPluginConfigFieldVo[]
+    datasource: string | null
+}
+
+interface ApiPluginConfigFieldVo {
+    key: string
+    type: ApiPluginConfigFieldType
+    title: string | null
+    description: string | null
+    value: string | null
+    default: string | null
+    hasValue: boolean
+    required: boolean
+    secret: boolean
+    unreadable: boolean
+    placeholder: string | null
+    minimum: number | null
+    maximum: number | null
+    integer: boolean
+    minLength: number | null
+    maxLength: number | null
+    pattern: string | null
+    options: ApiPluginConfigOptionVo[]
+}
+
+interface ApiPluginConfigOptionVo {
+    value: string
+    label: string | null
+}
+
+interface ApiPluginConfigDatasourceVo {
+    name: string
+    required: boolean
+    dbType: ApiPluginDatasourceType
+    configured: boolean
+    keys: string[]
+}
+
+interface ApiPluginConfigValueParam {
+    key: string
+    value: string
+}
+
+interface ApiPluginConfigGroupParam {
+    key: string
+    values: ApiPluginConfigValueParam[]
+}
+
+interface ApiPluginConfigUpdateParam {
+    pluginId: string
+    groups: ApiPluginConfigGroupParam[]
+}
+
+interface ApiPluginDatasourceTestParam {
+    name: string
+    values: ApiPluginConfigValueParam[]
+}
+
 interface ApiReportVo {
     apiKeyId: string
     date: string
     apiCode: string
-    apiName: string
     count: number
     cost: string
     keyVo?: ApiKeyVo
@@ -810,13 +920,15 @@ interface ApiReportGetParam extends PageParam {
     limit?: number
 }
 
+type ApiTransactionType = 'TOPUP' | 'DEDUCT' | 'REFUND' | 'ADJUST'
+
 interface ApiTransactionVo {
     id: string
     userId: string
     apiKeyId: string
     apiUsageId: string
     orderNo: string
-    type: string
+    type: ApiTransactionType
     amount: string
     balanceAfter: string
     remark: string
@@ -825,7 +937,7 @@ interface ApiTransactionVo {
 
 interface ApiTransactionGetParam extends PageParam {
     userId?: string
-    type?: string
+    type?: ApiTransactionType
     startTime?: string
     endTime?: string
 }
@@ -859,12 +971,12 @@ interface ApiUsageGetParam extends PageParam {
     endTime?: string
 }
 
-interface ApiDocPluginVo {
+interface ApiDocVo {
     pluginId: string
     name: string
     description: string
     versionName: string
-    versionCode: string
+    versionCode: number
     enable: boolean
     interfaces: ApiInterfaceVo[]
     openapi: unknown

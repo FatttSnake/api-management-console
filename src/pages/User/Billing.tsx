@@ -68,7 +68,7 @@ const Billing = () => {
             dataIndex: 'remark',
             ellipsis: true,
             render: (value, record) =>
-                record.type === 'TOTUP' ? `充值订单号：${record.orderNo} ; ${value}` : value
+                record.type === 'TOPUP' ? `充值订单号：${record.orderNo} ; ${value}` : value
         }
     ]
 

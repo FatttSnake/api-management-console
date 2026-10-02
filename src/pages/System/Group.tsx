@@ -31,7 +31,7 @@ const Group = () => {
     const [form] = AntdForm.useForm<GroupAddEditParam>()
     const formValues = AntdForm.useWatch([], form)
     const [newFormValues, setNewFormValues] = useState<GroupAddEditParam>()
-    const [groupData, setGroupData] = useState<GroupWithRoleGetVo[]>([])
+    const [groupData, setGroupData] = useState<GroupWithRoleVo[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [tableParams, setTableParams] = useState<TableParam>({
         pagination: {
@@ -55,7 +55,7 @@ const Group = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [tableSelectedItem, setTableSelectedItem] = useState<Key[]>([])
 
-    const dataColumns: _ColumnsType<GroupWithRoleGetVo> = [
+    const dataColumns: _ColumnsType<GroupWithRoleVo> = [
         {
             title: '名称',
             dataIndex: 'name',
@@ -145,7 +145,7 @@ const Group = () => {
     const handleOnTableChange = (
         pagination: _TablePaginationConfig,
         filters: Record<string, _FilterValue | null>,
-        sorter: _SorterResult<GroupWithRoleGetVo> | _SorterResult<GroupWithRoleGetVo>[]
+        sorter: _SorterResult<GroupWithRoleVo> | _SorterResult<GroupWithRoleVo>[]
     ) => {
         pagination = { ...tableParams.pagination, ...pagination }
         if (Array.isArray(sorter)) {
@@ -221,7 +221,7 @@ const Group = () => {
             )
     }
 
-    const handleOnEditBtnClick = (value: GroupWithRoleGetVo) => {
+    const handleOnEditBtnClick = (value: GroupWithRoleVo) => {
         return () => {
             setIsDrawerEdit(true)
             setIsDrawerOpen(true)
@@ -239,7 +239,7 @@ const Group = () => {
         }
     }
 
-    const handleOnDeleteBtnClick = (value: GroupWithRoleGetVo) => {
+    const handleOnDeleteBtnClick = (value: GroupWithRoleVo) => {
         return () => {
             modal
                 .confirm({

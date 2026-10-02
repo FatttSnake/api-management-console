@@ -10,7 +10,7 @@ import Card from '@/components/common/Card'
 import HideScrollbar from '@/components/common/HideScrollbar'
 import FlexBox from '@/components/common/FlexBox'
 
-const EVENT_LIST = [
+const EVENT_LIST: { text: string; value: EventLogEvent; color: string }[] = [
     { text: '创建 Key', value: 'KEY_CREATE', color: 'green' },
     { text: '编辑 Key', value: 'KEY_UPDATE', color: 'blue' },
     { text: '删除 Key', value: 'KEY_DELETE', color: 'red' },
@@ -42,7 +42,7 @@ const Audit = () => {
                 } 项 共 ${total} 项`
         }
     })
-    const [event, setEvent] = useState<string>()
+    const [event, setEvent] = useState<EventLogEvent>()
     const [timeRange, setTimeRange] = useState<[string, string]>()
 
     const dataColumns: _ColumnsType<ApiAuditVo> = [
@@ -165,7 +165,7 @@ const Audit = () => {
         }
     }
 
-    const handleOnEventChange = (value: string) => {
+    const handleOnEventChange = (value: EventLogEvent) => {
         setEvent(value)
     }
 

@@ -16,7 +16,7 @@ const OnlineInfo = () => {
     } | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [currentOnlineCount, setCurrentOnlineCount] = useState(-1)
-    const [scope, setScope] = useState('WEEK')
+    const [scope, setScope] = useState<OnlineInfoScope>('WEEK')
     const [onlineInfoEChartsOption, setOnlineInfoEChartsOption] =
         useState<echarts.EChartsCoreOption | null>(null)
 
@@ -61,7 +61,7 @@ const OnlineInfo = () => {
         getOnlineInfo()
     }, [])
 
-    const handleOnScopeChange = (value: string) => {
+    const handleOnScopeChange = (value: OnlineInfoScope) => {
         setScope(value)
         getOnlineInfo(value)
     }
@@ -70,7 +70,7 @@ const OnlineInfo = () => {
         getOnlineInfo()
     }
 
-    const getOnlineInfo = (_scope: string = scope) => {
+    const getOnlineInfo = (_scope: OnlineInfoScope = scope) => {
         if (isLoading) {
             return
         }

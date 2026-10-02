@@ -177,23 +177,27 @@ const Report = () => {
     const costColumns: _ColumnsType<ApiReportVo> = [
         {
             title: '插件',
-            dataIndex: ['pluginVo', 'name'],
+            dataIndex: ['pluginVo'],
             ellipsis: true,
-            render: (value, record) => (
-                <span title={record.pluginVo?.description}>
-                    {`${value}(${record.pluginVo?.pluginId})`}
-                </span>
-            )
+            render: (value) =>
+                value ? (
+                    <span title={value.description}>{`${value.name}(${value.pluginId})`}</span>
+                ) : (
+                    '-'
+                )
         },
         {
             title: '接口',
-            dataIndex: ['interfaceVo', 'name'],
+            dataIndex: ['interfaceVo'],
             ellipsis: true,
-            render: (value, record) => (
-                <span title={record.interfaceVo?.description}>
-                    {`${value}(${record.interfaceVo?.method} ${record.interfaceVo?.path})`}
-                </span>
-            )
+            render: (value) =>
+                value ? (
+                    <span title={value.description}>
+                        {`${value.name}(${value.method} ${value.path})`}
+                    </span>
+                ) : (
+                    '-'
+                )
         },
         {
             title: 'API 编码',

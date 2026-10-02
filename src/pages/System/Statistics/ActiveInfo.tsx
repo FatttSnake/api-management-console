@@ -15,7 +15,7 @@ const ActiveInfo = () => {
         dom: HTMLDivElement
     } | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [scope, setScope] = useState('WEEK')
+    const [scope, setScope] = useState<ActiveInfoScope>('WEEK')
     const [activeInfoEChartsOption, setActiveInfoEChartsOption] =
         useState<echarts.EChartsCoreOption | null>(null)
 
@@ -60,7 +60,7 @@ const ActiveInfo = () => {
         getActiveInfo()
     }, [])
 
-    const handleOnScopeChange = (value: string) => {
+    const handleOnScopeChange = (value: ActiveInfoScope) => {
         setScope(value)
         getActiveInfo(value)
     }
@@ -69,7 +69,7 @@ const ActiveInfo = () => {
         getActiveInfo()
     }
 
-    const getActiveInfo = (_scope: string = scope) => {
+    const getActiveInfo = (_scope: ActiveInfoScope = scope) => {
         if (isLoading) {
             return
         }

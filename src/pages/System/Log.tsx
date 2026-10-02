@@ -10,7 +10,7 @@ import HideScrollbar from '@/components/common/HideScrollbar'
 import FlexBox from '@/components/common/FlexBox'
 
 const Log = () => {
-    const [logData, setLogData] = useState<SysLogGetVo[]>([])
+    const [logData, setLogData] = useState<SysLogVo[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [tableParams, setTableParams] = useState<TableParam>({
         pagination: {
@@ -28,7 +28,7 @@ const Log = () => {
     const [searchRequestUrl, setSearchRequestUrl] = useState('')
     const [timeRange, setTimeRange] = useState<[string, string]>()
 
-    const dataColumns: _ColumnsType<SysLogGetVo> = [
+    const dataColumns: _ColumnsType<SysLogVo> = [
         {
             title: '类型',
             dataIndex: 'logType',
@@ -44,7 +44,7 @@ const Log = () => {
                 { text: 'Info', value: 'INFO' },
                 { text: 'Login', value: 'LOGIN' },
                 { text: 'Logout', value: 'LOGOUT' },
-                { text: 'Register', value: 'Register' },
+                { text: 'Register', value: 'REGISTER' },
                 { text: 'Statistics', value: 'STATISTICS' },
                 { text: 'Error', value: 'ERROR' }
             ]
@@ -128,7 +128,7 @@ const Log = () => {
     const handleOnTableChange = (
         pagination: _TablePaginationConfig,
         filters: Record<string, _FilterValue | null>,
-        sorter: _SorterResult<SysLogGetVo> | _SorterResult<SysLogGetVo>[]
+        sorter: _SorterResult<SysLogVo> | _SorterResult<SysLogVo>[]
     ) => {
         pagination = { ...tableParams.pagination, ...pagination }
         if (Array.isArray(sorter)) {
