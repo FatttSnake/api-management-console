@@ -86,8 +86,8 @@ const Settings = ({ pluginId }: SettingsProps) => {
                             />
                         </Card>
                     )}
-                    {configData.datasources.length && renderDatasources(configData.datasources)}
-                    {configData.groups.length &&
+                    {!!configData.datasources.length && renderDatasources(configData.datasources)}
+                    {!!configData.groups.length &&
                         configData.groups.map((group) => (
                             <ConfigCard
                                 pluginId={pluginId}
