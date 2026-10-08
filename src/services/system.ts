@@ -280,7 +280,7 @@ export const r_sys_api_key_delete_list = (param: ApiKeyDeleteParam) =>
     request.delete(URL_SYS_API_KEY, param)
 
 export const r_sys_api_key_available_apis = (userId: string) =>
-    request.get<ApiGroupVo[]>(`${URL_SYS_API_KEY_AVAILABLE_APIS}/${userId}`)
+    request.get<ApiKeyAvailableGroupVo[]>(`${URL_SYS_API_KEY_AVAILABLE_APIS}/${userId}`)
 
 export const r_sys_api_usage_get = (param: ApiUsageGetParam) =>
     request.get<PageVo<ApiUsageVo>>(URL_SYS_API_USAGE, param)

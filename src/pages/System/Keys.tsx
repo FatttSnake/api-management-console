@@ -848,7 +848,7 @@ const Keys = () => {
         })
     }
 
-    const availableApisToPowerTree = (apiGroups: ApiGroupVo[]): _OptionType[] =>
+    const availableApisToPowerTree = (apiGroups: ApiKeyAvailableGroupVo[]): _OptionType[] =>
         apiGroups.map(({ pluginId, pluginName, interfaces }) => ({
             label: pluginName,
             value: pluginId,

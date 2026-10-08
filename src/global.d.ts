@@ -651,6 +651,15 @@ interface ApiGroupVo {
     interfaces: ApiInterfaceVo[]
 }
 
+interface ApiKeyAvailableGroupVo {
+    pluginId: string
+    pluginName: string
+    interfaces: {
+        code: string
+        name: string
+    }[]
+}
+
 interface ApiInterfaceGetParam extends PageParam {
     searchCode?: string
     searchName?: string
