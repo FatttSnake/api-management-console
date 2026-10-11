@@ -7,6 +7,15 @@ export const userZone: RouteJsonObject[] = [
         element: <Navigate to="/api-keys" replace />
     },
     {
+        path: 'apis',
+        absolutePath: '/apis',
+        id: 'user-apis',
+        component: lazy(() => import('@/pages/User/Apis')),
+        name: '可用 API',
+        icon: lazy(() => import('~icons/console/api')),
+        menu: true
+    },
+    {
         path: 'usage',
         absolutePath: '/usage',
         id: 'user-usage',

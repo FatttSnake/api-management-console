@@ -988,5 +988,70 @@ interface ApiDocVo {
     versionCode: number
     enable: boolean
     interfaces: ApiInterfaceVo[]
-    openapi: unknown
+    openapi: OpenApiDoc | null
+}
+
+interface ApiDocGetParam extends PageParam {
+    searchName?: string
+}
+
+interface OpenApiSchema {
+    $ref?: string
+    type?: string | string[]
+    format?: string
+    contentMediaType?: string
+    contentEncoding?: string
+    title?: string
+    description?: string
+    enum?: unknown[]
+    examples?: unknown[]
+    default?: unknown
+    required?: string[]
+    properties?: Record<string, OpenApiSchema>
+    items?: OpenApiSchema
+    allOf?: OpenApiSchema[]
+    oneOf?: OpenApiSchema[]
+    anyOf?: OpenApiSchema[]
+    additionalProperties?: boolean | OpenApiSchema
+}
+
+interface OpenApiParameter {
+    name: string
+    in: 'query' | 'path' | 'header' | 'cookie'
+    required?: boolean
+    description?: string
+    schema?: OpenApiSchema
+}
+
+interface OpenApiMediaType {
+    schema?: OpenApiSchema
+    example?: unknown
+}
+
+interface OpenApiRequestBody {
+    required?: boolean
+    description?: string
+    content?: Record<string, OpenApiMediaType>
+}
+
+interface OpenApiResponse {
+    description?: string
+    content?: Record<string, OpenApiMediaType>
+}
+
+interface OpenApiOperation {
+    summary?: string
+    description?: string
+    operationId?: string
+    parameters?: OpenApiParameter[]
+    requestBody?: OpenApiRequestBody
+    responses?: Record<string, OpenApiResponse>
+}
+
+type OpenApiPathItem = Record<string, OpenApiOperation>
+
+interface OpenApiDoc {
+    openapi?: string
+    paths?: Record<string, OpenApiPathItem>
+    components?: { schemas?: Record<string, OpenApiSchema> }
 }

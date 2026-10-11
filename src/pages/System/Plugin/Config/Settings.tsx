@@ -90,6 +90,7 @@ const Settings = ({ pluginId }: SettingsProps) => {
                     {!!configData.groups.length &&
                         configData.groups.map((group) => (
                             <ConfigCard
+                                key={group.key}
                                 pluginId={pluginId}
                                 group={group}
                                 datasource={datasourceOf(group, configData.datasources)}

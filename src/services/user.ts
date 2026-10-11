@@ -2,6 +2,7 @@ import request from '@/services'
 import {
     URL_USER_API_ACCOUNT,
     URL_USER_API_ACCOUNT_TRANSACTIONS,
+    URL_USER_API_DOCS,
     URL_USER_API_KEY,
     URL_USER_API_KEY_AVAILABLE_APIS,
     URL_USER_API_USAGE
@@ -40,3 +41,9 @@ export const r_user_api_key_available_apis = () =>
 
 export const r_user_api_key_usage_get = (param: ApiUsageGetParam) =>
     request.get<PageVo<ApiUsageVo>>(URL_USER_API_USAGE, param)
+
+export const r_user_api_doc_get = (param: ApiDocGetParam) =>
+    request.get<PageVo<ApiDocVo>>(URL_USER_API_DOCS, param)
+
+export const r_user_api_doc_get_one = (pluginId: string) =>
+    request.get<ApiDocVo>(`${URL_USER_API_DOCS}/${pluginId}`)
