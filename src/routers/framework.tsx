@@ -16,6 +16,6 @@ export const framework: RouteJsonObject[] = [
     {
         path: '*',
         absolutePath: '*',
-        element: <Navigate to="/api-keys" replace />
+        element: <Navigate to="/" replace />
     }
 ]

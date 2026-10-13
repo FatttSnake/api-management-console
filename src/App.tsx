@@ -12,11 +12,10 @@ import {
 } from '@/constants/common.constants'
 import { ConfigProvider } from '@/components/config/ConfigContext'
 import { getThemeMode, init } from '@/utils/common'
-import { getRouter } from '@/routers'
+import { router } from '@/routers'
 import FullscreenLoadingMask from '@/components/common/FullscreenLoadingMask'
 
 export const AppContext = createContext({
-    refreshRouter: () => {},
     isDarkMode: false
 })
 
@@ -24,7 +23,6 @@ const App = () => {
     const [messageInstance, messageHolder] = message.useMessage()
     const [notificationInstance, notificationHolder] = notification.useNotification()
     const [modalInstance, modalHolder] = AntdModal.useModal()
-    const [routerState, setRouterState] = useState(getRouter)
     const [themeMode, setThemeMode] = useState(getThemeMode())
     const [isSystemDarkMode, setIsSystemDarkMode] = useState(false)
 
@@ -82,16 +80,9 @@ const App = () => {
             <BaseStyles />
             <CommonStyles />
             <ConfigProvider>
-                <AppContext.Provider
-                    value={{
-                        refreshRouter: () => {
-                            setRouterState(getRouter())
-                        },
-                        isDarkMode: getIsDark()
-                    }}
-                >
+                <AppContext.Provider value={{ isDarkMode: getIsDark() }}>
                     <Suspense fallback={<FullscreenLoadingMask />}>
-                        <RouterProvider router={routerState} />
+                        <RouterProvider router={router} />
                     </Suspense>
                 </AppContext.Provider>
                 {messageHolder}

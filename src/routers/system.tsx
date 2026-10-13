@@ -2,7 +2,12 @@ import { getAuthRoute } from '@/utils/route'
 
 export const systemZone: RouteJsonObject[] = [
     {
-        path: 'monitor',
+        path: '',
+        absolutePath: '',
+        element: <Navigate to="/" replace />
+    },
+    {
+        path: 'operations/monitor',
         absolutePath: '/system/operations/monitor',
         id: 'system-operations-monitor-dashboard',
         component: lazy(() => import('@/pages/System/Operations/Monitor')),
@@ -78,6 +83,11 @@ export const systemZone: RouteJsonObject[] = [
         menu: true,
         permission: true,
         children: [
+            {
+                path: '',
+                absolutePath: '',
+                element: <Navigate to="/" replace />
+            },
             {
                 path: 'usage/:userId',
                 absolutePath: '/system/operations/usage',
@@ -191,6 +201,11 @@ export const systemZone: RouteJsonObject[] = [
         icon: lazy(() => import('~icons/console/log')),
         menu: true,
         permission: true
+    },
+    {
+        path: '*',
+        absolutePath: '*',
+        element: <Navigate to="/" replace />
     }
 ]
 

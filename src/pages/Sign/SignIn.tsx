@@ -27,7 +27,7 @@ import Captcha, { CaptchaElement } from '@/components/common/Captcha'
 
 const SignIn = () => {
     const { styles, theme } = useStyles()
-    const { refreshRouter, isDarkMode } = useContext(AppContext)
+    const { isDarkMode } = useContext(AppContext)
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
     const captchaRef = useRef<CaptchaElement>(null)
@@ -70,8 +70,7 @@ const SignIn = () => {
                         setCsrfToken(data!.csrfToken)
                         message.success('登录成功').then(() => {
                             getUserInfo().then((user) => {
-                                refreshRouter()
-                                navigateToRedirect(navigate, searchParams, '/repository')
+                                navigateToRedirect(navigate, searchParams, '/apis')
 
                                 notification.success({
                                     title: '欢迎回来',

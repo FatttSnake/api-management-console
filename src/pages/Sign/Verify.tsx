@@ -11,13 +11,11 @@ import { getLoginStatus, getUserInfo, requestUserInfo } from '@/utils/auth'
 import { navigateToLogin, navigateToRedirect, navigateToRoot } from '@/utils/navigation'
 import { r_auth_resend, r_auth_verify } from '@/services/auth'
 import { r_sys_avatar_generate } from '@/services/system'
-import { AppContext } from '@/App'
 import FitCenter from '@/components/common/FitCenter'
 import FlexBox from '@/components/common/FlexBox'
 
 const Verify = () => {
     const { styles, theme } = useStyles()
-    const { refreshRouter } = useContext(AppContext)
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
     const [hasCode, setHasCode] = useState(true)
@@ -128,8 +126,7 @@ const Verify = () => {
                 case PERMISSION_VERIFY_SUCCESS:
                     message.success('恭喜你，完成了').then(() => {
                         requestUserInfo().then(() => {
-                            refreshRouter()
-                            navigateToRedirect(navigate, searchParams, '/repository')
+                            navigateToRedirect(navigate, searchParams, '/apis')
                         })
                     })
                     break

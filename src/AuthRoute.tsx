@@ -2,7 +2,7 @@ import { PRODUCTION_NAME } from '@/constants/common.constants'
 import useTokenRefresh from '@/hooks/useTokenRefresh'
 import { setPageTitle } from '@/utils/common'
 import { getRedirectUrl } from '@/utils/route'
-import { getLoginStatus, getVerifyStatus } from '@/utils/auth'
+import { getLoginStatus, getVerifyStatus, hasPathPermission, hasPermission } from '@/utils/auth'
 
 const AuthRoute = () => {
     const [searchParams] = useSearchParams()
@@ -48,8 +48,18 @@ const AuthRoute = () => {
             return <Navigate to={location.pathname.substring(0, location.pathname.length - 1)} />
         }
 
+        if (handle?.permission && !hasPathPermission(handle.absolutePath)) {
+            return <Navigate to={'/'} replace />
+        }
+        if (handle?.operationCode && !hasPermission(handle.operationCode)) {
+            return <Navigate to={'/'} replace />
+        }
+
         return outlet
     }, [
+        handle?.absolutePath,
+        handle?.operationCode,
+        handle?.permission,
         handle?.title,
         handle?.titlePostfix,
         handle?.titlePrefix,

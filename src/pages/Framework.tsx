@@ -9,8 +9,13 @@ const SystemFramework = () => {
     const { styles, cx } = useStyles()
     const location = useLocation()
     const navigate = useNavigate()
-    const userZone = getUserZoneRouteJson()
-    const systemZone = getSystemZoneRouteJson()
+    const { userZone, systemZone } = useMemo(
+        () => ({
+            userZone: getUserZoneRouteJson(),
+            systemZone: getSystemZoneRouteJson()
+        }),
+        []
+    )
 
     const mapToMenu = (routeJsonList: RouteJsonObject[]): ReactNode[] =>
         routeJsonList.map(

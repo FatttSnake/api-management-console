@@ -16,8 +16,8 @@ export const getFullTitle = (data: _DataNode, preTitle?: string) => {
 export const getAuthRoute = (
     route: RouteJsonObject[],
     parentPermission: boolean = false
-): RouteJsonObject[] => {
-    const temp = route
+): RouteJsonObject[] =>
+    route
         .filter(
             (value) =>
                 value.path === '*' ||
@@ -25,21 +25,12 @@ export const getAuthRoute = (
                 (hasPathPermission(value.absolutePath) &&
                     (!value.operationCode || hasPermission(value.operationCode)))
         )
-        .map((value) => {
-            if (value.children) {
-                value.children = getAuthRoute(value.children, parentPermission || value.permission)
-            }
-            return value
-        })
-    if (temp[0]) {
-        temp.push({
-            path: '',
-            absolutePath: '',
-            element: <Navigate to={temp[0].absolutePath} replace />
-        })
-    }
-    return temp
-}
+        .map((value) => ({
+            ...value,
+            children: value.children
+                ? getAuthRoute(value.children, parentPermission || value.permission)
+                : value.children
+        }))
 
 export const mapJsonToRoute = (jsonObject: RouteJsonObject[]): RouteObject[] => {
     return jsonObject.map((value) => ({
@@ -63,13 +54,9 @@ export const mapJsonToRoute = (jsonObject: RouteJsonObject[]): RouteObject[] => 
     }))
 }
 
-export const setTitle = (jsonObject: RouteJsonObject[], title: string): RouteJsonObject[] => {
-    return jsonObject.map((value) => {
-        if (!value.title) {
-            value.title = title
-        }
-        value.children && setTitle(value.children, title)
-
-        return value
-    })
-}
+export const setTitle = (jsonObject: RouteJsonObject[], title: string): RouteJsonObject[] =>
+    jsonObject.map((value) => ({
+        ...value,
+        title: value.title ?? title,
+        children: value.children ? setTitle(value.children, title) : value.children
+    }))

@@ -62,6 +62,7 @@ const Settings = ({ pluginId }: SettingsProps) => {
                 <div className={styles.datasourcesContent}>
                     {datasources.map(({ dbType, name, configured, required }) => (
                         <DatasourceCard
+                            key={name}
                             dbType={dbType}
                             name={name}
                             configured={configured}
