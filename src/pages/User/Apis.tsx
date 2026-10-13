@@ -1,6 +1,7 @@
 import { ChangeEvent, KeyboardEvent } from 'react'
 import { PrismLight as CodeHighlighter } from 'react-syntax-highlighter'
 import { vs, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash'
 import useStyles from '@/assets/css/pages/user/apis.style'
 import { message } from '@/utils/common'
 import { r_user_api_doc_get, r_user_api_doc_get_one } from '@/services/user'
@@ -11,6 +12,8 @@ import HideScrollbar from '@/components/common/HideScrollbar'
 import FlexBox from '@/components/common/FlexBox'
 import Card from '@/components/common/Card'
 import OpenApiDoc from '@/components/plugin/OpenApiDoc'
+
+CodeHighlighter.registerLanguage('bash', bash)
 
 const BILLING_MODE_LABEL: Record<ApiInterfaceBillingMode, string> = {
     FREE: '免费',
@@ -304,7 +307,7 @@ const Apis = () => {
                             <AntdTypography.Paragraph>
                                 示例：
                                 <CodeHighlighter
-                                    language={'shell'}
+                                    language={'bash'}
                                     style={isDarkMode ? vscDarkPlus : vs}
                                 >
                                     {buildCallExample()}
@@ -467,7 +470,7 @@ const Apis = () => {
                     </Card>
                     <Card className={styles.layout}>
                         调用方式：
-                        <CodeHighlighter language={'shell'} style={isDarkMode ? vscDarkPlus : vs}>
+                        <CodeHighlighter language={'bash'} style={isDarkMode ? vscDarkPlus : vs}>
                             {buildCallExample(selected.path)}
                         </CodeHighlighter>
                     </Card>
