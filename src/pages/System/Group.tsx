@@ -192,7 +192,8 @@ const Group = () => {
                     closable: true
                 },
                 title: '确定删除',
-                content: `确定删除选中的 ${tableSelectedItem.length} 个用户组吗？`
+                content: `确定删除选中的 ${tableSelectedItem.length} 个用户组吗？`,
+                okType: 'danger'
             })
             .then(
                 (confirmed) => {
@@ -246,7 +247,8 @@ const Group = () => {
                     centered: true,
                     mask: { closable: true },
                     title: '确定删除',
-                    content: `确定删除用户组 ${value.name} 吗？`
+                    content: `确定删除用户组 ${value.name} 吗？`,
+                    okType: 'danger'
                 })
                 .then(
                     (confirmed) => {

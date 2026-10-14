@@ -224,6 +224,7 @@ const Profile = () => {
                     icon: <Icon style={{ color: theme.colorPrimary }} component={IconConsole2fa} />,
                     title: '双因素',
                     content: '确定解除双因素？',
+                    okType: 'danger',
                     onOk: () => {
                         void modal.confirm({
                             centered: true,

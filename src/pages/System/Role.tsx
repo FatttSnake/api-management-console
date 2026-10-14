@@ -182,7 +182,8 @@ const Role = () => {
                 centered: true,
                 mask: { closable: true },
                 title: '确定删除',
-                content: `确定删除选中的 ${tableSelectedItem.length} 个角色吗？`
+                content: `确定删除选中的 ${tableSelectedItem.length} 个角色吗？`,
+                okType: 'danger'
             })
             .then(
                 (confirmed) => {
@@ -236,7 +237,8 @@ const Role = () => {
                     centered: true,
                     mask: { closable: true },
                     title: '确定删除',
-                    content: `确定删除角色 ${value.name} 吗？`
+                    content: `确定删除角色 ${value.name} 吗？`,
+                    okType: 'danger'
                 })
                 .then(
                     (confirmed) => {

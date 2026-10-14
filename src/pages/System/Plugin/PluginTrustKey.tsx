@@ -170,7 +170,8 @@ const PluginTrustKey = () => {
                     centered: true,
                     mask: { closable: true },
                     title: '确定删除',
-                    content: `确定删除签名 ${value.alias ?? value.keyId} 吗？`
+                    content: `确定删除签名 ${value.alias ?? value.keyId} 吗？`,
+                    okType: 'danger'
                 })
                 .then(
                     (confirmed) => {

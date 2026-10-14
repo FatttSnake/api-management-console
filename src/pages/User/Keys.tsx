@@ -683,7 +683,8 @@ const Keys = () => {
                     centered: true,
                     mask: { closable: true },
                     title: '确定删除',
-                    content: `确定删除 ${record.name} 吗？`
+                    content: `确定删除 ${record.name} 吗？`,
+                    okType: 'danger'
                 })
                 .then(
                     (confirmed) => {

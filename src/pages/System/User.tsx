@@ -293,7 +293,8 @@ const User = () => {
                 centered: true,
                 mask: { closable: true },
                 title: '确定删除',
-                content: `确定删除选中的 ${tableSelectedItem.length} 个用户吗？`
+                content: `确定删除选中的 ${tableSelectedItem.length} 个用户吗？`,
+                okType: 'danger'
             })
             .then(
                 (confirmed) => {
@@ -469,7 +470,8 @@ const User = () => {
                     centered: true,
                     mask: { closable: true },
                     title: '确定删除',
-                    content: `确定删除用户 ${value.username} 吗？`
+                    content: `确定删除用户 ${value.username} 吗？`,
+                    okType: 'danger'
                 })
                 .then(
                     (confirmed) => {
