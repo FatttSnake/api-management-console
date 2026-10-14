@@ -203,8 +203,8 @@ export const r_sys_api_plugin_update = (param: ApiPluginUpdateParam) =>
 export const r_sys_api_plugin_status = (param: ApiPluginUpdateStatusParam) =>
     request.patch(URL_SYS_API_PLUGIN, param)
 
-export const r_sys_api_plugin_uninstall = (pluginId: string) =>
-    request.delete(`${URL_SYS_API_PLUGIN}/${pluginId}`)
+export const r_sys_api_plugin_uninstall = (pluginId: string, purgeData?: boolean) =>
+    request.delete(`${URL_SYS_API_PLUGIN}/${pluginId}`, undefined, { params: { purgeData } })
 
 export const r_sys_api_plugin_info_get = (pluginId: string) =>
     request.get<ApiPluginVo>(`${URL_SYS_API_PLUGIN}/${pluginId}/info`)

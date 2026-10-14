@@ -30,6 +30,7 @@ const Plugin = () => {
     const navigate = useNavigate()
     const theme = useTheme()
     const fileInputRef = useRef<HTMLInputElement>(null)
+    const isPurgeDataRef = useRef(false)
     const uploadControllerRef = useRef(new AbortController())
     const [form] = AntdForm.useForm<ApiPluginUpdateParam>()
     const formValues = AntdForm.useWatch([], form)
@@ -358,20 +359,31 @@ const Plugin = () => {
     const handleOnUninstallBtnClick = (value: ApiPluginVo) => {
         return (e: MouseEvent) => {
             e.stopPropagation()
+            isPurgeDataRef.current = false
 
             modal
                 .confirm({
                     centered: true,
                     mask: { closable: true },
                     title: '确定卸载',
-                    content: `确定卸载插件 ${value.name} 吗？`
+                    content: (
+                        <FlexBox gap={12}>
+                            <span>确定卸载插件 {value.name} 吗？</span>
+                            <AntdCheckbox
+                                onChange={(e) => (isPurgeDataRef.current = e.target.checked)}
+                            >
+                                清除数据
+                            </AntdCheckbox>
+                        </FlexBox>
+                    ),
+                    okType: 'danger'
                 })
                 .then(
                     (confirmed) => {
                         if (confirmed) {
                             setIsLoading(true)
 
-                            r_sys_api_plugin_uninstall(value.pluginId)
+                            r_sys_api_plugin_uninstall(value.pluginId, isPurgeDataRef.current)
                                 .then((res) => {
                                     const response = res.data
                                     if (response.code === DATABASE_DELETE_SUCCESS) {
