@@ -70,7 +70,7 @@ const SignIn = () => {
                         setCsrfToken(data!.csrfToken)
                         message.success('登录成功').then(() => {
                             getUserInfo().then((user) => {
-                                navigateToRedirect(navigate, searchParams, '/apis')
+                                navigateToRedirect(navigate, searchParams, '/api-keys')
 
                                 notification.success({
                                     title: '欢迎回来',

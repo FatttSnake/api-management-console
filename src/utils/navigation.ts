@@ -20,7 +20,7 @@ export const navigateToLogin = (
 export const navigateToRedirect = (
     navigate: NavigateFunction,
     searchParams: URLSearchParams,
-    defaultUrl: '/apis' | '/',
+    defaultUrl: '/api-keys' | '/',
     options?: NavigateOptions
 ) => {
     navigate(searchParams.get('redirect') ?? defaultUrl, options)

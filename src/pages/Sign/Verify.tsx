@@ -126,7 +126,7 @@ const Verify = () => {
                 case PERMISSION_VERIFY_SUCCESS:
                     message.success('恭喜你，完成了').then(() => {
                         requestUserInfo().then(() => {
-                            navigateToRedirect(navigate, searchParams, '/apis')
+                            navigateToRedirect(navigate, searchParams, '/api-keys')
                         })
                     })
                     break

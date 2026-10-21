@@ -4,7 +4,7 @@ export const userZone: RouteJsonObject[] = [
     {
         path: '',
         absolutePath: '',
-        element: <Navigate to="/apis" replace />
+        element: <Navigate to="/api-keys" replace />
     },
     {
         path: 'apis',
