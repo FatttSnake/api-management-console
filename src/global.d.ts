@@ -603,6 +603,7 @@ type EventLogEvent =
     | 'KEY_STATUS'
     | 'KEY_REGENERATE'
     | 'KEY_TOPUP'
+    | 'PLUGIN_CONFIG_UPDATE'
 
 interface ApiAuditVo {
     id: string

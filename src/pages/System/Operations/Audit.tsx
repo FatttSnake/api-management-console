@@ -16,7 +16,8 @@ const EVENT_LIST: { text: string; value: EventLogEvent; color: string }[] = [
     { text: '删除 Key', value: 'KEY_DELETE', color: 'red' },
     { text: '启停 Key', value: 'KEY_STATUS', color: 'orange' },
     { text: '重新生成', value: 'KEY_REGENERATE', color: 'purple' },
-    { text: '余额充值', value: 'KEY_TOPUP', color: 'cyan' }
+    { text: '余额充值', value: 'KEY_TOPUP', color: 'cyan' },
+    { text: '插件配置', value: 'PLUGIN_CONFIG_UPDATE', color: 'geekblue' }
 ]
 
 const EVENT_META: Record<string, { text: string; color: string }> = EVENT_LIST.reduce(
