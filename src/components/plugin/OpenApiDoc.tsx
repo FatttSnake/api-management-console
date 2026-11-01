@@ -318,7 +318,7 @@ const OpenApiDoc = ({ doc, path, method }: OpenApiDocProps) => {
     const responseItems = Object.entries(operation.responses ?? {}).map(([code, response]) => ({
         key: code,
         label: code,
-        extra: response.description,
+        extra: <div style={{ marginLeft: 20 }}>{response.description}</div>,
         children: Object.entries(response.content ?? {}).map(([contentType, mediaType]) =>
             isBinaryContent(contentType, mediaType.schema) ? (
                 <AntdTypography.Text key={contentType}>二进制内容</AntdTypography.Text>
