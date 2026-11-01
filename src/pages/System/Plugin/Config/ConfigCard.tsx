@@ -11,6 +11,15 @@ import FlexBox from '@/components/common/FlexBox'
 import Permission from '@/components/common/Permission'
 import SettingsCard from '@/components/system/SettingCard'
 
+/**
+ * Serializes a form value for the plugin config API.
+ *
+ * A cleared number or select is null / undefined and means "clear"; sending its string form
+ * would store the literal "null" / "undefined". false and 0 are values and are kept.
+ */
+const toConfigValue = (value: unknown): string =>
+    value === null || value === undefined ? '' : String(value)
+
 interface ConfigCardProps {
     pluginId: string
     group: ApiPluginConfigGroupVo
@@ -59,7 +68,7 @@ const ConfigCard = ({
 
             const value = form.getFieldValue(key)
 
-            return [{ key, value: String(value ?? '') }]
+            return [{ key, value: toConfigValue(value) }]
         })
 
         r_sys_api_plugin_datasource_test(pluginId, { name: datasource.name, values })
@@ -96,7 +105,7 @@ const ConfigCard = ({
                             key: group.key,
                             values: Object.entries(changedFields).map(([key, value]) => ({
                                 key,
-                                value: String(value)
+                                value: toConfigValue(value)
                             }))
                         }
                     ]
