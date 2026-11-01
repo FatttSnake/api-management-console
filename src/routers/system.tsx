@@ -35,6 +35,15 @@ export const systemZone: RouteJsonObject[] = [
                 permission: true
             },
             {
+                path: 'module',
+                absolutePath: '/system/plugin/module',
+                id: 'system-plugin-module',
+                component: lazy(() => import('@/pages/System/Plugin/Module')),
+                name: '依赖模块',
+                menu: true,
+                permission: true
+            },
+            {
                 path: 'key',
                 absolutePath: '/system/plugin/key',
                 id: 'system-plugin-key',

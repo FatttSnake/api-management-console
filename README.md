@@ -62,7 +62,7 @@ api-management-console/
 │   ├── App.tsx                          # App shell: theme, router, ConfigProvider, message/notification/modal
 │   ├── AuthRoute.tsx                    # Route guard (login / verify / permissions / page title)
 │   ├── routers/                         # Route JSON definitions
-│   │   ├── index.tsx                    # Root routes (sign pages + framework)
+│   │   ├── Module.tsx                    # Root routes (sign pages + framework)
 │   │   ├── framework.tsx                # Framework splitting self-service zone & system zone
 │   │   ├── user.tsx                     # Self-service routes (usage, API keys, billing, profile)
 │   │   └── system.ts                    # Admin routes (plugin, interface, user/role/group, log, statistics, settings, …)

@@ -38,7 +38,11 @@ import {
     URL_SYS_API_PLUGIN_KEY,
     URL_SYS_API_KEY_AVAILABLE_APIS,
     URL_SYS_USER_INFO_BY_ID,
-    URL_SYS_API_PLUGIN_CONFIG
+    URL_SYS_API_PLUGIN_CONFIG,
+    URL_SYS_API_PLUGIN_MODULE,
+    URL_SYS_API_PLUGIN_MODULE_INSTALL,
+    URL_SYS_API_PLUGIN_MODULE_FETCH,
+    URL_SYS_API_PLUGIN_MODULE_GC
 } from '@/constants/urls.constants'
 import { SHA512 } from '@/utils/crypto'
 import request from '@/services'
@@ -222,6 +226,61 @@ export const r_sys_api_plugin_datasource_test = (
 
 export const r_sys_api_plugin_reload = (pluginId: string) =>
     request.post<ApiPluginVo>(`${URL_SYS_API_PLUGIN}/${pluginId}/reload`)
+
+export const r_sys_api_plugin_module_get = (param: PluginModuleGetParam) =>
+    request.get<PageVo<PluginModuleVo>>(URL_SYS_API_PLUGIN_MODULE, param)
+
+export const r_sys_api_plugin_module_install = (
+    file: File,
+    onProgress?: (percent: number) => void,
+    signal?: AbortSignal
+) => {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    return request.post<string>(URL_SYS_API_PLUGIN_MODULE_INSTALL, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        timeout: 6e5,
+        signal,
+        onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+                onProgress?.(Math.round((progressEvent.loaded / progressEvent.total) * 100))
+            }
+        }
+    })
+}
+
+export const r_sys_api_plugin_module_delete = (sha256: string) =>
+    request.delete(`${URL_SYS_API_PLUGIN_MODULE}/${sha256}`)
+
+export const r_sys_api_plugin_module_gc = () => request.post<number>(URL_SYS_API_PLUGIN_MODULE_GC)
+
+export const r_sys_api_plugin_module_fetch = (
+    file: File,
+    onProgress?: (percent: number) => void,
+    signal?: AbortSignal
+) => {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    return request.post<PluginModuleFetchVo>(URL_SYS_API_PLUGIN_MODULE_FETCH, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        timeout: 6e5,
+        signal,
+        onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+                onProgress?.(Math.round((progressEvent.loaded / progressEvent.total) * 100))
+            }
+        }
+    })
+}
+
+export const r_sys_api_plugin_module_fetch_status = (taskId: string) =>
+    request.get<PluginModuleFetchVo>(`${URL_SYS_API_PLUGIN_MODULE_FETCH}/${taskId}`)
 
 export const r_sys_api_interface_get = (param: ApiInterfaceGetParam) =>
     request.get<PageVo<ApiGroupVo>>(URL_SYS_API, param)

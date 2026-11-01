@@ -62,7 +62,7 @@ api-management-console/
 │   ├── App.tsx                          # 应用外壳：主题、路由、ConfigProvider、message/notification/modal
 │   ├── AuthRoute.tsx                    # 路由守卫（登录 / 验证 / 权限 / 页面标题）
 │   ├── routers/                         # 路由 JSON 定义
-│   │   ├── index.tsx                    # 根路由（登录注册页 + 主框架）
+│   │   ├── Module.tsx                    # 根路由（登录注册页 + 主框架）
 │   │   ├── framework.tsx                # 区分自助区与系统区的框架
 │   │   ├── user.tsx                     # 自助服务路由（用量、API Keys、账单、个人档案）
 │   │   └── system.ts                    # 管理端路由（插件、接口、用户/角色/群组、日志、统计、设置等）

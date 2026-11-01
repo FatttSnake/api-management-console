@@ -810,7 +810,6 @@ interface ApiPluginVo {
     defaultPrice: string
     defaultRateLimit: number
     defaultAccessMode: ApiInterfaceAccessMode
-    source: string
     versionName: string
     versionCode: number
     jarName: string
@@ -836,6 +835,60 @@ interface ApiPluginUpdateParam {
 interface ApiPluginUpdateStatusParam {
     id: string
     enable: boolean
+}
+
+interface PluginModuleVo {
+    id: string
+    groupId?: string
+    artifactId?: string
+    moduleVersion?: string
+    sha256: string
+    size?: number
+    source?: string
+    installTime?: string
+    createTime?: string
+    updateTime?: string
+    referenced: boolean
+    referencedBy: PluginModuleReferenceVo[]
+}
+
+interface PluginModuleReferenceVo {
+    pluginId?: string
+    name?: string
+    enable?: boolean
+}
+
+interface PluginModuleGetParam extends PageParam {
+    searchGroup?: string
+    searchArtifact?: string
+    searchVersion?: string
+    searchSha?: string
+    referenced?: boolean
+}
+
+type PluginModuleFetchStatus = 'RUNNING' | 'SUCCESS' | 'FAILED'
+
+type PluginModuleFetchModuleStatus = 'PENDING' | 'DOWNLOADING' | 'INSTALLED' | 'EXISTING' | 'FAILED'
+
+interface PluginModuleFetchModuleVo {
+    groupId: string
+    artifactId: string
+    moduleVersion: string
+    sha256: string
+    size: number
+    downloadedBytes: number
+    percent: number
+    status: PluginModuleFetchModuleStatus
+    message?: string
+}
+
+interface PluginModuleFetchVo {
+    taskId: string
+    status: PluginModuleFetchStatus
+    message?: string
+    modules: PluginModuleFetchModuleVo[]
+    createTime: string
+    finishTime?: string
 }
 
 type ApiPluginConfigFieldType = 'STRING' | 'TEXT' | 'NUMBER' | 'BOOLEAN' | 'ENUM' | 'SECRET'

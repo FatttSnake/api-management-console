@@ -25,6 +25,8 @@ import Permission from '@/components/common/Permission'
 import Card from '@/components/common/Card'
 import FitFullscreen from '@/components/common/FitFullscreen'
 import HideScrollbar from '@/components/common/HideScrollbar'
+import PluginModuleFetchModal from '@/components/plugin/PluginModuleFetchModal'
+import { usePluginModuleFetch } from '@/hooks/usePluginModuleFetch'
 
 const Plugin = () => {
     const navigate = useNavigate()
@@ -54,6 +56,14 @@ const Plugin = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
     const [uploadProgress, setUploadProgress] = useState(0)
+    const [isFetchModalOpen, setIsFetchModalOpen] = useState(false)
+    const {
+        task: fetchTask,
+        error: fetchError,
+        start: startFetch,
+        cancel: cancelFetch,
+        reset: resetFetch
+    } = usePluginModuleFetch()
 
     const dataColumns: _ColumnsType<ApiPluginVo> = [
         {
@@ -203,11 +213,34 @@ const Plugin = () => {
             return
         }
 
-        await uploadFile(file)
+        setIsFetchModalOpen(true)
+        setIsUploading(true)
+        setUploadProgress(0)
+        try {
+            const result = await startFetch(file, setUploadProgress)
+            if (result?.status === 'SUCCESS') {
+                setIsFetchModalOpen(false)
+                resetFetch()
+                await uploadFile(file)
+            }
+        } finally {
+            setIsUploading(false)
+            if (fileInputRef.current) {
+                fileInputRef.current.value = ''
+            }
+        }
     }
 
     const handleOnCancelUpload = () => {
         uploadControllerRef.current.abort()
+        cancelFetch()
+        setIsFetchModalOpen(false)
+        resetFetch()
+    }
+
+    const handleOnFetchModalClose = () => {
+        setIsFetchModalOpen(false)
+        resetFetch()
     }
 
     const handleOnShowDetail = (record: ApiPluginVo) => {
@@ -264,11 +297,6 @@ const Plugin = () => {
                             {
                                 label: '插件 ID',
                                 children: record.pluginId,
-                                style: { textWrap: 'nowrap' }
-                            },
-                            {
-                                label: '来源',
-                                children: record.source === 'BUILT_IN' ? '内置' : '上传',
                                 style: { textWrap: 'nowrap' }
                             },
                             {
@@ -557,7 +585,7 @@ const Plugin = () => {
                     style={{ display: 'none' }}
                     disabled={isUploading}
                 />
-                <Permission operationCode={['system:plugin:key:add']}>
+                <Permission operationCode={['system:plugin:plugin:install']}>
                     <Card style={{ overflow: 'inherit', flex: '0 0 auto' }}>
                         <AntdButton
                             type={'primary'}
@@ -587,7 +615,7 @@ const Plugin = () => {
                     </AntdButton>
                 </Card>
             </FlexBox>
-            {isUploading && (
+            {isUploading && !isFetchModalOpen && (
                 <AntdAlert
                     title={'安装中'}
                     description={<AntdProgress percent={uploadProgress} />}
@@ -702,6 +730,13 @@ const Plugin = () => {
             >
                 {priceForm}
             </AntdDrawer>
+            <PluginModuleFetchModal
+                open={isFetchModalOpen}
+                task={fetchTask}
+                error={fetchError}
+                uploadPercent={uploadProgress}
+                onClose={handleOnFetchModalClose}
+            />
         </>
     )
 }

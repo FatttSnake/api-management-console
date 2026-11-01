@@ -50,6 +50,15 @@ export const randomColor = (start: number, end: number) => {
     return `rgb(${randomInt(start, end)},${randomInt(start, end)},${randomInt(start, end)})`
 }
 
+export const formatBytes = (bytes: number) => {
+    if (!bytes) {
+        return '0 B'
+    }
+    const units = ['B', 'KiB', 'MiB', 'GiB']
+    const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1)
+    return `${(bytes / Math.pow(1024, exponent)).toFixed(exponent ? 2 : 0)} ${units[exponent]}`
+}
+
 export const floorNumber = (num: number, digits: number) => {
     if (digits > 0) {
         return Math.floor(num / Math.pow(10, digits - 1)) * Math.pow(10, digits - 1)
