@@ -2,7 +2,7 @@
     "name": "api-management-console",
     "private": true,
     "type": "module",
-    "version": "1.0.0-SNAPSHOT",
+    "version": "1.0.0",
     "description": "Console of API Management",
     "author": {
         "name": "FatttSnake",
