@@ -30,7 +30,9 @@ const PluginModuleFetchModal = ({
                     gap={12}
                     style={{ padding: 24, textAlign: 'center' }}
                 >
-                    <Icon component={IconConsoleLoading} spin style={{ fontSize: '2em' }} />
+                    <span>
+                        <Icon component={IconConsoleLoading} spin style={{ fontSize: '2em' }} />
+                    </span>
                     <span>正在上传并解析插件依赖……</span>
                     <AntdProgress percent={uploadPercent ?? 0} />
                 </FlexBox>
