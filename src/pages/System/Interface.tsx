@@ -331,11 +331,8 @@ const Interface = () => {
                                     : '继承插件'
                             },
                             {
-                                label: '每分钟限流次数',
-                                children:
-                                    record.rateLimit === null
-                                        ? '继承插件'
-                                        : record.rateLimit || '不限制'
+                                label: '每分钟总限流次数',
+                                children: !record.rateLimit ? '继承插件' : `${record.rateLimit} 次`
                             },
                             {
                                 label: '访问模式',
@@ -548,12 +545,12 @@ const Interface = () => {
                     ]}
                 />
             </AntdForm.Item>
-            <AntdForm.Item name={'rateLimit'} label={'每分钟限流次数'}>
+            <AntdForm.Item name={'rateLimit'} label={'每接口每分钟总限流次数'}>
                 <AntdInputNumber
                     style={{ width: '100%' }}
                     min={0}
                     precision={0}
-                    placeholder={'继承插件'}
+                    placeholder={'留空或 0 = 继承插件默认'}
                 />
             </AntdForm.Item>
             <AntdForm.Item name={'accessMode'} label={'访问模式'}>

@@ -63,15 +63,30 @@ const Api = () => {
                 layout={'vertical'}
             >
                 <AntdForm.Item
-                    label={'每 Key 每分钟默认限流次数 (0=不限)'}
-                    name={'defaultRateLimitPerMin'}
+                    label={'每用户每分钟默认限流次数（所有 Key 与登录态合计，0=不限）'}
+                    name={'defaultUserRateLimitPerMin'}
                 >
                     <AntdInputNumber style={{ width: '100%' }} min={0} precision={0} />
                 </AntdForm.Item>
-                <AntdForm.Item label={'每 Key 每个周期默认额度次数 (0=不限)'} name={'defaultQuota'}>
+                <AntdForm.Item
+                    label={'匿名调用每 IP 每分钟默认限流次数（0=不限）'}
+                    name={'defaultAnonymousRateLimitPerMin'}
+                >
                     <AntdInputNumber style={{ width: '100%' }} min={0} precision={0} />
                 </AntdForm.Item>
-                <AntdForm.Item label={'默认额度周期(秒)'} name={'defaultQuotaPeriodSeconds'}>
+                <AntdForm.Item
+                    label={'每 IP 每分钟鉴权失败上限（0=关闭，默认 30）'}
+                    name={'authFailureLimitPerMin'}
+                >
+                    <AntdInputNumber style={{ width: '100%' }} min={0} precision={0} />
+                </AntdForm.Item>
+                <AntdForm.Item
+                    label={'每用户每个周期默认额度次数（所有 Key 与登录态合计，0=不限）'}
+                    name={'defaultQuota'}
+                >
+                    <AntdInputNumber style={{ width: '100%' }} min={0} precision={0} />
+                </AntdForm.Item>
+                <AntdForm.Item label={'每用户额度周期(秒)'} name={'defaultQuotaPeriodSeconds'}>
                     <AntdInputNumber style={{ width: '100%' }} min={1} precision={0} />
                 </AntdForm.Item>
                 <AntdForm.Item label={'生成的 AccessKey 长度'} name={'accessKeyLength'}>

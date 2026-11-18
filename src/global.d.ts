@@ -454,7 +454,9 @@ interface TwoFactorSettingsParam {
 }
 
 interface ApiSettingsVo {
-    defaultRateLimitPerMin: number
+    defaultUserRateLimitPerMin: number
+    defaultAnonymousRateLimitPerMin: number
+    authFailureLimitPerMin: number
     defaultQuota: number
     defaultQuotaPeriodSeconds: number
     accessKeyLength: number
@@ -464,7 +466,9 @@ interface ApiSettingsVo {
 }
 
 interface ApiSettingsParam {
-    defaultRateLimitPerMin: number
+    defaultUserRateLimitPerMin: number
+    defaultAnonymousRateLimitPerMin: number
+    authFailureLimitPerMin: number
     defaultQuota: number
     defaultQuotaPeriodSeconds: number
     accessKeyLength: number
@@ -750,6 +754,7 @@ interface ApiMonitorItemVo {
     apiCode: string
     count: number
     error: number
+    rateLimited: number
     latencyMs: number
     pluginVo?: ApiPluginVo
     interfaceVo?: ApiInterfaceVo

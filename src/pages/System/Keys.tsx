@@ -238,29 +238,35 @@ const Keys = () => {
                                     <>
                                         <AntdForm.Item
                                             name={'rateLimit'}
-                                            label={'每分钟限流次数 (0=用全局默认)'}
+                                            label={'每分钟限流次数（0=继承用户默认）'}
                                         >
                                             <AntdInputNumber
                                                 style={{ width: '100%' }}
                                                 min={0}
                                                 precision={0}
+                                                placeholder={'0=继承用户默认'}
                                             />
                                         </AntdForm.Item>
                                         <AntdForm.Item
                                             name={'quota'}
-                                            label={'周期额度次数 (0=用全局默认)'}
+                                            label={'单个 Key 周期额度（0=不单独限制）'}
                                         >
                                             <AntdInputNumber
                                                 style={{ width: '100%' }}
                                                 min={0}
                                                 precision={0}
+                                                placeholder={'0=不单独限制'}
                                             />
                                         </AntdForm.Item>
-                                        <AntdForm.Item name={'quotaPeriod'} label={'额度周期(秒)'}>
+                                        <AntdForm.Item
+                                            name={'quotaPeriod'}
+                                            label={'额度周期(秒，0=用系统周期)'}
+                                        >
                                             <AntdInputNumber
                                                 style={{ width: '100%' }}
-                                                min={1}
+                                                min={0}
                                                 precision={0}
+                                                placeholder={'0=用系统周期'}
                                             />
                                         </AntdForm.Item>
                                     </>
@@ -390,15 +396,15 @@ const Keys = () => {
                             },
                             {
                                 label: '每分钟限流次数',
-                                children: record.rateLimit || '默认'
+                                children: record.rateLimit || '继承用户默认'
                             },
                             {
-                                label: '周期额度次数',
-                                children: record.quota || '默认'
+                                label: '单个 Key 周期额度',
+                                children: record.quota || '不单独限制'
                             },
                             {
                                 label: '额度周期(秒)',
-                                children: record.quotaPeriod
+                                children: record.quotaPeriod || '系统周期'
                             },
                             {
                                 label: '创建时间',
@@ -596,35 +602,35 @@ const Keys = () => {
                                         <>
                                             <AntdForm.Item
                                                 name={'rateLimit'}
-                                                label={'每分钟限流次数 (0=用全局默认)'}
-                                                rules={[{ required: true }]}
+                                                label={'每分钟限流次数（0=继承用户默认）'}
                                             >
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={0}
                                                     precision={0}
+                                                    placeholder={'0=继承用户默认'}
                                                 />
                                             </AntdForm.Item>
                                             <AntdForm.Item
                                                 name={'quota'}
-                                                label={'周期额度次数 (0=用全局默认)'}
-                                                rules={[{ required: true }]}
+                                                label={'单个 Key 周期额度（0=不单独限制）'}
                                             >
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={0}
                                                     precision={0}
+                                                    placeholder={'0=不单独限制'}
                                                 />
                                             </AntdForm.Item>
                                             <AntdForm.Item
                                                 name={'quotaPeriod'}
-                                                label={'额度周期(秒)'}
-                                                rules={[{ required: true }]}
+                                                label={'额度周期(秒，0=用系统周期)'}
                                             >
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
-                                                    min={1}
+                                                    min={0}
                                                     precision={0}
+                                                    placeholder={'0=用系统周期'}
                                                 />
                                             </AntdForm.Item>
                                         </>
