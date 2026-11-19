@@ -32,7 +32,7 @@ The console is written in **React + TypeScript + Vite** with **Ant Design**. Eve
 - **Permission-driven UI** — the sidebar and routes are dynamically assembled from the current user's RBAC permission tree; every operation is gated by a fine-grained permission code, covering **users / roles / groups**.
 - **Plugin management** — upload plugin jars with progress and **hot install / enable-disable / upgrade / uninstall**; manage the **Ed25519 trust keys** used to verify plugin signatures.
 - **Interface management** — configure every interface provided by the plugins (enable switch, `need-key`, access mode, price, rate limits, and more).
-- **API accounts &amp; keys** — create API keys bound to the available APIs (grouped by plugin), **regenerate a secret key (shown only once)**, enable/disable and expire them; view account balance.
+- **API accounts &amp; keys** — create API keys bound to the available APIs (grouped by plugin), **regenerate a secret key (shown only once)**, enable/disable and expire them, and set an IP allowlist (IPv4 or IPv6, address or CIDR); view account balance.
 - **Operations** — search API accounts, **top up** balances, browse **billing / transactions** and the usage of any account.
 - **Self-service zone** — my usage, my API keys, my billing &amp; balance, and a profile page (generated avatar, nickname, change password, bind/unbind 2FA, theme).
 - **Monitoring & statistics** — online &amp; active usage overview, hardware &amp; software inventory, real-time CPU / storage charts.
