@@ -76,6 +76,14 @@ const Monitor = () => {
                 value > 0 ? <AntdTag color={'error'}>{value}</AntdTag> : (value ?? 0)
         },
         {
+            title: '限流拒绝',
+            dataIndex: 'rateLimited',
+            align: 'center',
+            ellipsis: true,
+            render: (value) =>
+                value > 0 ? <AntdTag color={'warning'}>{value}</AntdTag> : (value ?? 0)
+        },
+        {
             title: '平均耗时',
             dataIndex: 'latencyMs',
             align: 'center',

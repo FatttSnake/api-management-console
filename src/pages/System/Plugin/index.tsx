@@ -284,7 +284,7 @@ const Plugin = () => {
                                 style: { textWrap: 'nowrap' }
                             },
                             {
-                                label: '默认每分钟限流次数',
+                                label: '默认每接口每分钟总限流次数',
                                 children: record.defaultRateLimit || '不限制',
                                 style: { textWrap: 'nowrap' }
                             },
@@ -683,12 +683,12 @@ const Plugin = () => {
                     placeholder={'免费'}
                 />
             </AntdForm.Item>
-            <AntdForm.Item name={'defaultRateLimit'} label={'默认每分钟限流次数'}>
+            <AntdForm.Item name={'defaultRateLimit'} label={'默认每接口每分钟总限流次数'}>
                 <AntdInputNumber
                     style={{ width: '100%' }}
                     min={0}
                     precision={0}
-                    placeholder={'不限制'}
+                    placeholder={'留空或 0 = 不限制'}
                 />
             </AntdForm.Item>
             <AntdForm.Item

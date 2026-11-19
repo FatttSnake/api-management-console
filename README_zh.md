@@ -95,7 +95,7 @@ api-management-console/
 
 - Node.js 与 npm（用于开发 / 构建）
 - Web 服务器，如 Nginx / Apache httpd（用于部署）
-- [API Management](https://github.com/FatttSnake/api-management) 后端服务
+- [API Management](https://github.com/FatttSnake/api-management) 后端服务，**版本不低于 1.0.2**
 
 # 开发
 

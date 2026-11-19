@@ -95,7 +95,7 @@ api-management-console/
 
 - Node.js & npm (for development / building)
 - A web server, e.g. Nginx / Apache httpd (for deployment)
-- The [API Management](https://github.com/FatttSnake/api-management) backend service
+- The [API Management](https://github.com/FatttSnake/api-management) backend service, **version 1.0.2 or newer**
 
 # Development
 
