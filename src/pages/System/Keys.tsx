@@ -6,6 +6,7 @@ import useStyles from '@/assets/css/pages/system/keys.style'
 import { DATABASE_NO_RECORD_FOUND, DATABASE_SELECT_SUCCESS } from '@/constants/common.constants'
 import { message, modal } from '@/utils/common'
 import { dayjsToUtc, isPastTime, utcToLocalTime } from '@/utils/datetime'
+import { isIpOrCidr } from '@/utils/ip'
 import { navigateToUsage, navigateToUserManagement } from '@/utils/navigation'
 import {
     r_sys_api__key_regenerate,
@@ -205,7 +206,7 @@ const Keys = () => {
                                     if (!value || !value.length) {
                                         return Promise.resolve()
                                     }
-                                    const invalid = value.filter((v) => !validateIpOrCIDR(v))
+                                    const invalid = value.filter((v) => !isIpOrCidr(v))
                                     if (invalid.length) {
                                         return Promise.reject(
                                             new Error(`无效的 IP/CIDR 格式: ${invalid.join(', ')}`)
@@ -567,7 +568,7 @@ const Keys = () => {
                                         if (!value || !value.length) {
                                             return Promise.resolve()
                                         }
-                                        const invalid = value.filter((v) => !validateIpOrCIDR(v))
+                                        const invalid = value.filter((v) => !isIpOrCidr(v))
                                         if (invalid.length) {
                                             return Promise.reject(
                                                 new Error(
@@ -887,13 +888,6 @@ const Keys = () => {
                 return []
             })
             .finally(() => setIsLoadingAvailableKeys(false))
-    }
-
-    const validateIpOrCIDR = (value: string) => {
-        const IP_CIDR_REGEX =
-            /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\/([1-9]|[1-2][0-9]|3[0-2]))?$/
-
-        return IP_CIDR_REGEX.test(value)
     }
 
     useEffect(() => {
