@@ -90,7 +90,8 @@ const Log = () => {
         {
             title: '请求 IP',
             dataIndex: 'requestIp',
-            align: 'center'
+            align: 'center',
+            ellipsis: true
         },
         {
             title: '开始时间',
