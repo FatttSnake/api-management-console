@@ -6,6 +6,7 @@ import useStyles from '@/assets/css/pages/system/keys.style'
 import { DATABASE_NO_RECORD_FOUND, DATABASE_SELECT_SUCCESS } from '@/constants/common.constants'
 import { message, modal } from '@/utils/common'
 import { dayjsToUtc, isPastTime, utcToLocalTime } from '@/utils/datetime'
+import { isIpOrCidr } from '@/utils/ip'
 import { navigateToUsage, navigateToUserManagement } from '@/utils/navigation'
 import {
     r_sys_api__key_regenerate,
@@ -205,7 +206,7 @@ const Keys = () => {
                                     if (!value || !value.length) {
                                         return Promise.resolve()
                                     }
-                                    const invalid = value.filter((v) => !validateIpOrCIDR(v))
+                                    const invalid = value.filter((v) => !isIpOrCidr(v))
                                     if (invalid.length) {
                                         return Promise.reject(
                                             new Error(`无效的 IP/CIDR 格式: ${invalid.join(', ')}`)
@@ -238,29 +239,35 @@ const Keys = () => {
                                     <>
                                         <AntdForm.Item
                                             name={'rateLimit'}
-                                            label={'每分钟限流次数 (0=用全局默认)'}
+                                            label={'每分钟限流次数（0=继承用户默认）'}
                                         >
                                             <AntdInputNumber
                                                 style={{ width: '100%' }}
                                                 min={0}
                                                 precision={0}
+                                                placeholder={'0=继承用户默认'}
                                             />
                                         </AntdForm.Item>
                                         <AntdForm.Item
                                             name={'quota'}
-                                            label={'周期额度次数 (0=用全局默认)'}
+                                            label={'单个 Key 周期额度（0=不单独限制）'}
                                         >
                                             <AntdInputNumber
                                                 style={{ width: '100%' }}
                                                 min={0}
                                                 precision={0}
+                                                placeholder={'0=不单独限制'}
                                             />
                                         </AntdForm.Item>
-                                        <AntdForm.Item name={'quotaPeriod'} label={'额度周期(秒)'}>
+                                        <AntdForm.Item
+                                            name={'quotaPeriod'}
+                                            label={'额度周期(秒，0=用系统周期)'}
+                                        >
                                             <AntdInputNumber
                                                 style={{ width: '100%' }}
-                                                min={1}
+                                                min={0}
                                                 precision={0}
+                                                placeholder={'0=用系统周期'}
                                             />
                                         </AntdForm.Item>
                                     </>
@@ -390,15 +397,15 @@ const Keys = () => {
                             },
                             {
                                 label: '每分钟限流次数',
-                                children: record.rateLimit || '默认'
+                                children: record.rateLimit || '继承用户默认'
                             },
                             {
-                                label: '周期额度次数',
-                                children: record.quota || '默认'
+                                label: '单个 Key 周期额度',
+                                children: record.quota || '不单独限制'
                             },
                             {
                                 label: '额度周期(秒)',
-                                children: record.quotaPeriod
+                                children: record.quotaPeriod || '系统周期'
                             },
                             {
                                 label: '创建时间',
@@ -561,7 +568,7 @@ const Keys = () => {
                                         if (!value || !value.length) {
                                             return Promise.resolve()
                                         }
-                                        const invalid = value.filter((v) => !validateIpOrCIDR(v))
+                                        const invalid = value.filter((v) => !isIpOrCidr(v))
                                         if (invalid.length) {
                                             return Promise.reject(
                                                 new Error(
@@ -596,35 +603,35 @@ const Keys = () => {
                                         <>
                                             <AntdForm.Item
                                                 name={'rateLimit'}
-                                                label={'每分钟限流次数 (0=用全局默认)'}
-                                                rules={[{ required: true }]}
+                                                label={'每分钟限流次数（0=继承用户默认）'}
                                             >
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={0}
                                                     precision={0}
+                                                    placeholder={'0=继承用户默认'}
                                                 />
                                             </AntdForm.Item>
                                             <AntdForm.Item
                                                 name={'quota'}
-                                                label={'周期额度次数 (0=用全局默认)'}
-                                                rules={[{ required: true }]}
+                                                label={'单个 Key 周期额度（0=不单独限制）'}
                                             >
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
                                                     min={0}
                                                     precision={0}
+                                                    placeholder={'0=不单独限制'}
                                                 />
                                             </AntdForm.Item>
                                             <AntdForm.Item
                                                 name={'quotaPeriod'}
-                                                label={'额度周期(秒)'}
-                                                rules={[{ required: true }]}
+                                                label={'额度周期(秒，0=用系统周期)'}
                                             >
                                                 <AntdInputNumber
                                                     style={{ width: '100%' }}
-                                                    min={1}
+                                                    min={0}
                                                     precision={0}
+                                                    placeholder={'0=用系统周期'}
                                                 />
                                             </AntdForm.Item>
                                         </>
@@ -881,13 +888,6 @@ const Keys = () => {
                 return []
             })
             .finally(() => setIsLoadingAvailableKeys(false))
-    }
-
-    const validateIpOrCIDR = (value: string) => {
-        const IP_CIDR_REGEX =
-            /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\/([1-9]|[1-2][0-9]|3[0-2]))?$/
-
-        return IP_CIDR_REGEX.test(value)
     }
 
     useEffect(() => {
